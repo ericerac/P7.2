@@ -1,5 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <img id ="logo" alt="Vue logo" src="./assets/logo.png">
   <MyHome/>
 </template>
 
@@ -15,6 +15,9 @@ export default {
 </script>
 
 <style>
+#logo{
+  width: 200px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
