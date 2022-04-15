@@ -32,10 +32,13 @@
                     <span class ="comment">{{commenter}}ico commenter</span>
                 </div>
             </div>
+            <button @click="getArticle()">Se connecter</button>
         </div>
 </template>
 
 <script>
+
+const axios = require("axios");
 export default {
         name: "MyHome",
   props: {},
@@ -51,14 +54,15 @@ export default {
     };
   },
   methods: {
-    signupPost() {
+    getArticle() {
       axios
-        .get("http://localhost:3000/article?id=40")
+        .get("http://localhost:3000/article/all")
         .then((data) => {
           if(data){
            formData.push(data);
           }
           console.log("reponse",data);
+          console.log(formData);
         })
         .catch(() => {
           console.log("ça m'énerve encore");
