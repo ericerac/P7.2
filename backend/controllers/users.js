@@ -41,8 +41,10 @@ exports.signup = async (req, res, next) => {
     },
   });
   if (created) {
-    res.status(401).json({ message: "Utilisateur enregistré" });
-    console.log(User); // This will certainly be 'Technical Lead JavaScript'
+    res.status(201).json(project);
+    
+    console.log(User); 
+    
   } else {
     res.status(404).json({ message: "Email utilisateur existant" });
   }
@@ -63,10 +65,24 @@ exports.login = async (req, res, next) => {
         `${process.env.TOKEN}`
       );
       res.status(200).json({ token: token });
+      console.log(token);
     } else {
       res.status(400).json({ error: "Mot de passe incorrect !" });
     }
   } else {
-    res.status(404).json({ error: "User does not exist" });
+    res.status(404).json({ error: "Le compte n'existe pas" });
   }
 };
+
+
+exports.destroyUser = async (req, res, ) => {
+  const params = req.query.id
+  console.log(params);
+    const suprimmer = await article.destroy({where:{id:params}});
+    if(suprimmer){
+      res.json({message:'Article supprimé'})
+  }else{
+      res.json({message:"erreur 404"})
+
+  }
+}

@@ -37,8 +37,36 @@
 
 <script>
 export default {
+        name: "MyHome",
+  props: {},
+  data: function () {
+    return {
+      formData: {
+        articleId: "",
+        content: "",
+        createdAdt: "",
+        updateAdt: "",
+        media: "",
+      },
+    };
+  },
+  methods: {
+    signupPost() {
+      axios
+        .get("http://localhost:3000/article?id=40")
+        .then((data) => {
+          if(data){
+           formData.push(data);
+          }
+          console.log("reponse",data);
+        })
+        .catch(() => {
+          console.log("ça m'énerve encore");
+        });
+    },
+  },
+};
 
-}
 </script>
 
 <style scoped>
