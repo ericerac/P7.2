@@ -45,17 +45,23 @@ exports.OnePublished = async (req, res, next) => {
 
 exports.publish = async (req, res, next) => {
   console.log("req.body.image",typeof req.body.media);
+  console.log("req.body",req.body);
   
-  const imageUrl = req.body.image;
+  const imageUrl = req.body.media;
 
   
   const publish = await article.create({
+   
+    usersId: req.body.usersId,
     content: req.body.content,
+    like:req.body.like,
+    dislike:req.body.dislike,
+
     media: `${req.protocol}://${req.get("host")}/images/${
       req.file.filename
     }`,
   });
-  console.log(typeof publish.media);
+  console.log("publish",publish);
   if(publish){
       res.json(publish)
   }else{

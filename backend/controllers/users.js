@@ -64,7 +64,7 @@ exports.login = async (req, res, next) => {
         { id: user.id, },
         `${process.env.TOKEN}`
       );
-      res.status(200).json({ token: token });
+      res.status(200).json({ token: token ,userId:user.id});
       console.log(token);
     } else {
       res.status(400).json({ error: "Mot de passe incorrect !" });

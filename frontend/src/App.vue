@@ -1,7 +1,7 @@
 <template>
   <img id ="logo" alt="Vue logo" src="./assets/logo.png">
-  <!-- <router-link to="/homepage">Home page</router-link>
-  <router-link to="/post">Post</router-link> -->
+   <router-link to="/homepage">Home page</router-link>
+  <router-link to="/post">Post</router-link>
   <MyHome/>
   <router-view/>
   
