@@ -8,6 +8,7 @@
         <span id="userComment" class="userInfo">Commentaires publiés:{{userComment}}</span>
         <button class ="btn" id="passwordChange">passwordChange</button>
         <label>choisir Photo de profil
+        
         <input type="file" id="PhotoPerfilChange" ref="file" v-on:change="onChangeFileUpload()" accept="image/png, image/jpeg"/>
         </label>
        

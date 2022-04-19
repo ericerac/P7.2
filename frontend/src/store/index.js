@@ -31,7 +31,7 @@ const store = createStore({
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
-          .post("signup", userData)
+          .post("/signup", userData)
           .then(function (response) {
             commit("setStatus", "loading");
             resolve(response);

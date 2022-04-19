@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Sequelize = require("sequelize");
 const CommentModel = require("../models/comment");
 
-const sequelize = new Sequelize("bd_groupo", "root", "1029!rieN", {
+const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.USER_NAME}`, `${process.env.PASSWORD_DB}`, {
   //require('../config/db.config)
   host: "localhost",
   dialect: "mysql",
@@ -15,12 +15,41 @@ exports.published = async (req, res, next) => {
   res.json(allComment);
 };
 
-exports.publish = async (req, res, next) => {
-  console.log("req.body", req.body);
 
+exports.publish = async (req, res, next) => {
+  console.log("req.body.image",typeof req.body.media);
+  console.log("req.body",req.body);
+  
+  const imageUrl = req.body.media;
+
+  
   const publish = await comment.create({
-    commentTxt: req.body.content,
-    image: "",
+   
+    usersId: req.body.usersId,
+    comment: req.body.comment,
+    like:req.body.like,
+    dislike:req.body.dislike,
+
+    image: `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`,
   });
-  res.json(publish)
+
+  console.log("publish",publish);
+  if(publish){
+      res.json(publish)
+  }else{
+      res.json({message:"erreur 404"})
+  }
+};
+
+exports.destroyComment = async (req, res) => {
+  const params = req.query.id;
+  console.log("id",params);
+  const suprimmer = await comment.destroy({ where: { id: params } });
+  if (suprimmer) {
+    res.json({ message: "comment supprimé" });
+  } else {
+    res.json({ message: "erreur 404" });
+  }
 };

@@ -6,17 +6,23 @@ const { QueryTypes } = require("@sequelize/core");
 const UserModel = require("../models/users");
 const Sequelize = require("sequelize");
 
- const sequelize = new Sequelize("bd_groupo", "root", "1029!rieN", { //require('../config/db.config)
-   host: "localhost",
-   dialect: "mysql",
- });
+const sequelize = new Sequelize(
+  `${process.env.DB_NAME}`,
+  `${process.env.USER_NAME}`,
+  `${process.env.PASSWORD_DB}`,
+  {
+    //require('../config/db.config)
+    host: "localhost",
+    dialect: "mysql",
+  }
+);
 
 const User = UserModel(sequelize, Sequelize);
 
 // Retrieve all user
 exports.findAll = (req, res) => {};
 // Find a single user
-exports.findOne = (req, res) => {};
+
 // Update userData
 exports.update = (req, res) => {};
 // Delete an user
@@ -25,7 +31,6 @@ exports.delete = (req, res) => {};
 exports.deleteAll = (req, res) => {};
 // Find all article's user.
 exports.findAllPublished = (req, res) => {};
-
 
 // --------------signup-----------------------
 exports.signup = async (req, res, next) => {
@@ -42,9 +47,8 @@ exports.signup = async (req, res, next) => {
   });
   if (created) {
     res.status(201).json(project);
-    
-    console.log(User); 
-    
+
+    console.log(User);
   } else {
     res.status(404).json({ message: "Email utilisateur existant" });
   }
@@ -60,11 +64,8 @@ exports.login = async (req, res, next) => {
       user.password
     );
     if (password_valid) {
-      token = jwt.sign(
-        { id: user.id, },
-        `${process.env.TOKEN}`
-      );
-      res.status(200).json({ token: token ,userId:user.id});
+      token = jwt.sign({ id: user.id }, `${process.env.TOKEN}`);
+      res.status(200).json({ token: token, userId: user.id });
       console.log(token);
     } else {
       res.status(400).json({ error: "Mot de passe incorrect !" });
@@ -74,15 +75,16 @@ exports.login = async (req, res, next) => {
   }
 };
 
-
-exports.destroyUser = async (req, res, ) => {
-  const params = req.query.id
-  console.log(params);
-    const suprimmer = await article.destroy({where:{id:params}});
-    if(suprimmer){
-      res.json({message:'Article supprimé'})
-  }else{
-      res.json({message:"erreur 404"})
-
+//-----------SUPPRIMER----------------//
+exports.destroyUser = async (req, res) => {
+  const params = req.query.id;
+  console.log("id",params);
+  const UserId = params.split("\ ");
+  console.log("id",params);
+  const suprimmer = await User.destroy({ where: { id: params } });
+  if (suprimmer) {
+    res.json({ message: "user supprimé" });
+  } else {
+    res.json({ message: "erreur 404" });
   }
-}
+};

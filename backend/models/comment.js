@@ -1,14 +1,18 @@
 module.exports = (sequelize, type) => {
   const Comment = sequelize.define("comment", {
-    commentTxt: {
-      type: type.STRING,
+    comment: {
+      type: type.STRING(),
     },
     image: {
-      type: type.STRING,
+      type: type.CHAR(255),
     },
     id: {
-      type: type.INTEGER,
+      type: type.INTEGER(),
       primaryKey: true,
+    },
+    like: {
+      type: type.INTEGER(),
+      
     },
   });
   return Comment;

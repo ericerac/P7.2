@@ -61,7 +61,7 @@ export default {
       axios
         .get("http://localhost:3000/article/all")
         .then((res) => {
-            console.log("reponse", res);
+            console.log("reponse", res.data);
             formData.push(res);
             console.log("formData",formData);
           if (res) {

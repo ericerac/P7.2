@@ -15,6 +15,7 @@ const routes =[
         component: post,
 
     }
+    
 ];
 
 const router = createRouter({

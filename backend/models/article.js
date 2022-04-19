@@ -16,8 +16,8 @@ module.exports = (sequelize, type) => {
       dislike:{
         type:type.INTEGER(36)
       },
-      userId:{
-        type:type.CHAR(36)
+      usersId:{
+        type:type.CHAR(38)
       },
       
     });
