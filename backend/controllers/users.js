@@ -79,7 +79,7 @@ exports.login = async (req, res, next) => {
 exports.destroyUser = async (req, res) => {
   const params = req.query.id;
   console.log("id",params);
-  const UserId = params.split("\ ");
+  
   console.log("id",params);
   const suprimmer = await User.destroy({ where: { id: params } });
   if (suprimmer) {

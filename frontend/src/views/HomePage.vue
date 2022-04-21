@@ -20,6 +20,7 @@
         accept="image/png, image/jpeg"
       />
     </label>
+    <button  class ="btn" id="valider" >Valider </button>
   </div>
 </template>
 
@@ -73,5 +74,7 @@ export default {
 .btn {
   width: 40%;
   margin: 10px auto;
+  border:1px solid black;
+  border-radius: 5px;
 }
 </style>

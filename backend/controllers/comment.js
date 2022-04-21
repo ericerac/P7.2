@@ -15,6 +15,12 @@ exports.published = async (req, res, next) => {
   res.json(allComment);
 };
 
+exports.OnePublished = async (req, res, next) => {
+  console.log("-------req.query One--------", req.query.id);
+  const params = req.query.id;
+  const oneComment = await comment.findOne({ where: { keys: `${params}` } });
+  res.json(oneComment);
+};
 
 exports.publish = async (req, res, next) => {
   console.log("req.body.image",typeof req.body.media);
@@ -25,12 +31,14 @@ exports.publish = async (req, res, next) => {
   
   const publish = await comment.create({
    
-    usersId: req.body.usersId,
+    users_id: req.body.users_id,
+    articles_id: req.body.articles_id,
+    articles_users_id: req.body.articles_users_id,
     comment: req.body.comment,
     like:req.body.like,
     dislike:req.body.dislike,
 
-    image: `${req.protocol}://${req.get("host")}/images/${
+    media: `${req.protocol}://${req.get("host")}/images/${
       req.file.filename
     }`,
   });

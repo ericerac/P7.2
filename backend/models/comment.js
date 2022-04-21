@@ -3,7 +3,7 @@ module.exports = (sequelize, type) => {
     comment: {
       type: type.STRING(),
     },
-    image: {
+    media: {
       type: type.CHAR(255),
     },
     id: {
@@ -14,6 +14,19 @@ module.exports = (sequelize, type) => {
       type: type.INTEGER(),
       
     },
+    users_id: {
+      type: type.INTEGER(),
+      
+    },
+    articles_id: {
+      type: type.INTEGER(),
+      
+    },
+    articles_users_id: {
+      type: type.INTEGER(),
+      
+    },
+
   });
   return Comment;
 };

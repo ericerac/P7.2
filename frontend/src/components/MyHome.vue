@@ -28,10 +28,12 @@
       <button v-if="mode == 'signup'" id="btn" @click="signupPost()">
         S'inscrire
       </button>
-      <span v-if="status =='loading'">En cours de connexion</span>
+      <span v-if="status == 'loading'">En cours de connexion</span>
       <span v-else>Connecté</span>
-      
-      <button v-if="mode == 'login'" id="btn" @click="loginPost()">Se connecter</button>
+
+      <button v-if="mode == 'login'" id="btn" @click="loginPost()">
+        Se connecter
+      </button>
 
       <p class="annonce" v-if="mode == 'signup'">
         Vous avez déjà un compte:><span @click="goToLogin">Se connecter</span>
@@ -74,25 +76,42 @@ export default {
       this.mode = "login";
     },
 
-    signupPost:function() {
-      this.$store.dispatch('signupPost',{
+    signupPost: function () {
+      this.$store
+        .dispatch("signupPost", {
           firstName: this.firstName,
-           lastName: this.lastName,
-           email: this.email,
-           password: this.password,
-      }).then((response)=>{
-console.log(response);
-      }).catch((error)=>{
-        console.log(error);
-      })
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
+    // login: function(){
+    //   const self = this;
+    //   this.$store.dispatch('loginPost',{
+    //     email:this.email,
+    //     password:this.password,
+
+    //   }).then(function (response){
+    //     self.$router.push('HomePage');
+    //   }).catch((err),{
+      
+    //   })
+    // }
     loginPost() {
+      const self = this;
       axios
         .post("http://localhost:3000/login", {
           email: this.email,
           password: this.password,
         })
         .then((response) => {
+          self.$router.push('HomePage');
           console.log("reponse", response);
         })
         .catch(() => {
@@ -132,20 +151,9 @@ console.log(response);
 }
 </style>
 
-
-// axios
-//         .post("http://localhost:3000/signup", {
-//           firstName: this.firstName,
-//           lastName: this.lastName,
-//           email: this.email,
-//           password: this.password,
-//         })
-//         .then((response) => {
-//           if (response.status(201)) {
-//             window.location.href = "http://localhost:8080/homepage";
-//           }
-//           console.log("reponse", response);
-//         })
-//         .catch(() => {
-//           console.log("ça m'énerve signup");
-//         });
+// axios // .post("http://localhost:3000/signup", { // firstName:
+this.firstName, // lastName: this.lastName, // email: this.email, // password:
+this.password, // }) // .then((response) => { // if (response.status(201)) { //
+window.location.href = "http://localhost:8080/homepage"; // } //
+console.log("reponse", response); // }) // .catch(() => { // console.log("ça
+m'énerve signup"); // });

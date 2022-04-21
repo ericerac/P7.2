@@ -3,6 +3,7 @@
                 <h2>Bienvenue sur votre Reseau social</h2>
                   <div id = "formLogin">
                       <form id="form_login">
+                        
                           <input class ="input" placeholder ="Email">
                           <input class ="input" placeholder ="Password">
                           <button class ="btn" v-on:click="loginPost()">Login</button>
