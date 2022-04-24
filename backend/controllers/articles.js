@@ -5,11 +5,16 @@ const multer = require("multer");
 const fs = require("fs");
 // const sequelize = require('../config/db.config')
 
-const sequelize = new Sequelize(`${process.env.DB_NAME}`, `${process.env.USER_NAME}`, `${process.env.PASSWORD_DB}`, {
-  //require('../config/db.config)
-  host: "localhost",
-  dialect: "mysql",
-});
+const sequelize = new Sequelize(
+  `${process.env.DB_NAME}`,
+  `${process.env.USER_NAME}`,
+  `${process.env.PASSWORD_DB}`,
+  {
+    //require('../config/db.config)
+    host: "localhost",
+    dialect: "mysql",
+  }
+);
 
 const article = ArtModel(sequelize, Sequelize);
 
@@ -27,7 +32,6 @@ exports.OnePublished = async (req, res, next) => {
   const oneArticle = await article.findOne({ where: { id: `${params}` } });
   res.json(oneArticle);
 };
-
 
 exports.publish = async (req, res, next) => {
   console.log("req.body.image", typeof req.body.media);

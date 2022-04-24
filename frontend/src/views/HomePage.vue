@@ -1,12 +1,12 @@
 <template>
   <div id="homePage">
-    <img id="userImg" src="" alt="" />
-    <h3 id="userName">{{ userName }}Machin Bidule</h3>
-    <span id="userDate" class="userInfo">Menbre depuis le:{{ userDate }}</span>
-    <span id="userEmail" class="userInfo">{{ userEmail }}</span>
-    <span id="userPost" class="userInfo">Articles publiés:{{ userPost }}</span>
+    <img id="userImg" src="user.profilImg" alt="" />
+    <h3 id="userName">{{ user.firstName }} {{user.lastName}}</h3>
+    <span id="userDate" class="userInfo">Menbre depuis le:{{ user.createdAt }}</span>
+    <span id="userEmail" class="userInfo">Email: {{ user.email }}</span>
+    <span id="userPost" class="userInfo">Articles publiés:{{ user.postCount }}</span>
     <span id="userComment" class="userInfo"
-      >Commentaires publiés:{{ userComment }}</span
+      >Commentaires publiés:{{ user.commentCount }}</span
     >
     <button class="btn" id="passwordChange">passwordChange</button>
     <label
@@ -21,36 +21,45 @@
       />
     </label>
     <button  class ="btn" id="valider" >Valider </button>
+    <!-- <button  class ="btn" id="logOut" :click="logOut()">Se deconnecter </button> -->
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
+  name:'HomePage',
+  mounted:function(){
+   
+    console.log(this.$store.state.user);
+     if (this.$store.state.user.userId == -1){
+       this.$router.push('/MyHome');
+       return;
+     }
+     this.$store.dispatch('getUserData');
+      //getUserData();
+  },
+
   data: () => {
-    return {};
+    return {
+      
+    };
+  },
+  computed:{
+    ...mapState({
+      user:'userData',
+    })
   },
   methods: {
-    getUser() {
-      axios
-        .get("http://localhost:3000/users")
-        .then((res) => {
-          console.log("reponse", res);
-          formData.push(res);
-          console.log("formData", formData);
-          if (res) {
-            formData.push(res);
-            console.log("reponse", res);
-            console.log(formData);
-          } else {
-            console.log("pas de data");
-          }
-        })
-        .catch((err) => {
-          console.log("reponse err", err);
-
-          //console.log("ça m'énerve encore");
-        });
-    },
+    // logOut: (state) => {
+      
+       
+      
+    //   localStorage.removeItem('user')
+    //   return
+    // },
+    
+    
   },
 };
 </script>

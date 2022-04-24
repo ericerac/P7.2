@@ -75,6 +75,15 @@ exports.login = async (req, res, next) => {
   }
 };
 
+// -----------GET USER-------------------
+exports.GetOneUser = async (req, res, next) => {
+  console.log("-------req.body One--------", req.body.id);
+  console.log("-------req.query One--------", req.query.id);
+  const params = req.query.id;
+  const oneArticle = await User.findOne({ where: { id: `${params}` } });
+  res.json(oneArticle);
+};
+
 //-----------SUPPRIMER----------------//
 exports.destroyUser = async (req, res) => {
   const params = req.query.id;

@@ -50,7 +50,8 @@ const userControl = require('../../controllers/users');
 //});
 router.post("/signup",  userControl.signup);
 router.post("/login",  userControl.login);
-router.put("/user",  userControl.destroyUser);
+//router.put("/user",  userControl.destroyUser);
+router.get("/user",  userControl.GetOneUser);
 
 // router.post("/signup", (req, res, next) => {
 //   console.log("req.body", req.body.email);

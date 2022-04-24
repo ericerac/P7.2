@@ -1,5 +1,5 @@
 <template>
-  <div id="form_card">
+  <div id="form_card" >
     <div id="form_signup">
       <div id="formName" v-if="mode == 'signup'">
         <input
@@ -48,10 +48,11 @@
 </template>
 
 <script>
-//import { log } from 'console';
 
-//mport axios from axios;
+
+//import axios from axios;
 const axios = require("axios");
+import { mapState } from 'vuex'
 
 export default {
   name: "MyHome",
@@ -66,7 +67,9 @@ export default {
       password: "",
     };
   },
-  computed: {},
+  computed: {
+     ...mapState(['status'])
+  },
   methods: {
     goToSignup: function () {
       this.mode = "signup";
@@ -75,49 +78,81 @@ export default {
     goToLogin: function () {
       this.mode = "login";
     },
+//---------------------------------------
 
-    signupPost: function () {
-      this.$store
-        .dispatch("signupPost", {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          email: this.email,
-          password: this.password,
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    // login: function(){
+signupPost: function(){
+       const self = this;
+
+       this.$store.dispatch('signupPost',{
+         firstName: this.firstName,
+         lastName: this.lastName,
+         email:this.email,
+         password:this.password
+       })
+       .then(function (response){
+         console.log("reponse",response);
+         self.loginPost();
+       })
+       .catch((err)=>{
+         console.log(err);
+       });
+     },
+
+//--------------------------------------
+    // signupPost() {
     //   const self = this;
-    //   this.$store.dispatch('loginPost',{
-    //     email:this.email,
-    //     password:this.password,
+    //   axios
+    //     .post("http://localhost:3000/signup", {
+    //       firstName: this.firstName,
+    //       lastName: this.lastName,
+    //       email: this.email,
+    //       password: this.password,
+    //     })
+    //     .then((response) => {
+    //       self.loginPost();
+    //       console.log(response);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
+//---------------------------------------------
 
-    //   }).then(function (response){
-    //     self.$router.push('HomePage');
-    //   }).catch((err),{
-      
-    //   })
-    // }
-    loginPost() {
-      const self = this;
-      axios
-        .post("http://localhost:3000/login", {
-          email: this.email,
-          password: this.password,
-        })
-        .then((response) => {
-          self.$router.push('HomePage');
-          console.log("reponse", response);
-        })
-        .catch(() => {
-          console.log("Restons calme login");
+     loginPost: function(){
+       const self = this;
+       this.$store.dispatch('loginPost',{
+         email:this.email,
+         password:this.password
+       })
+       .then((response) => {
+           console.log(response.data); // userId token
+           self.$router.push('HomePage');    
+       })
+       .catch((err) => {
+          console.log("Restons calme login",err);
         });
-    },
+     }
+
+//------------------------------------
+
+    // loginPost() {
+    //   const self = this;
+    //   axios
+    //     .post("http://localhost:3000/login", {
+    //       email: this.email,
+    //       password: this.password,
+    //     })
+    //     .then((response) => {
+    //       self.$router.push("HomePage");
+    //       console.log("reponse", response);
+    //     })
+    //     .catch(() => {
+    //       console.log("Restons calme login");
+    //     });
+    // },
+//--------------------------------------
+
+
   },
 };
 </script>

@@ -73,6 +73,7 @@ app.use(express.static(path.join(__dirname,"images")));
 app.use("/", userRoutes);
 app.use("/login", userRoutes);
 app.use("/article", ArtRoutes);
+// app.use("/comment", commentRoutes);
 app.use("/comment", commentRoutes);
 
 //app.use("/article", ArtRoutes);
