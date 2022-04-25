@@ -1,8 +1,8 @@
 const dbConfig = require("../config/db.config.js");
 const Sequelize = require("sequelize");
-const userModel = require('./users.js')
-const ArtModel = require('./article.js')
-const CommentModel = require('./comment.js')
+const userModel = require("./users.js");
+const ArtModel = require("./article.js");
+const CommentModel = require("./comment.js");
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
@@ -19,13 +19,35 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-const users = userModel(sequelize, Sequelize);
-const article = ArtModel(sequelize, Sequelize);
-const comment = CommentModel(sequelize, Sequelize);
+db.users = userModel(sequelize, Sequelize);
+db.article = ArtModel(sequelize, Sequelize);
+db.comment = CommentModel(sequelize, Sequelize);
+// const like = LikeModel(sequelize, Sequelize);
+// const DisLike = DisLikeModel(sequelize, Sequelize);
 
-//(db.users = require("./users.js")), (sequelize, Sequelize);
-//(db.article = require("./article.js")), (sequelize, Sequelize);
+db.users.hasMany(db.article, { as: "article" });
+db.article.hasMany(db.comment, { as: "comment" });
 
+db.article.belongsTo(db.users, {
+  foreignKey: "userId",
+  as: "users",
+});
+
+db.comment.belongsTo(db.article, {
+  foreignKey: "articleId",
+  as: "article",
+});
+
+db.comment.belongsTo(db.users, {
+  foreignKey: "userId",
+  as: "users",
+});
+
+// Object.keys(db).forEach(modelName => {
+//   if (db[modelName].associate) {
+//       db[modelName].associate(db);
+//   }
+// });
 module.exports = db;
 
 // db.role.belongsToMany(db.user, {

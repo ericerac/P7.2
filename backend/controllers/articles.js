@@ -3,6 +3,11 @@ const Sequelize = require("sequelize");
 const ArtModel = require("../models/article");
 const multer = require("multer");
 const fs = require("fs");
+const db = require("../models");
+//const Comment = require("../models/comment");
+const Comment = db.comment;
+const articles = db.article;
+
 // const sequelize = require('../config/db.config')
 
 const sequelize = new Sequelize(
@@ -18,34 +23,50 @@ const sequelize = new Sequelize(
 
 const article = ArtModel(sequelize, Sequelize);
 
+//--------------GET ARTICLES--------------------//
 exports.published = async (req, res, next) => {
   console.log("-------All Articles--------");
   console.log("-------req.params-------", req.query);
-  const allArticle = await article.findAll();
+  const allArticle = await article.findAll({
+    include: [
+      {
+        model: Comment,
+        as: "comments",
+      },
+    ],
+  });
   res.json(allArticle);
   console.log(allArticle);
 };
 
+//--------------GET ONE ARTICLE--------------------//
+
 exports.OnePublished = async (req, res, next) => {
   console.log("-------req.query One--------", req.query.id);
+  console.log("-------Comment--------", Comment);
   const params = req.query.id;
-  const oneArticle = await article.findOne({ where: { id: `${params}` } });
+  const oneArticle = await articles.findOne({
+    where: { id: `${params}` },
+    include: [{model:Comment,as:"comment"}],
+  });
   res.json(oneArticle);
 };
 
+//------------PUBLISH-----------------------//
+
 exports.publish = async (req, res, next) => {
   console.log("req.body.image", typeof req.body.media);
-  console.log("req.body", req.body.users_id);
+  console.log("req.body", req.body.usersid);
 
   const publish = await article.create({
-    users_id: req.body.users_id,
+    userId: req.body.usersid,
     content: req.body.content,
     like: req.body.like,
     dislike: req.body.dislike,
 
     media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
   });
-  console.log("publish", publish.users_id);
+  console.log("publish", publish.userId);
   if (publish) {
     res.json(publish);
   } else {
@@ -53,6 +74,7 @@ exports.publish = async (req, res, next) => {
   }
 };
 
+//---------------DELETE--------------------//
 exports.destroyArt = async (req, res) => {
   const params = req.query.id;
   console.log(params);

@@ -9,24 +9,23 @@ module.exports = (sequelize, type) => {
     id: {
       type: type.INTEGER(),
       primaryKey: true,
+      autoIncrement: true,
     },
     like: {
       type: type.INTEGER(),
-      
     },
-    users_id: {
-      type: type.INTEGER(),
-      
-    },
-    articles_id: {
-      type: type.INTEGER(),
-      
-    },
-    articles_users_id: {
-      type: type.INTEGER(),
-      
+    userId: {
+      type: type.INTEGER(36),
     },
 
+    articleId: {
+      type: type.INTEGER(),
+    },
+
+     
   });
+  Comment.associate = function(models) {
+    Comment.belongsTo(models.Article, {foreignKey: 'articleId', as: 'Article'})
+  };
   return Comment;
 };

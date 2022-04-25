@@ -40,6 +40,11 @@ module.exports = (sequelize,type) => {
         len: [8, 410]
       }
     },
+    role:{
+      type: type.STRING,
+      allowNull: false,
+      defaultValue: 'user',
+    }
     
   });
   

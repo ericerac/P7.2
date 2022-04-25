@@ -60,8 +60,8 @@ exports.publish = async (req, res, next) => {
   const imageUrl = req.body.media;
 
   const publish = await comment.create({
-    users_id: req.body.users_id,
-    articles_id: req.body.articles_id,
+    userId: req.body.users_id,
+    articleId: req.body.articles_id,
     articles_users_id: req.body.articles_users_id,
     comment: req.body.comment,
     like: req.body.like,

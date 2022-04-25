@@ -1,14 +1,13 @@
 import { createStore } from "vuex";
 const axios = require("axios");
 
-
-const mapState = require('vuex')
+const mapState = require("vuex");
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
-    // headers: {
-    //   "content-Type": "multipart/form-data",
-    // },
+  // headers: {
+  //   "content-Type": "multipart/form-data",
+  // },
 });
 
 let user = localStorage.getItem("user");
@@ -17,19 +16,19 @@ if (!user) {
     userId: -1,
     token: "",
   };
-};
+}
 
 const store = createStore({
   state: {
     status: "",
     user: user,
-     userData: {
-       firstName: "",
-       lastName: "",
-       email: "",
-    
-       createdAt: "",
-     },
+    userData: {
+      firstName: "",
+      lastName: "",
+      email: "",
+
+      createdAt: "",
+    },
   },
   mutations: {
     setStatus: (state, status) => {
@@ -37,12 +36,12 @@ const store = createStore({
     },
     logUser: (state, user) => {
       localStorage.setItem("user", JSON.stringify(user));
-      console.log("LOCALSTORAGE",user);
+      console.log("LOCALSTORAGE", user);
       state.user = user;
     },
-     UserData: (state, userData) => {
-       state.userData = userData;
-     },
+    UserData: (state, userData) => {
+      state.userData = userData;
+    },
     logOut: (state) => {
       state.user = {
         userId: -1,
@@ -51,9 +50,7 @@ const store = createStore({
       //localStorage.removeItem('user')
     },
   },
-  computed: {
- 
-  },
+  computed: {},
   actions: {
     signupPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
@@ -65,7 +62,7 @@ const store = createStore({
             resolve(response);
             console.log(response);
           })
-          .catch( (err) =>{
+          .catch((err) => {
             commit("setStatus", "error_create");
             reject(err);
             console.log("ça ne fonctionne pas");
@@ -79,11 +76,11 @@ const store = createStore({
         instance
           .post("/login", userData)
           .then((response) => {
-              commit("setStatus", "");
-              commit("logUser", response.data);
-              resolve(response);
-              console.log("logUser", logUser);
-            })
+            commit("setStatus", "");
+            commit("logUser", response.data);
+            resolve(response);
+            console.log("logUser", logUser);
+          })
           .catch((err) => {
             commit("setStatus", "error_login");
             console.log("ça deconne login index store");
@@ -93,8 +90,7 @@ const store = createStore({
     },
 
     getUserData: ({ commit }) => {
-      
-      const User =JSON.parse(user);
+      const User = JSON.parse(user);
       const userId = User.userId;
       console.log(userId);
       instance
@@ -121,15 +117,15 @@ const store = createStore({
         instance
           .post("/article", artData)
           .then((response) => {
-              commit("setStatus", "loading");
-              resolve(response);
-              console.log(response);
-            })
+            commit("setStatus", "loading");
+            resolve(response);
+            console.log(response);
+          })
           .catch((err) => {
-              commit("setStatus", "error_create");
-              reject(err);
-              console.log("ça ne fonctionne pas post art");
-            });
+            commit("setStatus", "error_create");
+            reject(err);
+            console.log("ça ne fonctionne pas post art");
+          });
       });
     },
 
@@ -139,15 +135,15 @@ const store = createStore({
         instance
           .post("/article", artData)
           .then((response) => {
-              commit("setStatus", "loading");
-              resolve(response);
-              console.log(response);
-            })
+            commit("setStatus", "loading");
+            resolve(response);
+            console.log(response);
+          })
           .catch((err) => {
-              commit("setStatus", "error_create");
-              reject(err);
-              console.log("ça ne fonctionne pas post art");
-            });
+            commit("setStatus", "error_create");
+            reject(err);
+            console.log("ça ne fonctionne pas post art");
+          });
       });
     },
   }, // fin actions

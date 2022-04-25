@@ -75,7 +75,7 @@ exports.login = async (req, res, next) => {
   }
 };
 
-// -----------GET USER-------------------
+// -----------GET USER DATA-------------------
 exports.GetOneUser = async (req, res, next) => {
   console.log("-------req.body One--------", req.body.id);
   console.log("-------req.query One--------", req.query.id);
@@ -83,8 +83,22 @@ exports.GetOneUser = async (req, res, next) => {
   const oneArticle = await User.findOne({ where: { id: `${params}` } });
   res.json(oneArticle);
 };
+//------------UPDATE-----------------//
 
-//-----------SUPPRIMER----------------//
+exports.updateUser = async (user, id) => {
+  var updateUser = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+     profilImg: user.profilImg,
+     password:user.password,
+      
+  };
+  const Update = await User.update(updateUser, { where: { id: id } });
+  return Update;
+}
+
+//-----------DELETE----------------//
 exports.destroyUser = async (req, res) => {
   const params = req.query.id;
   console.log("id",params);
