@@ -27,11 +27,11 @@ const article = ArtModel(sequelize, Sequelize);
 exports.published = async (req, res, next) => {
   console.log("-------All Articles--------");
   console.log("-------req.params-------", req.query);
-  const allArticle = await article.findAll({
+  const allArticle = await articles.findAll({
     include: [
       {
         model: Comment,
-        as: "comments",
+        as: "comment",
       },
     ],
   });

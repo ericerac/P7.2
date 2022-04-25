@@ -15,37 +15,26 @@ const sequelize = new Sequelize(
 
 const comment = CommentModel(sequelize, Sequelize);
 
+//------------GET ALL ARTICLE'S COMMENTS--------------//
+
 exports.ArtComments = async (req, res, next) => {
   console.log("requete Params", req.query);
-  const allComment = await comment.findAll({
-    where: {
-      articles_id: req.query.id,
-    },
-  });
+  const allComment = await comment.findAll();
   res.json(allComment);
 };
 
-
+//------------GET ALL USER'S COMMENTS--------------//
 exports.UsersComments = async (req, res, next) => {
   console.log("requete Params", req.query);
   const Comment = await comment.findAll({
     where: {
-      users_id: req.query.users_id,
+      userId: req.query.id,
     },
   });
   res.json(Comment);
 };
 
-// find (req, res) {
-//   return usuario.findAll({
-//       where: {
-//           : req.params.username,
-//       }
-//   })
-//   .then(usuario => res.status(200).send(usuario))
-//   .catch(error => res.status(400).send(error))
-// },
-// };
+
 exports.OnePublished = async (req, res, next) => {
   console.log("-------req.query One--------", req.query.id);
   const params = req.query.id;

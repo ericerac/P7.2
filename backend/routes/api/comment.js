@@ -4,7 +4,8 @@ const commentControl = require('../../controllers/comment');
 
 //router.get("/", commentControl.published)
 //router.get("/all", commentControl.ArtComments)
-router.get("/", commentControl.ArtComments)
+router.get("/all", commentControl.ArtComments)
+router.get("/", commentControl.UsersComments)
 
 router.post("/",multer, commentControl.publish)
 
