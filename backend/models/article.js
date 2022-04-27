@@ -27,11 +27,10 @@ module.exports = (sequelize, type) => {
       
     });
 
-    //  Article.associate = function(models) {
-    //    article.belongsTo(models.user, {foreignKey: 'userId', as: 'user'});
-    //    article.hasMany(models.comment, {foreignKey: 'commentId', as: 'comment'})
-  
-    //  };
+      // Article.associate = function(models) {
+      //   article.belongsTo(models.user, {foreignKey: 'userId', as: 'user'});
+      //   article.hasMany(models.comment, {foreignKey: 'commentId', as: 'comment'})
+      // };
     
     return Article;
   };

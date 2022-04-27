@@ -12,7 +12,7 @@ const sequelize = new Sequelize(
     dialect: "mysql",
   }
 );
-
+// Objet sequelize
 const comment = CommentModel(sequelize, Sequelize);
 
 //------------GET ALL ARTICLE'S COMMENTS--------------//
@@ -34,6 +34,7 @@ exports.UsersComments = async (req, res, next) => {
   res.json(Comment);
 };
 
+//------------GET ONE COMMENT--------------//
 
 exports.OnePublished = async (req, res, next) => {
   console.log("-------req.query One--------", req.query.id);
@@ -41,6 +42,8 @@ exports.OnePublished = async (req, res, next) => {
   const oneComment = await comment.findOne({ where: { id: `${params}` } });
   res.json(oneComment);
 };
+
+//-----------PUBLISH A COMMENT---------------//
 
 exports.publish = async (req, res, next) => {
   console.log("req.body.image", typeof req.body.media);
@@ -66,6 +69,8 @@ exports.publish = async (req, res, next) => {
     res.json({ message: "erreur 404" });
   }
 };
+
+//-----------DELETE A COMMENT---------------//
 
 exports.destroyComment = async (req, res) => {
   const params = req.query.id;

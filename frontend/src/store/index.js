@@ -5,10 +5,12 @@ const mapState = require("vuex");
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
-  // headers: {
-  //   "content-Type": "multipart/form-data",
-  // },
+   headers: {
+     
+    //  "content-Type": "multipart/form-data",
+   },
 });
+
 
 let user = localStorage.getItem("user");
 if (!user) {
@@ -18,17 +20,31 @@ if (!user) {
   };
 }
 
+const User = JSON.parse(user);
+      const userId = User.userId;
+      console.log(userId);
+
 const store = createStore({
   state: {
     status: "",
     user: user,
     userData: {
+     
       firstName: "",
       lastName: "",
       email: "",
-
       createdAt: "",
     },
+    formData: {
+      userId:"",
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      media: "",
+    },
+    artData: {},
+    comment: {},
   },
   mutations: {
     setStatus: (state, status) => {
@@ -42,6 +58,22 @@ const store = createStore({
     UserData: (state, userData) => {
       state.userData = userData;
     },
+    ArtData: (state, artData) => {
+      state.artData = artData;
+    },
+    Comment: (state, comment) => {
+      state.comment = comment;
+    },
+    FormData:(state,formData)=>{
+      state.formData = formData;
+    },
+    Articles:(state, articles) => {
+      state.articles = articles;
+    },
+    Comments:(state, comments) => {
+      state.comments = comments;
+    },
+
     logOut: (state) => {
       state.user = {
         userId: -1,
@@ -88,6 +120,28 @@ const store = createStore({
           });
       });
     },
+    updateUser: ({commit},formData) => {
+      commit("setStatus", "loading");
+      
+
+      return new Promise((resolve, reject) => {
+        instance
+          .put("/user/update", formData)
+          .then( (response) => {
+
+            console.log("FORM-DATA INDEX -->",formData);
+
+            commit("setStatus", "loading");
+            resolve(response);
+            console.log("REPONSE UPDATE",response);
+          })
+          .catch((err) => {
+            commit("setStatus", "error_create");
+            reject(err);
+            console.log("ça ne fonctionne pas");
+          });
+      });
+    },
 
     getUserData: ({ commit }) => {
       const User = JSON.parse(user);
@@ -98,6 +152,11 @@ const store = createStore({
         .then((res) => {
           console.log("reponse", res.data);
           commit("UserData", res.data);
+          const countArticle = res.data.article.length;
+          commit("Articles",countArticle);
+          const countComment = res.data.comment.length;
+          console.log("Articles",countComment);
+          commit("Comments",countComment);
           if (res) {
             console.log("reponse", res);
           } else {
@@ -129,15 +188,29 @@ const store = createStore({
       });
     },
 
-    getAllArticle: ({ commit }, artData) => {
+    getAllArticle: ({ commit }) => {
       commit("setStatus", "loading");
+      console.log("getAllArticle");
       return new Promise((resolve, reject) => {
         instance
-          .post("/article", artData)
-          .then((response) => {
+          .get("/article/all")
+          .then((res) => {
+            console.log(res);
             commit("setStatus", "loading");
-            resolve(response);
-            console.log(response);
+            commit("ArtData", res.data);
+            console.log("res GET INDEX", res.data);
+            let dat = res.data;
+            console.log("res GET INDEX ARt", dat);
+            //  let com = dat.comment;
+            //  console.log("res GET INDEX COM",com);
+            //  let cont = com.content;
+            //  console.log("res GET INDEX COMMENT",cont);
+            for (let i of dat) {
+              commit("Comment", i.comment);
+              console.log("comment", i.comment);
+            }
+
+            resolve(res);
           })
           .catch((err) => {
             commit("setStatus", "error_create");

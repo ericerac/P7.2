@@ -15,7 +15,7 @@ var sequelize = new Sequelize(dbConfig);
 /* Define Models */
 
 module.exports = (sequelize,type) => {
-  return sequelize.define("user", {
+  const User = sequelize.define("user", {
     id: {
       type: type.UUID,
       defaultValue: type.UUIDV4,
@@ -40,6 +40,9 @@ module.exports = (sequelize,type) => {
         len: [8, 410]
       }
     },
+    media:{
+      type:type.CHAR(255)
+    },
     role:{
       type: type.STRING,
       allowNull: false,
@@ -47,5 +50,10 @@ module.exports = (sequelize,type) => {
     }
     
   });
-  
+  // User.associate = function(models) {
+    
+  //   User.hasMany(models.comment, {foreignKey: 'articletId', as: 'article'})
+  //   User.hasMany(models.comment, {foreignKey: 'commentId', as: 'comment'})
+  // };
+  return User;
 };

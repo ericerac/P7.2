@@ -1,5 +1,5 @@
 <template>
-  <div id="form_card" >
+  <div id="form_card">
     <div id="form_signup">
       <div id="formName" v-if="mode == 'signup'">
         <input
@@ -16,7 +16,12 @@
           placeholder="Prénom"
         />
       </div>
-      <input v-model="email" class="input" placeholder="Email" />
+      
+      <input 
+        v-model="email" 
+        class="input" 
+        placeholder="Email" 
+      />
 
       <input
         v-model="password"
@@ -48,11 +53,9 @@
 </template>
 
 <script>
-
-
 //import axios from axios;
 const axios = require("axios");
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "MyHome",
@@ -68,7 +71,7 @@ export default {
     };
   },
   computed: {
-     ...mapState(['status'])
+    ...mapState(["status"]),
   },
   methods: {
     goToSignup: function () {
@@ -78,81 +81,44 @@ export default {
     goToLogin: function () {
       this.mode = "login";
     },
-//---------------------------------------
+    //-------------SIGNUP----------------------//
 
-signupPost: function(){
-       const self = this;
+    signupPost: function () {
+      const self = this;
 
-       this.$store.dispatch('signupPost',{
-         firstName: this.firstName,
-         lastName: this.lastName,
-         email:this.email,
-         password:this.password
-       })
-       .then(function (response){
-         console.log("reponse",response);
-         self.loginPost();
-       })
-       .catch((err)=>{
-         console.log(err);
-       });
-     },
-
-//--------------------------------------
-    // signupPost() {
-    //   const self = this;
-    //   axios
-    //     .post("http://localhost:3000/signup", {
-    //       firstName: this.firstName,
-    //       lastName: this.lastName,
-    //       email: this.email,
-    //       password: this.password,
-    //     })
-    //     .then((response) => {
-    //       self.loginPost();
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-//---------------------------------------------
-
-     loginPost: function(){
-       const self = this;
-       this.$store.dispatch('loginPost',{
-         email:this.email,
-         password:this.password
-       })
-       .then((response) => {
-           console.log(response.data); // userId token
-           self.$router.push('HomePage');    
-       })
-       .catch((err) => {
-          console.log("Restons calme login",err);
+      this.$store
+        .dispatch("signupPost", {   // dispatch ("nom de la fonction dans ./store/index.js ")
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password,
+        })
+        .then(function (response) {
+          console.log("reponse", response);
+          self.loginPost();
+        })
+        .catch((err) => {
+          console.log(err);
         });
-     }
+    },
 
-//------------------------------------
+    //-------------LOGIN-----------------------//
 
-    // loginPost() {
-    //   const self = this;
-    //   axios
-    //     .post("http://localhost:3000/login", {
-    //       email: this.email,
-    //       password: this.password,
-    //     })
-    //     .then((response) => {
-    //       self.$router.push("HomePage");
-    //       console.log("reponse", response);
-    //     })
-    //     .catch(() => {
-    //       console.log("Restons calme login");
-    //     });
-    // },
-//--------------------------------------
-
-
+    loginPost: function () {
+      const self = this;
+      this.$store
+        .dispatch("loginPost", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((response) => {
+          console.log(response.data); // userId token
+          self.$router.push("HomePage");
+        })
+        .catch((err) => {
+          console.log("Restons calme login", err);
+        });
+    },
   },
 };
 </script>

@@ -16,7 +16,4 @@ module.exports = {
   };
 
 
-  // const sequelize = new Sequelize("bd_groupo", "root", "1029!rieN", {
-  //   host: "localhost",
-  //   dialect: "mysql",
-  // });
+  

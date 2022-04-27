@@ -24,8 +24,8 @@ module.exports = (sequelize, type) => {
 
      
   });
-  Comment.associate = function(models) {
-    Comment.belongsTo(models.Article, {foreignKey: 'articleId', as: 'Article'})
-  };
+  // Comment.associate = function(models) {
+  //   Comment.belongsTo(models.Article, {foreignKey: 'articleId', as: 'Article'})
+  // };
   return Comment;
 };

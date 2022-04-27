@@ -3,8 +3,8 @@ const Sequelize = require("sequelize");
 const ArtModel = require("../models/article");
 const multer = require("multer");
 const fs = require("fs");
+
 const db = require("../models");
-//const Comment = require("../models/comment");
 const Comment = db.comment;
 const articles = db.article;
 

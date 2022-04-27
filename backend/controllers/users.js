@@ -4,7 +4,14 @@ const jwt = require("jsonwebtoken");
 //const Op = db.Sequelize.Op;
 const { QueryTypes } = require("@sequelize/core");
 const UserModel = require("../models/users");
+
 const Sequelize = require("sequelize");
+
+const db = require("../models");
+const { use } = require("../app");
+const Comment = db.comment;
+const articles = db.article;
+const user = db.users;
 
 const sequelize = new Sequelize(
   `${process.env.DB_NAME}`,
@@ -80,30 +87,75 @@ exports.GetOneUser = async (req, res, next) => {
   console.log("-------req.body One--------", req.body.id);
   console.log("-------req.query One--------", req.query.id);
   const params = req.query.id;
-  const oneArticle = await User.findOne({ where: { id: `${params}` } });
-  res.json(oneArticle);
+  const oneUser = await user.findOne({
+    where: { id: `${params}` },
+    include: [
+      {
+        model: articles,
+        as: "article",
+      },
+      {
+        model: Comment,
+        as: "comment",
+      },
+    ],
+    distinct:true,
+    col:'articleId'
+
+  });
+  res.json(oneUser);
 };
-//------------UPDATE-----------------//
 
-exports.updateUser = async (user, id) => {
-  var updateUser = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-     profilImg: user.profilImg,
-     password:user.password,
-      
-  };
-  const Update = await User.update(updateUser, { where: { id: id } });
-  return Update;
-}
+//------------UPDATE 4---------------//
 
+exports.updateUser = async (req, res) => {
+  try {
+    const id = req.body.userId;
+
+    console.log("req.body-->", req.body);
+    console.log("req.body.userId-->", id);
+
+    const response = await User.update(
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password:req.body.password,
+          media: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
+      },
+      {
+        where: { id: id },
+      }
+    )
+      .then(function (data) {
+        const res = {
+          success: true,
+          data: data,
+          message: "Mise à jour réussie",
+        };
+        return res;
+      })
+      .catch((error) => {
+        const res = {
+          success: false,
+          error: error,
+          message: "Echec lors de la mise à jour",
+        };
+        return res;
+      });
+    res.json(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
 //-----------DELETE----------------//
 exports.destroyUser = async (req, res) => {
   const params = req.query.id;
-  console.log("id",params);
-  
-  console.log("id",params);
+  console.log("id", params);
+
+  console.log("id", params);
   const suprimmer = await User.destroy({ where: { id: params } });
   if (suprimmer) {
     res.json({ message: "user supprimé" });

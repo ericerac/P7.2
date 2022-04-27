@@ -26,11 +26,12 @@ db.comment = CommentModel(sequelize, Sequelize);
 // const DisLike = DisLikeModel(sequelize, Sequelize);
 
 db.users.hasMany(db.article, { as: "article" });
+db.users.hasMany(db.comment, { as: "comment" });
 db.article.hasMany(db.comment, { as: "comment" });
 
 db.article.belongsTo(db.users, {
   foreignKey: "userId",
-  as: "users",
+  as: "user",
 });
 
 db.comment.belongsTo(db.article, {
@@ -40,7 +41,7 @@ db.comment.belongsTo(db.article, {
 
 db.comment.belongsTo(db.users, {
   foreignKey: "userId",
-  as: "users",
+  as: "user",
 });
 
 // Object.keys(db).forEach(modelName => {
