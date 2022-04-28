@@ -11,8 +11,12 @@
         >Menbre depuis le:{{ user.createdAt }}</span
       >
       <span id="userEmail" class="userInfo">Email: {{ user.email }}</span>
-      <span id="userPost" class="userInfo">Articles publiés: {{CountArticle}}</span>
-      <span id="userComment" class="userInfo">Commentaires publiés: {{CountComment}}</span>
+      <span id="userPost" class="userInfo"
+        >Articles publiés: {{ CountArticle }}</span
+      >
+      <span id="userComment" class="userInfo"
+        >Commentaires publiés: {{ CountComment }}</span
+      >
     </div>
     <div v-if="mode == 'updateProfil'" id="dataForm">
       <input
@@ -107,14 +111,14 @@ export default {
   data: () => {
     return {
       mode: "homePage",
-      fileSelected:'',
+      fileSelected: "",
       formData: {
         userId: "",
         firstName: "",
         lastName: "",
         email: "",
         password: "",
-         media: "",
+        media: "",
       },
     };
   },
@@ -122,18 +126,18 @@ export default {
   computed: {
     ...mapState({
       user: "userData",
-      CountArticle:"articles",
-      CountComment:"comments",
+      CountArticle: "articles",
+      CountComment: "comments",
       UpdateData: "formData",
     }),
-  //   firstName: {
-  //   get () {
-  //     return formData.firstName
-  //   },
-  //   set (value) {
-  //     ( value)
-  //   }
-  // }
+    //   firstName: {
+    //   get () {
+    //     return formData.firstName
+    //   },
+    //   set (value) {
+    //     ( value)
+    //   }
+    // }
   },
   methods: {
     goToHomePage: function () {
@@ -146,34 +150,61 @@ export default {
 
     FileUpload(event) {
       console.log("EVENT", event);
-      // this.fileSelected = event.target.files[0];
-      // console.log("fichier Image",this.fileSelected);
+       this.formData.media = event.target.files[0];
+       console.log("fichier Image",this.formData.media);
     },
 
-    updateUser: function (formData) {
-      console.log("UPDATE USER HOME PAGE");
-        const formDat = new FormData();
-       formDat.append('media',this.fileSelected, this.fileSelected.name);
-      console.log('media',this.fileSelected);
-      this.$store
-        .dispatch("updateUser", { formDat
-          // userId: this.formData.userId,
-          // firstName: this.formData.firstName,
-          // lastName: this.formData.lastName,
-          // email: this.formData.email,
-          // password: this.formData.password,
-          // media: this.formData.media,
-        })
-        .then(function (response) {
-          console.log("reponse", response);
-          // self.loginPost();
-          self.$router.push("/HomePage");
-          goToHomePage();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    // updateUser: function () {
+    //   console.log("UPDATE USER HOME PAGE");
+    //   const getFormData = (formData =>
+    //     Object.entries(formData).reduce((fd, [key, val]) => {
+    //       if (Array.isArray(val)) {
+    //         val.forEach((v) => fd.append(key, v));
+    //       } else {
+    //         fd.append(key, val);
+    //       }
+    //       return fd;
+    //     }), new FormData());
+
+    //   console.log("media", this.fileSelected)
+    //   this.$store
+    //     .dispatch("updateUser", this.getFormData
+    //     //{
+    //       //  userId: this.formData.userId,
+    //       //  firstName: this.formData.firstName,
+    //       //  lastName: this.formData.lastName,
+    //       //  email: this.formData.email,
+    //       //  password: this.formData.password,
+    //       //  media: this.formData.media,
+    //     //}
+    //     )
+    //     .then(function (response) {
+    //       console.log("reponse", response);
+    //       // self.loginPost();
+    //       self.$router.push("/HomePage");
+    //       goToHomePage();
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
+    //-------------UPDATE USER 2--------------_();
+updateUser(formData, index, fileList) {
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    }
+  }
+
+  this.$store.dispatch('updateUser', {
+    'imageData': this.formData,
+    'config': config
+  })
+},
+
+
+    //----------------LOGOUT-------------------(())
+
     // logOut: (state) => {
     //   localStorage.removeItem('user')
     //   return

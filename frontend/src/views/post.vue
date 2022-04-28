@@ -13,13 +13,13 @@
 
           <input
             type="file"
-            id="PhotoPerfilChange"
+            id="mediaPost"
             ref="file"
-            v-on:change="onChangeFileUpload()"
+            @change="FileUpload"
             accept="image/png, image/jpeg"
           />
         </label>
-        <button class="Valider">Publier</button>
+        <button class="Publier" @click="uploadPost">Publier</button>
       </div>
     </div>
     <div id="postPublié" v-for="article in dataArt" :key="article.id">
@@ -33,11 +33,10 @@
         <img class="postImg" alt="Image" v-bind:src="article.media" />
       </div>
       <div id="options">
-        <fa icon="cofee" />
         <span class="like"
           >{{ article.like }} like {{ article.dislike }} dislike</span
         >
-        <div class="comment" >commenter</div>
+        <div class="comment">commenter</div>
       </div>
 
       <div id="repondre">
@@ -51,8 +50,8 @@
 
       <div id="commentaires">
         <div class="commentaire" v-for="comments in dataArt" :key="comments.id">
-          UserName:{{ comments.comment }}</div
-        >
+          UserName:{{ comments.comment }}
+        </div>
         <div id="options">
           <span class="like">{{ likes }} {{ dislikes }} </span>
           <span class="comment">{{ commenter }}ico commenter</span>
@@ -81,31 +80,45 @@ export default {
     this.$store.dispatch("getUserData");
     //getUserData();
   },
-  updated:function (){
-console.log(this.$store.state.artData);
-console.log(this.$store.state.comment);
-
+  updated: function () {
+    console.log(this.$store.state.artData);
+    console.log(this.$store.state.comment);
   },
   data: function () {
-    return {};
+    return {
+
+      fileSelected:'',
+      post: {
+        article: "",
+        media: "",
+      },
+    };
   },
   computed: {
     ...mapState({
       user: "userData",
       dataArt: "artData",
-      comment:"comment",
-      
+      comment: "comment",
 
       //dataCommenmt:"artDAta.comment"
     }),
   },
-  methods: {
+ 
     methods: {
+      uploadPost: function () {
+        console.log(" Publier Post");
+      },
+
+      FileUpload(event) {
+        console.log("EVENT", event);
+         this.fileSelected = event.target.files[0];
+         console.log("fichier Image",this.fileSelected);
+      },
       //  getImg(img) {
       //    return require(`url/${img}`);
       //  }
     },
-  },
+  
 };
 </script>
 
@@ -176,12 +189,12 @@ console.log(this.$store.state.comment);
   display: flex;
   flex-wrap: nowrap;
   text-align: justify;
-  
+
   margin: 20px auto;
   padding-top: 10px;
   background-color: rgb(255, 255, 255);
   width: 95%;
-height: auto;
+  height: auto;
   border: 1px solid #fd2d01;
   border-radius: 5px;
 }

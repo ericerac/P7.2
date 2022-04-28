@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: "http://localhost:3000/",
    headers: {
      
-    //  "content-Type": "multipart/form-data",
+      "content-Type": "multipart/form-data",
    },
 });
 
@@ -35,13 +35,14 @@ const store = createStore({
       email: "",
       createdAt: "",
     },
+    
     formData: {
       userId:"",
       firstName: "",
       lastName: "",
       email: "",
       password: "",
-      media: "",
+     media:'',
     },
     artData: {},
     comment: {},
@@ -120,16 +121,18 @@ const store = createStore({
           });
       });
     },
-    updateUser: ({commit},formData) => {
-      commit("setStatus", "loading");
-      
+    //----------UPDATE 1------------//
 
+    updateUser: ({commit},updateUser) => {
+      commit("setStatus", "loading");
+      console.log("UPDATE USER INDEX",updateUser);
+     
       return new Promise((resolve, reject) => {
         instance
-          .put("/user/update", formData)
+          .put("/user/update", updateUser)
           .then( (response) => {
 
-            console.log("FORM-DATA INDEX -->",formData);
+            console.log("FORM-DATA INDEX -->",response);
 
             commit("setStatus", "loading");
             resolve(response);
@@ -142,7 +145,16 @@ const store = createStore({
           });
       });
     },
-
+//--------------------UPDATE 2-----------------//
+// async updateUser ({ commit }, updateUser) {
+//   await axios.put('/user/update', updateUser.formData, updateUser.config)
+//     .then((res) => {
+//       console.log(res.data)
+//     }).catch((err) => {
+//       console.log(err)
+//     })
+// },
+//-----------------GET USER DATA----------------(())
     getUserData: ({ commit }) => {
       const User = JSON.parse(user);
       const userId = User.userId;

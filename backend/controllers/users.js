@@ -110,17 +110,18 @@ exports.GetOneUser = async (req, res, next) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const id = req.body.userId;
+    const formData = req.body.imageData;
+    const id = formData.userId;
 
     console.log("req.body-->", req.body);
     console.log("req.body.userId-->", id);
 
     const response = await User.update(
       {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password:req.body.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password:formData.password,
           media: `${req.protocol}://${req.get("host")}/images/${
             req.file.filename
           }`,
