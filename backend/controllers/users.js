@@ -107,30 +107,35 @@ exports.GetOneUser = async (req, res, next) => {
 };
 
 //------------UPDATE 4---------------//
-
 exports.updateUser = async (req, res) => {
-  try {
+  
+    console.log("req.body-->", req.body);
     const formData = req.body.imageData;
+    console.log("req.body-->", formData);
     const id = formData.userId;
 
-    console.log("req.body-->", req.body);
+    
     console.log("req.body.userId-->", id);
 
     const response = await User.update(
-      {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password:formData.password,
+      
+      { formData,
+         firstName: formData.firstName,
+         lastName: formData.lastName,
+         email: formData.email,
+        // password:formData.password,
+         userId:formData.userId,
           media: `${req.protocol}://${req.get("host")}/images/${
             req.file.filename
           }`,
       },
       {
         where: { id: id },
-      }
+      },
+      console.log("formData.firstName",formData.firstName),
     )
-      .then(function (data) {
+      .then( (data) => {
+        console.log("REUSSI");
         const res = {
           success: true,
           data: data,
@@ -139,6 +144,7 @@ exports.updateUser = async (req, res) => {
         return res;
       })
       .catch((error) => {
+        console.log("ERREUR");
         const res = {
           success: false,
           error: error,
@@ -147,10 +153,9 @@ exports.updateUser = async (req, res) => {
         return res;
       });
     res.json(response);
-  } catch (e) {
-    console.log(e);
-  }
-};
+  }; 
+
+    
 //-----------DELETE----------------//
 exports.destroyUser = async (req, res) => {
   const params = req.query.id;

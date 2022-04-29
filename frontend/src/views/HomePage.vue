@@ -89,6 +89,12 @@
 <script>
 import { mapState } from "vuex";
 
+ let user = localStorage.getItem("user");
+ const User = JSON.parse(user);
+       const userId = User.userId;
+       const userToken= User.token;
+       console.log(userId,userToken);
+
 export default {
   name: "HomePage",
   mounted: function () {
@@ -119,6 +125,7 @@ export default {
         email: "",
         password: "",
         media: "",
+        token:userToken
       },
     };
   },
@@ -129,6 +136,7 @@ export default {
       CountArticle: "articles",
       CountComment: "comments",
       UpdateData: "formData",
+      
     }),
     //   firstName: {
     //   get () {
@@ -192,13 +200,13 @@ export default {
 updateUser(formData, index, fileList) {
   const config = {
     headers: {
-      'content-type': 'multipart/form-data',
+      //'content-type': 'application/x-www-form-urlencoded;',
     }
   }
 
   this.$store.dispatch('updateUser', {
     'imageData': this.formData,
-    'config': config
+     //'config': config
   })
 },
 

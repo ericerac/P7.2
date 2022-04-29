@@ -56,15 +56,18 @@ exports.OnePublished = async (req, res, next) => {
 
 exports.publish = async (req, res, next) => {
   console.log("req.body.image", typeof req.body.media);
-  console.log("req.body", req.body.usersid);
-
+  console.log("req.body", req.body);
+// if(req.body.content && req.body.media == {}){
+//   res.json({message:"Post vide"});
+//   return;
+// }
   const publish = await article.create({
-    userId: req.body.usersid,
+    userId: req.body.userId,
     content: req.body.content,
-    like: req.body.like,
-    dislike: req.body.dislike,
+    // like: req.body.like,
+    // dislike: req.body.dislike,
 
-    media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+    //media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
   });
   console.log("publish", publish.userId);
   if (publish) {

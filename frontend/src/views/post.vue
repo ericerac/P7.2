@@ -3,7 +3,7 @@
     <div id="articleUser">
       <div id="postText">
         <input
-          v-model="article"
+          v-model="post.content"
           class="commentaire"
           type="texte"
           placeholder="Ecrire"
@@ -25,7 +25,9 @@
     <div id="postPublié" v-for="article in dataArt" :key="article.id">
       <div id="user">
         <span class="user">{{ article.userId }}</span>
-        <span class="postDate">posté le:{{ article.createdAt }}</span>
+        <span class="postDate"
+          >posté le: {{ dateTime(article.createdAt) }}
+        </span>
       </div>
 
       <div id="article">
@@ -40,18 +42,16 @@
       </div>
 
       <div id="repondre">
-        <div id="identificationComment">
-          <span id="UserComment">UserComment{{ userName }}</span>
-          <span id="dateComment">dateComment{{ date }}</span>
-        </div>
         <input v-model="commentaire" class="commentaire" type="texte" />
         <button class="Valider">Répondre</button>
       </div>
-
-      <div id="commentaires">
-        <div class="commentaire" v-for="comments in dataArt" :key="comments.id">
-          UserName:{{ comments.comment }}
+      <div id="commentaires" v-for="comments in artData" :key="comments.id">
+        <div id="identificationComment">
+          <span id="UserComment">UserComment{{}}</span>
+          <span id="dateComment">dateComment{{ date }}</span>
         </div>
+
+        <div class="commentaire">UserName:{{ comments.content }}</div>
         <div id="options">
           <span class="like">{{ likes }} {{ dislikes }} </span>
           <span class="comment">{{ commenter }}ico commenter</span>
@@ -64,8 +64,15 @@
 
 <script>
 import { mapState } from "vuex";
+import moment from "moment";
 import LoginVue from "../components/Login.vue";
 const axios = require("axios");
+
+let user = localStorage.getItem("user");
+ const User = JSON.parse(user);
+       const userId = User.userId;
+       const userToken= User.token;
+       console.log(userId,userToken);
 
 export default {
   name: "MyHome",
@@ -80,17 +87,20 @@ export default {
     this.$store.dispatch("getUserData");
     //getUserData();
   },
+
   updated: function () {
     console.log(this.$store.state.artData);
     console.log(this.$store.state.comment);
   },
+
   data: function () {
     return {
-
-      fileSelected:'',
+      fileSelected: "",
       post: {
-        article: "",
+        content: "",
         media: "",
+        userId: userId,
+        token: userToken,
       },
     };
   },
@@ -103,22 +113,43 @@ export default {
       //dataCommenmt:"artDAta.comment"
     }),
   },
- 
-    methods: {
-      uploadPost: function () {
-        console.log(" Publier Post");
-      },
 
-      FileUpload(event) {
-        console.log("EVENT", event);
-         this.fileSelected = event.target.files[0];
-         console.log("fichier Image",this.fileSelected);
-      },
-      //  getImg(img) {
-      //    return require(`url/${img}`);
-      //  }
+  methods: {
+    dateTime(value) {
+      return moment(value).format("DD-MM-YYYY");
     },
-  
+
+    uploadPost: function () {
+      const self = this;
+      console.log(" Publier Post");
+      this.$store
+        .dispatch("uploadPost", {
+          // dispatch ("nom de la fonction dans ./store/index.js ")
+          
+            content: this.post.content,
+            media: this.post.media,
+            userId: this.post.userId,
+            //token: this.token,
+         
+        })
+        .then(function (response) {
+          console.log("reponse", response);
+          //self.$store.dispatch("getAllArticle");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    FileUpload(event) {
+      console.log("EVENT", event);
+      this.fileSelected = event.target.files[0];
+      console.log("fichier Image", this.fileSelected);
+    },
+    //  getImg(img) {
+    //    return require(`url/${img}`);
+    //  }
+  },
 };
 </script>
 

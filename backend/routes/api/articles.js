@@ -13,6 +13,6 @@ router.put("/",  artControl.destroyArt);
 
 //router.post("/login",  artControl.publish);
 
-router.post("/",multer, artControl.publish);
+router.post("/post",multer, artControl.publish);
 
 module.exports = router;

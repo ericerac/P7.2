@@ -6,8 +6,9 @@ const mapState = require("vuex");
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
    headers: {
-     
-      "content-Type": "multipart/form-data",
+    //'Content-Type': 'multipart/form-data; boundary=--hadhba122--'
+    //'content-Type': 'application/x-www-form-urlencoded; '
+    //'Content-Type':'application/json; charset=utf-8',
    },
 });
 
@@ -22,7 +23,8 @@ if (!user) {
 
 const User = JSON.parse(user);
       const userId = User.userId;
-      console.log(userId);
+      const userToken= User.token;
+      console.log(userId,userToken);
 
 const store = createStore({
   state: {
@@ -34,6 +36,14 @@ const store = createStore({
       lastName: "",
       email: "",
       createdAt: "",
+    },
+    updateUser:{
+      firstName:'',
+      lastName:'',
+      email:'',
+      userId:'',
+      token:'',
+      media:'',
     },
     
     formData: {
@@ -132,7 +142,7 @@ const store = createStore({
           .put("/user/update", updateUser)
           .then( (response) => {
 
-            console.log("FORM-DATA INDEX -->",response);
+            console.log("RESPONSE INDEX -->",response);
 
             commit("setStatus", "loading");
             resolve(response);
@@ -182,20 +192,26 @@ const store = createStore({
         });
     },
 
-    publishArt: ({ commit }, artData) => {
+    uploadPost: ({ commit }, uploadPost) => {
+      console.log("UPLOAD-POST INDEX",);
       commit("setStatus", "loading");
+      
+
       return new Promise((resolve, reject) => {
         instance
-          .post("/article", artData)
-          .then((response) => {
+          .post("/article/post", uploadPost)
+          .then( (response) => {
+
+            console.log("RESPONSE INDEX -->",response);
+
             commit("setStatus", "loading");
             resolve(response);
-            console.log(response);
+            
           })
           .catch((err) => {
             commit("setStatus", "error_create");
             reject(err);
-            console.log("ça ne fonctionne pas post art");
+            console.log("ça ne fonctionne pas");
           });
       });
     },
