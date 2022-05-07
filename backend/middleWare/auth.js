@@ -8,17 +8,17 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1]; // récupère le token dans le header
     console.log("-----token-----",token);
     const decodedToken = jwt.verify(token,`${process.env.TOKEN}`); // décrypte le token
-    console.log("-----verify token-------");
+    console.log("-----verify token-------",decodedToken);
     const userId = decodedToken.userId; // récupère l'id du token
     if (req.body.userId && req.body.userId !== userId) {
       // compare l'id du token avec l'id utilisateur
-      throw "Invalid user ID";
+      throw "Id utilisateur invalide";
     } else {
       next(); // si Id identhique passe au middleware suivant " la route est protégée"
     }
   } catch {
     res.status(401).json({
-      error: new Error("Invalid request!"),
+      error: new Error("Requete invalide"),
     });
   }
 };

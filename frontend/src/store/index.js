@@ -1,3 +1,4 @@
+import { _ } from "core-js";
 import { createStore } from "vuex";
 const axios = require("axios");
 
@@ -12,31 +13,37 @@ const instance = axios.create({
    },
 });
 
-
 let user = localStorage.getItem("user");
+let  userId ="";
+let userToken = "";
 if (!user) {
   user = {
     userId: -1,
     token: "",
-  };
-}
+  } 
+}else if(user){
+  const User = JSON.parse(user);
+  userId = User.userId;
+ userToken = User.token;
+};
 
-const User = JSON.parse(user);
-      const userId = User.userId;
-      const userToken= User.token;
-      console.log(userId,userToken);
+
+
+
+console.log(userId, userToken);
 
 const store = createStore({
   state: {
     status: "",
     user: user,
-    userData: {
+
+    
+
+    
      
-      firstName: "",
-      lastName: "",
-      email: "",
-      createdAt: "",
-    },
+    PostData:{},
+    
+
     updateUser:{
       firstName:'',
       lastName:'',
@@ -54,8 +61,12 @@ const store = createStore({
       password: "",
      media:'',
     },
-    artData: {},
-    comment: {},
+
+   userData:"",
+    alldata:"",
+    artData: "",
+    comments: "",
+    usersId:"",
   },
   mutations: {
     setStatus: (state, status) => {
@@ -69,12 +80,22 @@ const store = createStore({
     UserData: (state, userData) => {
       state.userData = userData;
     },
+    AllsUsersData: (state, allsUsersData) => {
+      state.allsUsersData = allsUsersData;
+    },
     ArtData: (state, artData) => {
       state.artData = artData;
     },
     Comment: (state, comment) => {
       state.comment = comment;
     },
+    AllData:(state,alldata)=>{
+      state.alldata = alldata;
+    },
+    // dat_Post:(state,data)=>{
+    
+    // PostData.set(state.PostData, data.property, data.value)
+    // },
     FormData:(state,formData)=>{
       state.formData = formData;
     },
@@ -83,6 +104,9 @@ const store = createStore({
     },
     Comments:(state, comments) => {
       state.comments = comments;
+    },
+    UsersId:(state, usersId) => {
+      state.usersId = usersId;
     },
 
     logOut: (state) => {
@@ -93,8 +117,20 @@ const store = createStore({
       //localStorage.removeItem('user')
     },
   },
+  getters:{
+allDatas:(state)=> state.artData
+  },
+
   computed: {},
+
   actions: {
+    // dat_Post:({commit}, data)=>{
+    //   commit("dat_Post",data)
+    // },
+
+
+
+
     signupPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
@@ -131,15 +167,15 @@ const store = createStore({
           });
       });
     },
-    //----------UPDATE 1------------//
+    //----------UPDATE USER 1------------//
 
-    updateUser: ({commit},updateUser) => {
+    updateUser: ({commit},Data) => {
       commit("setStatus", "loading");
-      console.log("UPDATE USER INDEX",updateUser);
-     
+      console.log("UPDATE USER INDEX",Data);
+      
       return new Promise((resolve, reject) => {
         instance
-          .put("/user/update", updateUser)
+          .put("/user/update", Data)
           .then( (response) => {
 
             console.log("RESPONSE INDEX -->",response);
@@ -151,24 +187,18 @@ const store = createStore({
           .catch((err) => {
             commit("setStatus", "error_create");
             reject(err);
+            console.log("ERREUR",err);
             console.log("ça ne fonctionne pas");
           });
       });
     },
-//--------------------UPDATE 2-----------------//
-// async updateUser ({ commit }, updateUser) {
-//   await axios.put('/user/update', updateUser.formData, updateUser.config)
-//     .then((res) => {
-//       console.log(res.data)
-//     }).catch((err) => {
-//       console.log(err)
-//     })
-// },
+
 //-----------------GET USER DATA----------------(())
-    getUserData: ({ commit }) => {
+    getUserData: ({ commit },usersId) => {
       const User = JSON.parse(user);
       const userId = User.userId;
       console.log(userId);
+      const useId = usersId;
       instance
         .get(`/user?id=${userId}`)
         .then((res) => {
@@ -179,8 +209,9 @@ const store = createStore({
           const countComment = res.data.comment.length;
           console.log("Articles",countComment);
           commit("Comments",countComment);
+
           if (res) {
-            console.log("reponse", res);
+            console.log("reponse", res.data);
           } else {
             console.log("pas de data");
           }
@@ -191,9 +222,35 @@ const store = createStore({
           //console.log("ça m'énerve encore");
         });
     },
+//-----------------GET ALL USERS DATA----------------(())
+    getAllUsersData: ({ commit },usersId) => {
+      
+      instance
+        .get(`/user/all`)
+        .then((res) => {
+          console.log("reponse", res.data);
+          commit("UserData", res.data);
+          //const countArticle = res.data.article.length;
+          //commit("Articles",countArticle);
+          //const countComment = res.data.comment.length;
+          //console.log("Articles",countComment);
+          //commit("Comments",countComment);
 
+          if (res) {
+            console.log("reponse", res.data);
+          } else {
+            console.log("pas de data");
+          }
+        })
+        .catch((err) => {
+          console.log("reponse err", err);
+
+          //console.log("ça m'énerve encore");
+        });
+    },
+//-----------UPLOAD POST-----------------//
     uploadPost: ({ commit }, uploadPost) => {
-      console.log("UPLOAD-POST INDEX",);
+      console.log("UPLOAD-POST INDEX",uploadPost);
       commit("setStatus", "loading");
       
 
@@ -215,31 +272,72 @@ const store = createStore({
           });
       });
     },
-
+//----------------GET ALL ARTICLES---------------//
     getAllArticle: ({ commit }) => {
       commit("setStatus", "loading");
+      const self = this;
       console.log("getAllArticle");
       return new Promise((resolve, reject) => {
         instance
           .get("/article/all")
           .then((res) => {
             console.log(res);
+            const usersId = [];
             commit("setStatus", "loading");
             commit("ArtData", res.data);
-            console.log("res GET INDEX", res.data);
+            const resData = res.data;
+           
+            const comments = resData.map((a) => a.comment);
+            commit("Comments",comments)
+            commit("AllData",resData.comment)
+            console.log("ArtData  INDEX",  resData);
+           
             let dat = res.data;
-            console.log("res GET INDEX ARt", dat);
-            //  let com = dat.comment;
-            //  console.log("res GET INDEX COM",com);
-            //  let cont = com.content;
-            //  console.log("res GET INDEX COMMENT",cont);
-            for (let i of dat) {
-              commit("Comment", i.comment);
-              console.log("comment", i.comment);
-            }
+            console.log("res GET INDEX COMMENTS", comments);
+            for(let i of dat){
+              usersId.push(i.userId);
+            
 
+            }
+           
+            // console.log("BOUCLE INDEX USER-ID", usersId);
+            commit("UsersId",usersId);
+           commit("AllData",comments)
+          
+          
+         
             resolve(res);
+            
+            
           })
+            
+            // return new Promise((resolve, reject) => {
+            //   const self = this;
+            //   instance
+            //     .get(`/user?id=${userId}`)
+            //     .then((res) => {
+            //       const UsersId={};
+            //       console.log("USER-ID",usersId);
+            //       console.log("BOUCLE INDEX RES 2", res.data.firstName);
+            //        for(let i of res.data){
+            //          UsersId.push(i.firstName);
+            //                      }
+
+            //       console.log("BOUCLE INDEX USER-ID 3",self.usersId);
+                  
+      
+            //       resolve(res);
+                  
+                  
+            //     })
+            //     .catch((err) => {
+            //       commit("setStatus", "error_create");
+            //       reject(err);
+            //       console.log("ça ne fonctionne pas GET ART 2 ");
+            //     });
+            // });
+            
+          
           .catch((err) => {
             commit("setStatus", "error_create");
             reject(err);
@@ -251,3 +349,32 @@ const store = createStore({
 });
 
 export default store;
+
+
+// const One = axios.get(reqAll);
+// const url = "http://localhost:3000/article?";
+// const reqAll = "http://localhost:3000/article/all";
+// const reqOne = `http://localhost:3000/article?${One}`;
+
+
+
+//  const Two = axios.get(reqOne);
+
+//  const getArticle = (axios.all([One, Two]).then(
+//    // reste a definir les conditions de éponses pour chaque requete
+//    axios.spread((...response) => {
+//      console.log("---------RESPONSE----------", response.data);
+//      console.log("---------REQUETE----------",  One, Two);
+//      console.log("---------Response Type----------", One.blob);
+//      const ResponseOne = response[0];
+//      const ResponseTwo = response[1];
+//      console.log(
+//        "ResponseOne",
+//        ResponseOne.data,
+//        "ResponseTWo",
+//        ResponseTwo.data
+//      );  
+//    })
+//  ).catch = () => {
+//    res.json({message:"ça marche pas"})
+//  })

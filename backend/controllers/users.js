@@ -72,7 +72,7 @@ exports.login = async (req, res, next) => {
     );
     if (password_valid) {
       token = jwt.sign({ id: user.id }, `${process.env.TOKEN}`);
-      res.status(200).json({ token: token, userId: user.id });
+      res.status(200).json({ token: token, userId: user.id,userRole:user.role });
       console.log(token);
     } else {
       res.status(400).json({ error: "Mot de passe incorrect !" });
@@ -105,12 +105,35 @@ exports.GetOneUser = async (req, res, next) => {
   });
   res.json(oneUser);
 };
+exports.GetAllUsers = async (req, res, next) => {
+  
+  const allUsers = await user.findAll({
+    
+    include: [
+      {
+        model: articles,
+        as: "article",
+      },
+      {
+        model: Comment,
+        as: "comment",
+      },
+    ],
+    distinct:true,
+    col:'articleId'
+
+  });
+  res.json(allUsers);
+};
 
 //------------UPDATE 4---------------//
 exports.updateUser = async (req, res) => {
   
-    console.log("req.body-->", req.body);
-    const formData = req.body.imageData;
+    console.log("req.body 1 -->", req.body);
+    const form = "";
+    form.toString(req.body).valueOf(req.body);
+    console.log("req.body 2 -->", form);
+    const formData = req.body;
     console.log("req.body-->", formData);
     const id = formData.userId;
 
@@ -125,14 +148,14 @@ exports.updateUser = async (req, res) => {
          email: formData.email,
         // password:formData.password,
          userId:formData.userId,
-          media: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
+           media: `${req.protocol}://${req.get("host")}/images/${
+             req.file.filename
+           }`,
       },
       {
         where: { id: id },
       },
-      console.log("formData.firstName",formData.firstName),
+     
     )
       .then( (data) => {
         console.log("REUSSI");

@@ -7,6 +7,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-regular-svg-icons";
 
 //library.add(fas);
+//Vue.component('font-awesome-icon', FontAwesomeIcon)
 import App from "./App.vue";
 
 

@@ -13,12 +13,12 @@ module.exports = (sequelize, type) => {
       media:{
         type:type.CHAR(255)
       },
-      like:{
-        type:type.INTEGER(36)
-      },
-      dislike:{
-        type:type.INTEGER(36)
-      },
+      // like:{
+      //   type:type.INTEGER(36)
+      // },
+      // dislike:{
+      //   type:type.INTEGER(36)
+      // },
       userId:{
         type:type.INTEGER(36)
       },

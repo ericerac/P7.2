@@ -1,85 +1,99 @@
 <template>
-  <div id="homePage">
-    <div id="UserData" v-if="mode == 'homePage'">
-      <img
-        id="userImg"
-        v-bind:src="user.media"
-        alt="Photo de profil utilisatuer"
-      />
-      <h3 id="userName">{{ user.firstName }} {{ user.lastName }}</h3>
-      <span id="userDate" class="userInfo"
-        >Menbre depuis le:{{ user.createdAt }}</span
+  <form id="form" @submit.prevent="uploadUser">
+    <div id="homePage">
+      <div id="UserData" v-if="mode == 'homePage'">
+        <!-- USER NON DEFINI -->
+
+        <img
+          id="userImg"
+          v-bind:src="user.media"
+          alt="Photo de profil utilisateur"
+        />
+
+        <h3 id="userName">{{ user.firstName }} {{ user.lastName }}</h3>
+        <p id="adminUser" v-if="user.role == 'admin'">Compte administrateur</p>
+        <router-link to="/user/admin" v-if="user.role == 'admin'"
+          >Page administrateur</router-link
+        >
+        <span id="userDate" class="userInfo"
+          >Menbre depuis le:{{ user.createdAt }}</span
+        >
+        <span id="userEmail" class="userInfo">Email: {{ user.email }}</span>
+        <span id="userPost" class="userInfo"
+          >Articles publiés: {{ CountArticle }}</span
+        >
+        <span id="userComment" class="userInfo"
+          >Commentaires publiés: {{ CountComment }}</span
+        >
+      </div>
+      <div v-if="mode == 'updateProfil'" id="dataForm">
+        <input
+          v-model.lazy="firstName"
+          name="firstName"
+          class="input"
+          type="text"
+          placeholder="Nom"
+        />
+
+        <input
+          v-model="lastName"
+          name="lastName"
+          class="input"
+          type="text"
+          placeholder="Prénom"
+        />
+
+        <input
+          v-model="email"
+          name="email"
+          class="input"
+          type="text"
+          placeholder="Email"
+        />
+      </div>
+      <button v-if="mode == 'updateProfil'" class="btn" id="passwordChange">
+        passwordChange
+      </button>
+      <label v-if="mode == 'updateProfil'"
+        >choisir Photo de profil
+
+        <input
+          type="file"
+          name="image"
+          id="PhotoPerfilChange"
+          ref="file"
+          @change="FileUpload"
+          accept="image/png, image/jpeg"
+        />
+      </label>
+      <button
+        v-if="mode == 'homePage'"
+        class="btn"
+        id="valider"
+        @click="goToUpdateProfil"
       >
-      <span id="userEmail" class="userInfo">Email: {{ user.email }}</span>
-      <span id="userPost" class="userInfo"
-        >Articles publiés: {{ CountArticle }}</span
+        Modifier votre profil
+      </button>
+      <button
+        v-if="mode == 'updateProfil'"
+        class="btn"
+        id="valider"
+        @click="onSubmit()"
       >
-      <span id="userComment" class="userInfo"
-        >Commentaires publiés: {{ CountComment }}</span
+        Modifier
+      </button>
+      <button
+        type="submit"
+        v-if="mode == 'updateProfil'"
+        class="btn"
+        id="valider"
+        @click="goToHomePage"
       >
+        Annuler
+      </button>
+      <!-- <button  class ="btn" id="logOut" :click="logOut()">Se deconnecter </button> -->
     </div>
-    <div v-if="mode == 'updateProfil'" id="dataForm">
-      <input
-        v-model.lazy="formData.firstName"
-        class="input"
-        type="text"
-        placeholder="Nom"
-      />
-
-      <input
-        v-model="formData.lastName"
-        class="input"
-        type="text"
-        placeholder="Prénom"
-      />
-
-      <input
-        v-model="formData.email"
-        class="input"
-        type="text"
-        placeholder="Email"
-      />
-    </div>
-    <button v-if="mode == 'updateProfil'" class="btn" id="passwordChange">
-      passwordChange
-    </button>
-    <label v-if="mode == 'updateProfil'"
-      >choisir Photo de profil
-
-      <input
-        type="file"
-        id="PhotoPerfilChange"
-        ref="file"
-        @change="FileUpload"
-        accept="image/png, image/jpeg"
-      />
-    </label>
-    <button
-      v-if="mode == 'homePage'"
-      class="btn"
-      id="valider"
-      @click="goToUpdateProfil"
-    >
-      Modifier votre profil
-    </button>
-    <button
-      v-if="mode == 'updateProfil'"
-      class="btn"
-      id="valider"
-      @click="updateUser"
-    >
-      Modifier
-    </button>
-    <button
-      v-if="mode == 'updateProfil'"
-      class="btn"
-      id="valider"
-      @click="goToHomePage"
-    >
-      Annuler
-    </button>
-    <!-- <button  class ="btn" id="logOut" :click="logOut()">Se deconnecter </button> -->
-  </div>
+  </form>
 </template>
 
 //***-----------------------------------***/
@@ -88,27 +102,37 @@
 
 <script>
 import { mapState } from "vuex";
+//import FormData from 'form-data';
+const FormData = require("form-data");
+import { axios } from "axios";
 
- let user = localStorage.getItem("user");
- const User = JSON.parse(user);
-       const userId = User.userId;
-       const userToken= User.token;
-       console.log(userId,userToken);
+let user = localStorage.getItem("user");
+let userId = "";
+let userToken = "";
+const User = JSON.parse(user);
+if (User) {
+  userId = User.userId;
+  userToken = User.token;
+} else {
+}
+
+console.log(userId, userToken);
 
 export default {
   name: "HomePage",
+
   mounted: function () {
     console.log(this.$store.state.user);
-    if (this.$store.state.user.userId == -1) {
-      this.$router.push("/MyHome");
+    if (User.userId == null) {
+      this.$router.push("/");
       return;
     }
     const UserId = this.$store.state.user;
-    const User = JSON.parse(UserId);
-    const userId = User.userId;
-    console.log(userId);
+    console.log("USER-ID Mounted", UserId.userId);
 
-    this.formData.userId = userId;
+    const userId = UserId.userId;
+
+    this.userId = userId;
     console.log("USER-ID", userId);
     this.$store.dispatch("getUserData");
     //getUserData();
@@ -117,16 +141,18 @@ export default {
   data: () => {
     return {
       mode: "homePage",
-      fileSelected: "",
-      formData: {
-        userId: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        media: "",
-        token:userToken
-      },
+      fileSelected: null,
+      name: "",
+
+      url: "http://localhost:8080",
+
+      userId: "userId",
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+
+      token: userToken,
     };
   },
   props: {},
@@ -136,16 +162,8 @@ export default {
       CountArticle: "articles",
       CountComment: "comments",
       UpdateData: "formData",
-      
+      usersId: "usersId",
     }),
-    //   firstName: {
-    //   get () {
-    //     return formData.firstName
-    //   },
-    //   set (value) {
-    //     ( value)
-    //   }
-    // }
   },
   methods: {
     goToHomePage: function () {
@@ -158,9 +176,37 @@ export default {
 
     FileUpload(event) {
       console.log("EVENT", event);
-       this.formData.media = event.target.files[0];
-       console.log("fichier Image",this.formData.media);
+      this.fileSelected = event.target.files[0];
+
+      console.log("fichier Image", this.fileSelected);
     },
+    //--------------------UPDATE-USER 1---------------------//
+
+    onSubmit() {
+      // upload file
+      var bodyFormData = new FormData();
+      bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
+      bodyFormData.append("firstName", this.firstName);
+      bodyFormData.append("lastName", this.lastName);
+      bodyFormData.append("email", this.email);
+      console.log("FORMDATA", bodyFormData);
+      console.table("this.firstName ", ...bodyFormData.entries());
+      axios({
+        method: "post",
+        url: "http://localhost:3000/user/update",
+        data: bodyFormData,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
+    },
+    //--------------------UPDATE-USER 1.1---------------------//
 
     // updateUser: function () {
     //   console.log("UPDATE USER HOME PAGE");
@@ -197,19 +243,21 @@ export default {
     //     });
     // },
     //-------------UPDATE USER 2--------------_();
-updateUser(formData, index, fileList) {
-  const config = {
-    headers: {
-      //'content-type': 'application/x-www-form-urlencoded;',
-    }
-  }
+    // updateUser(e) {
+    //   e.preventDefault();
+    //   const fd = new FormData();
+    //   fd.append(e.currentTarget);
+    //   console.log("NEW FORM-->", fd);
 
-  this.$store.dispatch('updateUser', {
-    'imageData': this.formData,
-     //'config': config
-  })
-},
+    //   //Data.append('corp',this.formData);
+    //   // let fileName = this.fileSelected;
+    //   // let naame = fileName.name;
+    //   // fd.append('file',this.fileSelected,this.fileSelected.name);
 
+    //   // console.log("DATA",fd);
+    //   // console.log("file", this.fileSelected);
+    //   // this.$store.dispatch("updateUser", fd);
+    // },
 
     //----------------LOGOUT-------------------(())
 

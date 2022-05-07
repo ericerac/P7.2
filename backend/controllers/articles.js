@@ -67,7 +67,7 @@ exports.publish = async (req, res, next) => {
     // like: req.body.like,
     // dislike: req.body.dislike,
 
-    //media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+    media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
   });
   console.log("publish", publish.userId);
   if (publish) {

@@ -1,5 +1,52 @@
 <template>
+<div>
+<nav class="navbar navbar-expand-lg navbar-dark " v-if="mode == 'login'">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="../assets/icon-left-font-monochrome-white.png" alt="" width="100" height="80">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown button
+  </button>
+  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+    <li><a class="dropdown-item active" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#">Separated link</a></li>
+  </ul>
+</div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" v-if="mode == 'signup'">Disabled</a>
+          <a class="nav-link " v-if="mode == 'login'">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+
   <div id="form_card">
+   
     <div id="form_signup">
       <div id="formName" v-if="mode == 'signup'">
         <input
@@ -50,8 +97,11 @@
       </p>
     </div>
   </div>
+</div>
 </template>
+//----------------SCRIPT----------------//
 
+                    //----------------SCRIPT----------------//
 <script>
 //import axios from axios;
 const axios = require("axios");
@@ -70,6 +120,9 @@ export default {
       password: "",
     };
   },
+   mounted:function(){
+     //localStorage.removeItem("user");
+   },
   computed: {
     ...mapState(["status"]),
   },
@@ -124,6 +177,12 @@ export default {
 </script>
 
 <style scoped>
+.navbar {
+ /* Couleur de fond de la barre de navigation */
+ background-color:#ffd7d7;
+ 
+ border: 2px solid #fd7a7a;;
+}
 #form_card {
   width: 350px;
   margin: 0 auto;
@@ -158,3 +217,11 @@ this.password, // }) // .then((response) => { // if (response.status(201)) { //
 window.location.href = "http://localhost:8080/homepage"; // } //
 console.log("reponse", response); // }) // .catch(() => { // console.log("ça
 m'énerve signup"); // });
+
+
+
+//{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiYjUyNDBiLTkxZGUtNDc1YS1hMDQyLTNlMTEzMDA2MGZjZiIsImlhdCI6MTY1MTU3Njc0NX0.KYBkPXBeTQPMVRytgj0Z0MSQdiRhQg3Sdr7hNff-wQ8",
+    "userId": "0bb5240b-91de-475a-a042-3e1130060fcf",
+    "userRole": "admin"
+}

@@ -12,6 +12,7 @@ router.post("/signup",  userControl.signup);
 router.post("/login",  userControl.login);
 
 router.get("/user",  userControl.GetOneUser);
+router.get("/user/all",  userControl.GetAllUsers);
 router.put("/user/delete",  userControl.destroyUser);
 router.put("/user/update",multer,  userControl.updateUser);
 

@@ -3,6 +3,8 @@ const Sequelize = require("sequelize");
 const userModel = require("./users.js");
 const ArtModel = require("./article.js");
 const CommentModel = require("./comment.js");
+const LikeModel = require("./like.js");
+const DislikeModel = require('./dislike.js')
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
