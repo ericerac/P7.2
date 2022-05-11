@@ -8,80 +8,90 @@
 </button> -->
 
   <div id="post">
-    <form id ="formPost" @submit.prevent="articlePost">
-    <div id="articleUser">
-      <div id="postText">
-        <input
-          v-model="content"
-          class="commentaire"
-          type="texte"
-          placeholder="Ecrire"
-        />
-        <label
-          >choisir
-
+    <form id="formPost" @submit.prevent="articlePost">
+      <div id="articleUser">
+        <div id="postText">
           <input
-            type="file"
-            id="mediaPost"
-            ref="file"
-            @change="FileUpload"
-            accept="image/png, image/jpeg"
+            v-model="content"
+            class="commentaire"
+            type="texte"
+            placeholder="Ecrire"
           />
-        </label>
-        <button class="Publier" @click="uploadPost">Publier</button>
+          <label
+            >choisir
+
+            <input
+              type="file"
+              id="mediaPost"
+              ref="file"
+              @change="FileUpload"
+              accept="image/png, image/jpeg"
+            />
+          </label>
+          <button class="Publier" @click="uploadPost">Publier</button>
+        </div>
       </div>
-    </div>
     </form>
     <div id="postPublié" v-for="article in dataArt" :key="article.id">
-    <div id =" postUser " >   
-    
-      <div id="user">
-        <span class="user" >{{ user.firstName }} {{ }} {{ user.lastName }}</span>
+      <div id=" postUser ">
+        <!-- <div id="user">
+        <span class="user" >{{article.user }} {{ }} {{  }}</span>
         
         <span class="postDate"
         
           >posté le: {{ dateTime(article.createdAt) }}
         </span>
-      </div>
-
-      <div id="article">
-        <span class="content">{{ article.content }}</span>
-        <img class="postImg" alt="Image"  v-bind:src="article.media" />
-      </div>
-      
-      <div id="options">
-        <span class="like"
-          >{{ }} like {{  }} dislike</span
-        >
-        <div class="comment">commenter</div>
-      </div>
-
-      <div id="repondre">
-        <input v-model="ArticleDate" class="commentaire" type="texte" />
-        <button class="Valider" @click="filtreArticleDate()">Répondre</button>
-        <button class="Valider" @click="filtreMAP()">Répondre</button>
-      </div>
-      <div id="commentaires" v-for="(commKey ) in article.comment" :Key="commKey.id">
-        <div id="identificationComment" >
-          <span id="UserComment" >UserComment{{ }}</span>
-          <span id="dateComment">{{ dateTime(commKey.createdAt) }}</span>
+      </div> -->
+        <span class="postDate">
+          posté le: {{ dateTime(article.createdAt) }}
+        </span>
+        <div id="article">
+          <span class="content">{{ article.content }}</span>
+          <img class="postImg" alt="Image" v-bind:src="article.media" />
+        </div>
+        <template v-for="it in article.user" :key="it">
+          <div id="user">
+            <span class="user"> {{ it }} </span>
+          </div>
+        </template>
+        <div id="options">
+          <span class="like">{{}} like {{}} dislike</span>
+          <div class="comment">commenter</div>
         </div>
 
-        <div class="commentaire"  >{{commKey.comment}}</div>
-        <!-- <div class="commentaire"  v-for="( comment, value,key ) in article.comment[0]" :Key="key">{{key}}:{{comment}}:{{value}}:</div> -->
-        <!-- <div class="commentaire"  v-for="( comments,value ) in comments" :Key="comments"> ARTICLE COMMENT ?  :    {{comments}}:{{value}}</div> -->
-        
-        
-        <div id="options" >
-          <span class="like">{{ likes }} {{ dislikes }} </span>
-          <span class="comment"></span>
+        <div id="repondre">
+          <input v-model="ArticleDate" class="commentaire" type="texte" />
+          <button class="Valider" @click="filtreArticleDate()">Répondre</button>
+          <button class="Valider" @click="filtreMAP()">Répondre</button>
         </div>
-     
-      </div>
-      <button>Se connecter</button>
-    </div>
-    </div>
+        
+          <div id="commentaires">
 
+            <template v-for="commKey in article.comment" :item="commKey.id">
+            <div class="commentaire">{{ commKey.comment }}</div>
+            </template>
+
+            
+            <div id="identificationComment" >
+              <span id="UserComment" > name:{{ commKey }}</span>
+              <!-- <span id="dateComment">{{ dateTime(commKey.createdAt) }}</span>-->
+            </div>
+           
+            <!-- <div class="commentaire"  v-for="( comment, value,key ) in article.comment[0]" :Key="key">{{key}}:{{comment}}:{{value}}:</div> -->
+            <!-- <div class="commentaire"  v-for="( comments,value ) in comments" :Key="comments"> ARTICLE COMMENT ?  :    {{comments}}:{{value}}</div> -->
+
+            <div id="options">
+              <span class="like" ><fa :icon="['fas','user']"  /> <fa :icon="['far','calendar-alt']" />
+               <fa :icon="['far','bell']" /><fa :icon="['far','paper-plane']" /><fa :icon="['far','thumbs-up']" />
+               <fa :icon="['far','thumbs-down']" /><fa :icon="['far','user-circle']" /><fa :icon="['far','trash-alt']" />
+               <fa :icon="['far','file-alt']" /><fa :icon="['fas','upload']" /><fa :icon="['fas','bars']" /><fa :icon="['fas','pencil-alt']" /></span>
+              <span class="comment"></span>
+            </div>
+          </div>
+        
+        <button>Se connecter</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -96,16 +106,17 @@ import LoginVue from "../components/Login.vue";
 const axios = require("axios");
 const FormData = require("form-data");
 
- let user = localStorage.getItem("user");
- let  userId ="";
+let user = localStorage.getItem("user");
+let userId = "";
 let userToken = "";
- const User = JSON.parse(user);
- if(User){
- userId = User.userId;
+const User = JSON.parse(user);
+if (User) {
+  userId = User.userId;
   userToken = User.token;
- }else{};
- 
- console.log(userId, userToken);
+} else {
+}
+
+console.log(userId, userToken);
 let commentaires = [];
 
 //***************    ******************// */
@@ -115,19 +126,17 @@ export default {
   props: {},
   mounted: function () {
     console.log("MOUNTED");
-    
-    
   },
 
   updated: function () {
     console.log("UPDATED");
     console.log("ARTICLES-->", this.$store.state.artData);
     console.log("COMMENT ALL DATA-->", this.$store.state.alldata);
-   //this.comments=this.$store.state.comment;
+    //this.comments=this.$store.state.comment;
     console.log("USER-DATA-->", this.$store.state.userData);
     console.log("COMMENT 2-->", this.comments);
     this.usersData(this.$store.state.artData);
-// this.update(this.allData,this.comments)
+    // this.update(this.allData,this.comments)
   },
 
   data: function () {
@@ -138,18 +147,14 @@ export default {
       // filterEntries:[],
 
       fileSelected: "",
-      
-      commenter:commentaires,
 
-      
-     
-      
-        content: "",
-        media: "",
-        userId: userId,
-        token: userToken,
-     
-      
+      commenter: commentaires,
+
+      content: "",
+      media: "",
+      userId: userId,
+      token: userToken,
+
       ArticleDate: "",
       //UsersId: [],
 
@@ -158,38 +163,35 @@ export default {
         lastName: "",
       },
     };
-  },beforeMount:function(){
-     this.getAllArticle();
-    console.log("BEFORE MOUNT")
   },
-  onMounted:function(){
-    
-  console.log("ON MOUNTED")
+  beforeMount: function () {
+    this.getAllArticle();
+    console.log("BEFORE MOUNT");
   },
-  beforeCreate:function(){
-   
-console.log("BEFORE CREATED")
+  onMounted: function () {
+    console.log("ON MOUNTED");
   },
-  beforeUpdate:function(){
-    console.log("BEFORE UPDATE")
+  beforeCreate: function () {
+    console.log("BEFORE CREATED");
   },
-  
-  
-   computed: {
-     
-  //   ...mapGetters({
-  //     PostData:"allDatas"
-  //   }),
+  beforeUpdate: function () {
+    console.log("BEFORE UPDATE");
+  },
+
+  computed: {
+    //   ...mapGetters({
+    //     PostData:"allDatas"
+    //   }),
     ...mapState({
-      user: "userData",
+      // user: "userData",
       dataArt: "artData",
-      comments: "comments",
       
-      alldata:"alldata",
+      comments: "comments",
+
+      alldata: "alldata",
 
       //dataCommenmt:"artDAta.comment"
     }),
-    
   },
 
   methods: {
@@ -250,15 +252,15 @@ console.log("BEFORE CREATED")
 
       //-----------------FOREACH-------------------//
 
-      const articul = this.articulos
+      const articul = this.articulos;
       const foritch = Arts.forEach((item, index) => {
         console.log("ITEM INDEX", index, item);
       });
-    //  articul.push(foritch);
-    //   console.log("ARTICULOS", articul);
-    //   console.log("ARTICULOS", articul);
-    //   this.comment = comments;
-    //   const IdComments = comments.map((id) => id);
+      //  articul.push(foritch);
+      //   console.log("ARTICULOS", articul);
+      //   console.log("ARTICULOS", articul);
+      //   this.comment = comments;
+      //   const IdComments = comments.map((id) => id);
 
       console.log("comments", this.comments);
       console.log("comments2", comments);
@@ -266,21 +268,18 @@ console.log("BEFORE CREATED")
     },
     //--------------USER DATA----------------------//
 
-    usersData: ( ua) => {
+    usersData: (ua) => {
       let self = this;
       const UserId = [];
       const comm = [];
       console.log("DATA-ART", ua);
       for (let i of ua) {
-       
         UserId.push(i.userId);
-comm.push(i.comment)
-       
+        comm.push(i.comment);
       }
       // console.log("UserId", UserId);
       // console.log("Comment userData PostVue",comm);
-     
-    
+
       //this.UsersId=UserId;
     },
 
@@ -292,8 +291,9 @@ comm.push(i.comment)
       bodyFormData.append("userId", userId);
       console.log("FORMDATA", bodyFormData);
       console.table("this.firstName ", ...bodyFormData.entries());
-      this.$store.dispatch("uploadPost", bodyFormData)
-      
+      this.$store
+        .dispatch("uploadPost", bodyFormData)
+
         .then(function (response) {
           //handle success
           console.log(response);
@@ -319,12 +319,12 @@ comm.push(i.comment)
           console.log("REPONSE GET ALL ARTICLE POST PAGE", response.data);
           //self.filtreMAP()
           const resData = response.data;
-          console.log("RESPONSE DATA",resData);
-            const commentes = resData.map((a) => a.comment);
-           
-            console.log("POST VUE COMMENT PUSH",commentes);
-          
-            console.log("POST VUE COMMENT DATA",this.comments);
+          console.log("RESPONSE DATA", resData);
+          const commentes = resData.map((a) => a.comment);
+
+          console.log("POST VUE COMMENT PUSH", commentes);
+
+          console.log("POST VUE COMMENT DATA", this.comments);
         })
         .catch((err) => {
           console.log("Restons calme getAllArticle:postPage", err);
@@ -333,6 +333,9 @@ comm.push(i.comment)
   },
 };
 </script>
+
+//***********   +++++++++++++  +++++++++++++ */
+        //***********   +++++++++++++  +++++++++++++ */
 
 <style scoped>
 #post {

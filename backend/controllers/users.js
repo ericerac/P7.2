@@ -29,7 +29,7 @@ const sequelize = new Sequelize(
 );
 
 const User = UserModel(sequelize, Sequelize);
-
+//---------------------------------------------//
 
 exports.deleteAll = (req, res) => {};
 
@@ -213,29 +213,21 @@ exports.updateUser = async (req, res) => {
 exports.destroyUser = async (req, res) => {
   //const params = req.query.id;
   const params = req.body;
-  console.log("id", params);
+  console.log("id TO DESTROY", params);
 
-  console.log("id", params);
-  const suprimmer = await User.destroy({ where: { id: params.id } });
-  if (suprimmer) {
+  
+  const supprimer = await User.destroy({ where: { id: params.id } });
+  console.log("SUPPRIMER",supprimer);
+  console.log("PARAMS.ID",params.id);
+
+  if (supprimer) {
     res.json({ message: "Compte Utilisateur supprimé" });
   } else {
     res.json({ message: "erreur 404" });
   }
 };
 
-//-------------------ADMIN USER-----------------------//
-// exports.GetAdminUser = async (req, res, next) => {
-//   console.log("-------req.body One--------", req.body.role);
-//   console.log("-------req.query One--------", req.query.role);
-//   //const params = req.query.id;
-//   const params = req.body.role;
-//   const adminUser = await user.findOne({
-//     where: { role: `${params}` },
-    
-//   });
-//   res.json(adminUser);
-// };
+
 
 exports.GetAdminUser = async (req) => {
 

@@ -46,57 +46,51 @@ const sequelize = new Sequelize(
 //     );
 // };
 
-module.exports = async (req, res, next) => {  
-
+module.exports = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1]; // récupère le token dans le header
-    console.log("-----token-----",token);
-    const decodedToken = jwt.verify(token,`${process.env.TOKEN}`); // décrypte le token
-    const userId = decodedToken.id; // récupère l'id du token
-    
+  console.log("-----token-----", token);
+  const decodedToken = jwt.verify(token, `${process.env.TOKEN}`); // décrypte le token
+  const userId = decodedToken.id; // récupère l'id du token
 
-    console.log("-----verify token-------",decodedToken);
-    console.log("-----userId-------",userId);
-    console.log("-----req.body.id-------",req.body.id);
+  console.log("-----verify token-------", decodedToken);
+  console.log("-----userId-------", userId);
+  console.log("-----req.body.id-------", req.body.id);
 
-   const oneUser = await user
-   .findOne({
-     where: { id: `${userId}` },
-   })
-   .then((res) => {
-     console.log("RES", res.role);
-     let adm = res.role;
-     let admin = "admin";
-     console.log("RES2", adm);
+  const oneUser = await user
+    .findOne({
+      where: { id: `${userId}` },
+    })
+    .then((res) => {
+      console.log("RES", res.role);
+      let adm = res.role;
+      let admin = "admin";
+      console.log("RES2", adm);
 
-     if (adm === admin) {
-      console.log(" ADMIN");
-       return true
-     } else {
-       
-       console.log(" NON ADMIN");
-       return false
-     }
-   })
+      if (adm === admin) {
+        console.log(" ADMIN");
+        return true;
+      } else {
+        console.log(" NON ADMIN");
+        return false;
+      }
+    });
 
   try {
     console.log("on est là try auth");
     //console.log(userId);
 
-    console.log("oneUser",oneUser);
-    if ( req.body.id == userId || oneUser == true ) {
+    console.log("oneUser", oneUser);
+
+    if (req.body.id == userId || oneUser == true) {
       // compare l'id du token avec l'id utilisateur
       next(); // si Id identhique ça continu " la route est protégée"
-    } 
-    else{
+    } else {
       throw "Id utilisateur invalide";
-      
-    };
-    } catch {
+    }
+  } catch {
     res.status(401).json({
       error: new Error(),
-      message:("Requete non autorisée")
-      
-      
+      message: "Requete non autorisée",
     });
   }
 };

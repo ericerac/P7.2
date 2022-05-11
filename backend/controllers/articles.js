@@ -33,12 +33,18 @@ exports.published = async (req, res, next) => {
       {
         model: Comment,
         as: "comment",
-        require:true,
-      },{
+        require: true,
+        include: {
+          model: User,
+          as: "user",
+          require: true,
+        },
+      },
+      {
         model: User,
-        as:"user",
-        require:true,
-      }
+        as: "user",
+        require: true,
+      },
     ],
   });
   res.json(allArticle);
@@ -53,7 +59,23 @@ exports.OnePublished = async (req, res, next) => {
   const params = req.query.id;
   const oneArticle = await articles.findOne({
     where: { id: `${params}` },
-    include: [{ model: Comment, as: "comment" }],
+    include: [
+      {
+        model: Comment,
+        as: "comment",
+        require: true,
+        include: {
+          model: User,
+          as: "user",
+          require: true,
+        },
+      },
+      {
+        model: User,
+        as: "user",
+        require: true,
+      },
+    ],
   });
   res.json(oneArticle);
 };
