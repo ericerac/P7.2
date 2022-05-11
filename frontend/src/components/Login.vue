@@ -115,7 +115,7 @@ export default {
         })
         .then((response) => {
           console.log(response.data); // userId token
-          self.$router.push("HomePage");
+          self.$router.push("profil");
         })
         .catch((err) => {
           console.log("Restons calme login", err);

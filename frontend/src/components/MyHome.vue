@@ -165,8 +165,8 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          console.log(response.data); // userId token
-          self.$router.push("HomePage");
+          console.log("REPONSE MY-HOME", response.data); // userId token
+          self.$router.push("/profil");
         })
         .catch((err) => {
           console.log("Restons calme login", err);

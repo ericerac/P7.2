@@ -9,10 +9,10 @@ const auth = require('../../middleWare/auth')
 
 router.get("/all",  artControl.published); 
 router.get("/",  artControl.OnePublished); 
-router.put("/",  artControl.destroyArt); 
+router.put("/",auth,  artControl.destroyArt); 
 
 //router.post("/login",  artControl.publish);
 
-router.post("/post",auth,multer, artControl.publish);
+router.post("/post", multer, artControl.publish);
 
 module.exports = router;

@@ -2,7 +2,7 @@
   <form id="form" @submit.prevent="uploadUser">
     <div id="homePage">
       <div id="UserData" v-if="mode == 'homePage'">
-        <!-- USER NON DEFINI -->
+       
 
         <img
           id="userImg"
@@ -109,6 +109,7 @@ import { axios } from "axios";
 let user = localStorage.getItem("user");
 let userId = "";
 let userToken = "";
+
 const User = JSON.parse(user);
 if (User) {
   userId = User.userId;
@@ -128,14 +129,14 @@ export default {
       return;
     }
     const UserId = this.$store.state.user;
-    console.log("USER-ID Mounted", UserId.userId);
+    console.log("USER-ID Mounted", user.userId);
 
     const userId = UserId.userId;
 
     this.userId = userId;
     console.log("USER-ID", userId);
     this.$store.dispatch("getUserData");
-    //getUserData();
+   
   },
 
   data: () => {
@@ -180,23 +181,20 @@ export default {
 
       console.log("fichier Image", this.fileSelected);
     },
-    //--------------------UPDATE-USER 1---------------------//
+    //--------------------UPDATE-USER ---------------------//
 
     onSubmit() {
-      // upload file
+      
       var bodyFormData = new FormData();
       bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
       bodyFormData.append("firstName", this.firstName);
       bodyFormData.append("lastName", this.lastName);
       bodyFormData.append("email", this.email);
+      bodyFormData.append("userId", userId);
       console.log("FORMDATA", bodyFormData);
       console.table("this.firstName ", ...bodyFormData.entries());
-      axios({
-        method: "post",
-        url: "http://localhost:3000/user/update",
-        data: bodyFormData,
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      this.$store.dispatch("updateUser", bodyFormData)
+      
         .then(function (response) {
           //handle success
           console.log(response);
@@ -206,59 +204,7 @@ export default {
           console.log(response);
         });
     },
-    //--------------------UPDATE-USER 1.1---------------------//
-
-    // updateUser: function () {
-    //   console.log("UPDATE USER HOME PAGE");
-    //   const getFormData = (formData =>
-    //     Object.entries(formData).reduce((fd, [key, val]) => {
-    //       if (Array.isArray(val)) {
-    //         val.forEach((v) => fd.append(key, v));
-    //       } else {
-    //         fd.append(key, val);
-    //       }
-    //       return fd;
-    //     }), new FormData());
-
-    //   console.log("media", this.fileSelected)
-    //   this.$store
-    //     .dispatch("updateUser", this.getFormData
-    //     //{
-    //       //  userId: this.formData.userId,
-    //       //  firstName: this.formData.firstName,
-    //       //  lastName: this.formData.lastName,
-    //       //  email: this.formData.email,
-    //       //  password: this.formData.password,
-    //       //  media: this.formData.media,
-    //     //}
-    //     )
-    //     .then(function (response) {
-    //       console.log("reponse", response);
-    //       // self.loginPost();
-    //       self.$router.push("/HomePage");
-    //       goToHomePage();
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
-    //-------------UPDATE USER 2--------------_();
-    // updateUser(e) {
-    //   e.preventDefault();
-    //   const fd = new FormData();
-    //   fd.append(e.currentTarget);
-    //   console.log("NEW FORM-->", fd);
-
-    //   //Data.append('corp',this.formData);
-    //   // let fileName = this.fileSelected;
-    //   // let naame = fileName.name;
-    //   // fd.append('file',this.fileSelected,this.fileSelected.name);
-
-    //   // console.log("DATA",fd);
-    //   // console.log("file", this.fileSelected);
-    //   // this.$store.dispatch("updateUser", fd);
-    // },
-
+    
     //----------------LOGOUT-------------------(())
 
     // logOut: (state) => {

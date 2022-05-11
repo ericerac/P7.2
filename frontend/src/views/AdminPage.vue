@@ -14,7 +14,7 @@
         <li
           class="breadcrumb-item active"
           aria-current="page"
-          @click="goToAdminPage()"
+          @click="goToProfilPage()"
         >
           Retour Page Profil
         </li>
@@ -130,7 +130,7 @@
     <table class="table" v-if="mode == 'usersData'" >
   <thead>
     <tr>
-      <th scope="col">Id</th>
+      <th scope="col">Supprimer</th>
       <th scope="col">Nom</th>
       <th scope="col">Prénom</th>
       <th scope="col">Inscrition</th>
@@ -138,10 +138,10 @@
   </thead>
   <tbody>
     <tr v-for="use in AllUsers" v-bind:key="use">
-      <th scope="row">{{use.index}}</th>
+      <th scope="row"></th>
       <td>{{use.firstName}}</td>
-      <td>{{use.lasstName}}</td>
-      <td>{{use.createdAt}}</td>
+      <td>{{use.lastName}}</td>
+      <td>{{ dateTime(use.createdAt) }}</td>
     </tr>
     
   </tbody>
@@ -155,7 +155,7 @@ const url = "localhost:3000";
 import { mapState } from "vuex";
 //import{$array}from"alga.js";
 const axios = require("axios");
-
+import moment from "moment";
 export default {
   name: "adminPage",
 
@@ -163,10 +163,10 @@ export default {
     return {
       mode: "admin",
 //-------gestion affichage liste user-----//
-      entries:[],
-      listEntries:[10,20,50],
-      currentEntries:10,
-      filterEntries:[],
+      // entries:[],
+      // listEntries:[10,20,50],
+      // currentEntries:10,
+      // filterEntries:[],
 //-------*****************************-----//
 
       firstName: "",
@@ -179,8 +179,13 @@ export default {
   updated:function(){
  console.log(this.AllUsers);
   },
+  
   computed: {
       //...mapState(["status"]),
+      disconnect:function(){
+this.$store
+         .dispatch("disconnect")
+      },
     ...mapState({
       user: "userData",
       CountArticle: "articles",
@@ -188,6 +193,7 @@ export default {
       UpdateData: "formData",
       usersId:"usersId",
       AllUsers:"allsUsersData",
+
     }),
   },
   methods: {
@@ -197,6 +203,9 @@ export default {
 
     goToAdmin: function () {
       this.mode = "admin";
+    },
+    goToProfilPage: function () {
+      this.$router.push("../profil");
     },
     goToUsersData: function () {
          this.$store.dispatch("getAllUsersData")
@@ -218,6 +227,10 @@ export default {
   
   
      },
+     dateTime(value) {
+      return moment(value).format('DD-MM-YYYY');
+    },
+
 
     // getAllUsersData: () => {
       
@@ -248,4 +261,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#adminPage{
+  background-color: antiquewhite;
+}
+</style>

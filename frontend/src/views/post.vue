@@ -8,10 +8,11 @@
 </button> -->
 
   <div id="post">
+    <form id ="formPost" @submit.prevent="articlePost">
     <div id="articleUser">
       <div id="postText">
         <input
-          v-model="post.content"
+          v-model="content"
           class="commentaire"
           type="texte"
           placeholder="Ecrire"
@@ -30,19 +31,24 @@
         <button class="Publier" @click="uploadPost">Publier</button>
       </div>
     </div>
-    <div id="postPublié" v-for="article in dataArt" :key="article.id" >
-      <div></div>
+    </form>
+    <div id="postPublié" v-for="article in dataArt" :key="article.id">
+    <div id =" postUser " >   
+    
       <div id="user">
-        <span class="user">{{ article.userId }}</span>
+        <span class="user" >{{ user.firstName }} {{ }} {{ user.lastName }}</span>
+        
         <span class="postDate"
+        
           >posté le: {{ dateTime(article.createdAt) }}
         </span>
       </div>
 
       <div id="article">
         <span class="content">{{ article.content }}</span>
-        <img class="postImg" alt="Image" v-bind:src="article.media" />
+        <img class="postImg" alt="Image"  v-bind:src="article.media" />
       </div>
+      
       <div id="options">
         <span class="like"
           >{{ }} like {{  }} dislike</span
@@ -55,25 +61,27 @@
         <button class="Valider" @click="filtreArticleDate()">Répondre</button>
         <button class="Valider" @click="filtreMAP()">Répondre</button>
       </div>
-      <div id="commentaires" >
+      <div id="commentaires" v-for="(commKey ) in article.comment" :Key="commKey.id">
         <div id="identificationComment" >
           <span id="UserComment" >UserComment{{ }}</span>
-          <span id="dateComment">dateComment{{ }}</span>
+          <span id="dateComment">{{ dateTime(commKey.createdAt) }}</span>
         </div>
 
-        <div class="commentaire"  v-for="(commKey ) in article.comment" :Key="commKey.id">UserName:{{commKey}}</div>
-        <div class="commentaire"  v-for="( comment, value,key ) in article.comment[0]" :Key="key">{{key}}:{{comment}}:{{value}}:</div>
+        <div class="commentaire"  >{{commKey.comment}}</div>
+        <!-- <div class="commentaire"  v-for="( comment, value,key ) in article.comment[0]" :Key="key">{{key}}:{{comment}}:{{value}}:</div> -->
         <!-- <div class="commentaire"  v-for="( comments,value ) in comments" :Key="comments"> ARTICLE COMMENT ?  :    {{comments}}:{{value}}</div> -->
         
         
-        <div id="options">
+        <div id="options" >
           <span class="like">{{ likes }} {{ dislikes }} </span>
-          <span class="comment">{{  }}ico commenter</span>
+          <span class="comment"></span>
         </div>
      
       </div>
       <button>Se connecter</button>
     </div>
+    </div>
+
   </div>
 </template>
 
@@ -84,8 +92,9 @@
 import { mapGetters, mapState } from "vuex";
 import moment from "moment";
 import LoginVue from "../components/Login.vue";
-// import { log } from 'console';
+
 const axios = require("axios");
+const FormData = require("form-data");
 
  let user = localStorage.getItem("user");
  let  userId ="";
@@ -134,12 +143,12 @@ export default {
 
       
      
-      post: {
+      
         content: "",
         media: "",
         userId: userId,
         token: userToken,
-      },
+     
       
       ArticleDate: "",
       //UsersId: [],
@@ -167,6 +176,7 @@ console.log("BEFORE CREATED")
   
   
    computed: {
+     
   //   ...mapGetters({
   //     PostData:"allDatas"
   //   }),
@@ -183,10 +193,19 @@ console.log("BEFORE CREATED")
   },
 
   methods: {
+    //-------------FILE NAME----------------//
+    FileUpload(event) {
+      console.log("EVENT", event);
+      this.fileSelected = event.target.files[0];
+
+      console.log("fichier Image", this.fileSelected);
+    },
+
     //--------------COMPIL DATA ART ET COMMENT----------//
     // update:function(allData,comments){
     //   this.$store.dispatch("dat_Post",(allData,comments))
     // },
+
     //--------------FORMAT DATE----------------------//
     dateTime(value) {
       return moment(value).format("DD-MM-YYYY");
@@ -267,24 +286,21 @@ comm.push(i.comment)
 
     //------------ UPLOAD POST-----------------------//
     uploadPost: function () {
-      const self = this;
-      console.log(" Publier Post");
-      this.$store
-        .dispatch("uploadPost", {
-          // dispatch ("nom de la fonction dans ./store/index.js ")
-
-          content: this.post.content,
-          // media: this.post.media,
-          userId: this.post.userId,
-
-          //token: this.token,
-        })
+      var bodyFormData = new FormData();
+      bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
+      bodyFormData.append("content", this.content);
+      bodyFormData.append("userId", userId);
+      console.log("FORMDATA", bodyFormData);
+      console.table("this.firstName ", ...bodyFormData.entries());
+      this.$store.dispatch("uploadPost", bodyFormData)
+      
         .then(function (response) {
-          console.log("reponse", response);
-          self.$store.dispatch("getAllArticle");
+          //handle success
+          console.log(response);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(function (response) {
+          //handle error
+          console.log(response);
         });
     },
 
@@ -386,7 +402,7 @@ comm.push(i.comment)
   flex-wrap: nowrap;
   text-align: justify;
 
-  margin: 20px auto;
+  margin: 5px auto 20px;
   padding-top: 10px;
   background-color: rgb(255, 255, 255);
   width: 95%;
@@ -407,5 +423,6 @@ comm.push(i.comment)
   justify-content: space-between;
   width: 95%;
   margin: 0 auto;
+  padding-bottom: 0;
 }
 </style>

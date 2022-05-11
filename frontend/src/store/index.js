@@ -6,29 +6,22 @@ const mapState = require("vuex");
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
-   headers: {
-    //'Content-Type': 'multipart/form-data; boundary=--hadhba122--'
-    //'content-Type': 'application/x-www-form-urlencoded; '
-    //'Content-Type':'application/json; charset=utf-8',
-   },
+  
 });
 
 let user = localStorage.getItem("user");
-let  userId ="";
+let userId = "";
 let userToken = "";
 if (!user) {
   user = {
     userId: -1,
     token: "",
-  } 
-}else if(user){
+  };
+} else if (user) {
   const User = JSON.parse(user);
   userId = User.userId;
- userToken = User.token;
-};
-
-
-
+  userToken = User.token;
+}
 
 console.log(userId, userToken);
 
@@ -37,36 +30,31 @@ const store = createStore({
     status: "",
     user: user,
 
-    
+    PostData: {},
 
-    
-     
-    PostData:{},
-    
-
-    updateUser:{
-      firstName:'',
-      lastName:'',
-      email:'',
-      userId:'',
-      token:'',
-      media:'',
+    updateUser: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      userId: "",
+      token: "",
+      media: "",
     },
-    
+
     formData: {
-      userId:"",
+      userId: "",
       firstName: "",
       lastName: "",
       email: "",
       password: "",
-     media:'',
+      media: "",
     },
-
-   userData:"",
-    alldata:"",
+    allsUsersData: "",
+    userData: "",
+    alldata: "",
     artData: "",
     comments: "",
-    usersId:"",
+    usersId: "",
   },
   mutations: {
     setStatus: (state, status) => {
@@ -89,23 +77,23 @@ const store = createStore({
     Comment: (state, comment) => {
       state.comment = comment;
     },
-    AllData:(state,alldata)=>{
+    AllData: (state, alldata) => {
       state.alldata = alldata;
     },
     // dat_Post:(state,data)=>{
-    
+
     // PostData.set(state.PostData, data.property, data.value)
     // },
-    FormData:(state,formData)=>{
+    FormData: (state, formData) => {
       state.formData = formData;
     },
-    Articles:(state, articles) => {
+    Articles: (state, articles) => {
       state.articles = articles;
     },
-    Comments:(state, comments) => {
+    Comments: (state, comments) => {
       state.comments = comments;
     },
-    UsersId:(state, usersId) => {
+    UsersId: (state, usersId) => {
       state.usersId = usersId;
     },
 
@@ -117,8 +105,8 @@ const store = createStore({
       //localStorage.removeItem('user')
     },
   },
-  getters:{
-allDatas:(state)=> state.artData
+  getters: {
+    allDatas: (state) => state.artData,
   },
 
   computed: {},
@@ -128,9 +116,6 @@ allDatas:(state)=> state.artData
     //   commit("dat_Post",data)
     // },
 
-
-
-
     signupPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
@@ -139,7 +124,7 @@ allDatas:(state)=> state.artData
           .then(function (response) {
             commit("setStatus", "loading");
             resolve(response);
-            console.log(response);
+            console.log("REPONSE SIGNUP ",response);
           })
           .catch((err) => {
             commit("setStatus", "error_create");
@@ -151,6 +136,7 @@ allDatas:(state)=> state.artData
 
     loginPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
+      console.log("USER-DATA LOGIN INDEX",userData);
       return new Promise((resolve, reject) => {
         instance
           .post("/login", userData)
@@ -162,53 +148,76 @@ allDatas:(state)=> state.artData
           })
           .catch((err) => {
             commit("setStatus", "error_login");
-            console.log("ça deconne login index store");
+            
+            console.log("ça deconne login index store",err);
             reject(err);
           });
       });
     },
+    //----------DELETE USER---------------//
+    deleteUser: ({ commit }, userData) => {
+      commit("setStatus", "loading");
+      return new Promise((resolve, reject) => {
+        instance
+          .put(`/user/delete?id=${userId}`)
+          .then((response) => {
+            commit("setStatus", "");
+            commit("logUser", response.data);
+            resolve(response);
+            console.log("logUser", logUser);
+          })
+          .catch((err) => {
+            commit("setStatus", "error_login");
+            console.log("ça deconne delete index store");
+            reject(err);
+          });
+      });
+    },
+
+    //----------DISCONNECT----------------//
+    disconnect: () => {
+      localStorage.removeItem("user");
+      this.$router.push("/");
+    },
     //----------UPDATE USER 1------------//
 
-    updateUser: ({commit},Data) => {
+    updateUser: ({ commit }, Data) => {
       commit("setStatus", "loading");
-      console.log("UPDATE USER INDEX",Data);
-      
+      console.log("UPDATE USER INDEX", Data.entries());
+
       return new Promise((resolve, reject) => {
         instance
           .put("/user/update", Data)
-          .then( (response) => {
-
-            console.log("RESPONSE INDEX -->",response);
+          .then((response) => {
+            console.log("RESPONSE INDEX -->", response);
 
             commit("setStatus", "loading");
             resolve(response);
-            console.log("REPONSE UPDATE",response);
+            console.log("REPONSE UPDATE", response);
           })
           .catch((err) => {
             commit("setStatus", "error_create");
             reject(err);
-            console.log("ERREUR",err);
+            console.log("ERREUR", err);
             console.log("ça ne fonctionne pas");
           });
       });
     },
 
-//-----------------GET USER DATA----------------(())
-    getUserData: ({ commit },usersId) => {
-      const User = JSON.parse(user);
-      const userId = User.userId;
-      console.log(userId);
-      const useId = usersId;
+    //-----------------GET USER DATA----------------(())
+    getUserData: ({ commit },data ) => {
+      const userId = data;
+      console.log(data);
       instance
         .get(`/user?id=${userId}`)
         .then((res) => {
-          console.log("reponse", res.data);
+          console.log("REPONSE USER-DATA INDEX STORE", res.data);
           commit("UserData", res.data);
           const countArticle = res.data.article.length;
-          commit("Articles",countArticle);
+          commit("Articles", countArticle);
           const countComment = res.data.comment.length;
-          console.log("Articles",countComment);
-          commit("Comments",countComment);
+          console.log("Articles", countComment);
+          commit("Comments", countComment);
 
           if (res) {
             console.log("reponse", res.data);
@@ -222,14 +231,13 @@ allDatas:(state)=> state.artData
           //console.log("ça m'énerve encore");
         });
     },
-//-----------------GET ALL USERS DATA----------------(())
-    getAllUsersData: ({ commit },usersId) => {
-      
-      instance
+    //-----------------GET ALL USERS DATA----------------(())
+    getAllUsersData: async ({ commit }, usersId) => {
+      await instance
         .get(`/user/all`)
         .then((res) => {
           console.log("reponse", res.data);
-          commit("UserData", res.data);
+          commit("AllsUsersData", res.data);
           //const countArticle = res.data.article.length;
           //commit("Articles",countArticle);
           //const countComment = res.data.comment.length;
@@ -248,22 +256,24 @@ allDatas:(state)=> state.artData
           //console.log("ça m'énerve encore");
         });
     },
-//-----------UPLOAD POST-----------------//
-    uploadPost: ({ commit }, uploadPost) => {
-      console.log("UPLOAD-POST INDEX",uploadPost);
+    //-----------UPLOAD POST-----------------//
+    uploadPost: ({ commit }, data) => {
+      console.log("UPLOAD-POST INDEX", ...data.entries());
       commit("setStatus", "loading");
-      
-
+      const token = userToken;
+      console.log("TOKEN", token);
       return new Promise((resolve, reject) => {
         instance
-          .post("/article/post", uploadPost)
-          .then( (response) => {
-
-            console.log("RESPONSE INDEX -->",response);
+          .post("/article/post", data, {
+            headers: {
+              Authorization: `Basic ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("RESPONSE INDEX -->", response);
 
             commit("setStatus", "loading");
             resolve(response);
-            
           })
           .catch((err) => {
             commit("setStatus", "error_create");
@@ -272,7 +282,7 @@ allDatas:(state)=> state.artData
           });
       });
     },
-//----------------GET ALL ARTICLES---------------//
+    //----------------GET ALL ARTICLES---------------//
     getAllArticle: ({ commit }) => {
       commit("setStatus", "loading");
       const self = this;
@@ -284,60 +294,28 @@ allDatas:(state)=> state.artData
             console.log(res);
             const usersId = [];
             commit("setStatus", "loading");
-            commit("ArtData", res.data);
+            const revers = res.data.reverse();
+            commit("ArtData", revers);
             const resData = res.data;
-           
+
             const comments = resData.map((a) => a.comment);
-            commit("Comments",comments)
-            commit("AllData",resData.comment)
-            console.log("ArtData  INDEX",  resData);
-           
+            commit("Comments", comments);
+            commit("AllData", resData.comment);
+            console.log("ArtData  INDEX", resData);
+
             let dat = res.data;
             console.log("res GET INDEX COMMENTS", comments);
-            for(let i of dat){
+            for (let i of dat) {
               usersId.push(i.userId);
-            
-
             }
-           
-            // console.log("BOUCLE INDEX USER-ID", usersId);
-            commit("UsersId",usersId);
-           commit("AllData",comments)
-          
-          
-         
-            resolve(res);
-            
-            
-          })
-            
-            // return new Promise((resolve, reject) => {
-            //   const self = this;
-            //   instance
-            //     .get(`/user?id=${userId}`)
-            //     .then((res) => {
-            //       const UsersId={};
-            //       console.log("USER-ID",usersId);
-            //       console.log("BOUCLE INDEX RES 2", res.data.firstName);
-            //        for(let i of res.data){
-            //          UsersId.push(i.firstName);
-            //                      }
 
-            //       console.log("BOUCLE INDEX USER-ID 3",self.usersId);
-                  
-      
-            //       resolve(res);
-                  
-                  
-            //     })
-            //     .catch((err) => {
-            //       commit("setStatus", "error_create");
-            //       reject(err);
-            //       console.log("ça ne fonctionne pas GET ART 2 ");
-            //     });
-            // });
-            
-          
+            // console.log("BOUCLE INDEX USER-ID", usersId);
+            commit("UsersId", usersId);
+            commit("AllData", comments);
+
+            resolve(res);
+          })
+
           .catch((err) => {
             commit("setStatus", "error_create");
             reject(err);
@@ -350,13 +328,10 @@ allDatas:(state)=> state.artData
 
 export default store;
 
-
 // const One = axios.get(reqAll);
 // const url = "http://localhost:3000/article?";
 // const reqAll = "http://localhost:3000/article/all";
 // const reqOne = `http://localhost:3000/article?${One}`;
-
-
 
 //  const Two = axios.get(reqOne);
 
@@ -373,7 +348,7 @@ export default store;
 //        ResponseOne.data,
 //        "ResponseTWo",
 //        ResponseTwo.data
-//      );  
+//      );
 //    })
 //  ).catch = () => {
 //    res.json({message:"ça marche pas"})

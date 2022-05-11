@@ -7,6 +7,7 @@ const fs = require("fs");
 const db = require("../models");
 const Comment = db.comment;
 const articles = db.article;
+const User = db.users;
 
 // const sequelize = require('../config/db.config')
 
@@ -23,7 +24,7 @@ const sequelize = new Sequelize(
 
 const article = ArtModel(sequelize, Sequelize);
 
-//--------------GET ARTICLES--------------------//
+//--------------GET ARTICLES--------------------OK--//
 exports.published = async (req, res, next) => {
   console.log("-------All Articles--------");
   console.log("-------req.params-------", req.query);
@@ -32,14 +33,19 @@ exports.published = async (req, res, next) => {
       {
         model: Comment,
         as: "comment",
-      },
+        require:true,
+      },{
+        model: User,
+        as:"user",
+        require:true,
+      }
     ],
   });
   res.json(allArticle);
   console.log(allArticle);
 };
 
-//--------------GET ONE ARTICLE--------------------//
+//--------------GET ONE ARTICLE--------------------OK--//
 
 exports.OnePublished = async (req, res, next) => {
   console.log("-------req.query One--------", req.query.id);
@@ -47,29 +53,35 @@ exports.OnePublished = async (req, res, next) => {
   const params = req.query.id;
   const oneArticle = await articles.findOne({
     where: { id: `${params}` },
-    include: [{model:Comment,as:"comment"}],
+    include: [{ model: Comment, as: "comment" }],
   });
   res.json(oneArticle);
 };
 
-//------------PUBLISH-----------------------//
+//------------PUBLISH-----------------------OK--//
 
 exports.publish = async (req, res, next) => {
   console.log("req.body.image", typeof req.body.media);
   console.log("req.body", req.body);
-// if(req.body.content && req.body.media == {}){
-//   res.json({message:"Post vide"});
-//   return;
-// }
-  const publish = await article.create({
-    userId: req.body.userId,
-    content: req.body.content,
-    // like: req.body.like,
-    // dislike: req.body.dislike,
+  console.log("req.file", req.file);
+  let artPost = "";
 
-    media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+  if (req.file) {
+    console.log("condition IF FILE TRUE");
+    artPost = {
+      userId: req.body.userId,
+      content: req.body.content,
+
+      media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+    };
+  } else {
+    console.log("condition IF FILE FALSE");
+    artPost = { ...req.body };
+  }
+  const publish = await article.create({
+    ...artPost,
   });
-  console.log("publish", publish.userId);
+  console.log("ART-POST", artPost);
   if (publish) {
     res.json(publish);
   } else {
@@ -77,11 +89,26 @@ exports.publish = async (req, res, next) => {
   }
 };
 
-//---------------DELETE--------------------//
+//---------------DELETE-------------------- OK--//
 exports.destroyArt = async (req, res) => {
   const params = req.query.id;
   console.log(params);
+  const oneArticle = await articles.findOne({
+    where: { id: `${params}` },
+  });
+
+  let data = oneArticle.media;
+
+  console.log("oneArticle", oneArticle);
+  console.log("Media", data);
+
+  if (data) {
+    const filename = data.split("/images/")[1];
+    console.log("FILENAME", filename);
+    fs.unlink(`images/${filename}`, () => {});
+  }
   const suprimmer = await article.destroy({ where: { id: params } });
+
   if (suprimmer) {
     res.json({ message: "Article supprimé" });
   } else {
