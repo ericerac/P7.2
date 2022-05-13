@@ -2,11 +2,8 @@
   <div class="container d-flex justify-content-center align-items-center">
     <div class="card">
       <div class="mt-2 text-center">
-        <router-link
-          class="text d-block mb-3"
-          to="/user/admin"
-          v-if="user.role == 'admin'"
-          ><button class="btn btn-primary btn-sm follow pt-20px">
+        <router-link class="text d-block mb-3" to="/user/admin" v-if="user.role == 'admin'"><button
+            class="btn btn-primary btn-sm follow pt-20px">
             Page administrateur
           </button>
         </router-link>
@@ -15,7 +12,7 @@
         <button class="btn btn-sm follow mt-0" @click="goToFilActu">
           Allez au fil d'actualité
         </button>
-        <button class="btn btn-danger btn-sm follow mt-0">
+        <button class="btn btn-danger btn-sm follow mt-0" @click="deleteUser(user.id)">
           Effacer mon compte
         </button>
       </div>
@@ -23,13 +20,7 @@
 
       <div class="user text-center">
         <div class="profile">
-          <img
-            id="userImg"
-            v-bind:src="user.media"
-            class="rounded-circle"
-            width="80"
-            alt="Photo de profil"
-          />
+          <img id="userImg" v-bind:src="user.media" class="rounded-circle" width="80" alt="Photo de profil" />
           <!-- <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> -->
         </div>
       </div>
@@ -39,9 +30,7 @@
 
         <p id="adminUser" v-if="user.role == 'admin'">Compte administrateur</p>
 
-        <div
-          class="d-flex justify-content-between align-items-center mt-4 px-3"
-        >
+        <div class="d-flex justify-content-between align-items-center mt-4 px-3">
           <div class="stats">
             <h6 class="mt-3">Articles</h6>
             <span class="stat">{{ CountArticle }}</span>
@@ -84,42 +73,45 @@ console.log(userId, userToken);
 
 export default {
   name: "profil",
+  beforeMount: function () {
 
+    console.log("BEFORE MOUNT");
+    console.log("USER-DATA-->", user)
+  },
+  onMounted: function () {
+    console.log("ON MOUNTED");
+    console.log("USER-DATA-->", user)
+  },
+  beforeCreate: function () {
+    console.log("BEFORE CREATED");
+    console.log("USER-DATA-->", user)
+  },
+  beforeUpdate: function () {
+    console.log("BEFORE UPDATE");
+    console.log("USER-DATA-->", user)
+  },
   mounted: function () {
-    // console.log(this.$store.state.user);
 
-    // const UserId = this.$store.state.user;
-    // // if (User.userId == null) {
-    // //   this.$router.push("/");
-    // //   return;
-    // // }
-    // const User = JSON.parse(UserId);
-    // console.log("USER-ID Mounted", User.userId);
-    // const IdUser = User.userId;
-    // //const userId = UserId.userId;
-
-    // //this.userId = userId;
-    // console.log("USER-ID", userId);
-    // //this.$store.dispatch("getUserData");
 
     let user = localStorage.getItem("user");
-let userId = "";
-let userToken = "";
-if (!user) {
-  user = {
-    userId: -1,
-    token: "",
-  };
-} else if (user) {
-  const User = JSON.parse(user);
-  userId = User.userId;
-  userToken = User.token;
-}
+    let userId = "";
+    let userToken = "";
+    if (!user) {
+      user = {
+        userId: -1,
+        token: "",
+      };
+    } else if (user) {
+      const User = JSON.parse(user);
+      userId = User.userId;
+      userToken = User.token;
+    }
 
-console.log(userId, userToken);
+    console.log("USER-ID i TOKEN 1-------->", userId, userToken);
 
     this.getUserData(userId);
   },
+
 
   data: () => {
     return {
@@ -129,7 +121,7 @@ console.log(userId, userToken);
 
       url: "http://localhost:8080",
 
-      userId: "userId",
+      userId: userId,
       firstName: "",
       lastName: "",
       email: "",
@@ -145,7 +137,7 @@ console.log(userId, userToken);
       CountArticle: "articles",
       CountComment: "comments",
       UpdateData: "formData",
-      usersId: "usersId",
+      usersId: "userId",
     }),
   },
   methods: {
@@ -205,6 +197,26 @@ console.log(userId, userToken);
           console.log(response);
         });
     },
+
+    //--------------------DELETE USER-------------------------//
+
+    deleteUser(data) {
+
+      console.log("USER-ID PROFIL DELETE", data);
+      this.$store
+        .dispatch("deleteUser", data)
+        .then((response) => {
+          if(response){
+
+            
+            response.json({ message: "Compte supprimé" })
+          this.$router.push("login");
+            }
+        }).catch((err)=>{
+          console.log("ERREUR REQUETE PROFIL DELETE USER------>",err);
+         
+        })
+    }
     //--------------------UPDATE-USER 1.1---------------------//
 
     // updateUser: function () {

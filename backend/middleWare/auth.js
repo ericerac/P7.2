@@ -47,6 +47,16 @@ const sequelize = new Sequelize(
 // };
 
 module.exports = async (req, res, next) => {
+  console.log("HEADERS------>>>", req.headers );
+  if(!req.headers.authorization){
+    console.log("HEADERS AUTH------>>>", req.headers.authorization );
+   
+    res.status(401).json({
+      error: new Error(),
+      message: "Requete  sans token",
+    });
+    return
+  }
   const token = req.headers.authorization.split(" ")[1]; // récupère le token dans le header
   console.log("-----token-----", token);
   const decodedToken = jwt.verify(token, `${process.env.TOKEN}`); // décrypte le token

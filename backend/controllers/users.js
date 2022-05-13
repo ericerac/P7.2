@@ -69,7 +69,9 @@ exports.login = async (req, res, next) => {
       user.password
     );
     if (password_valid) {
-      token = jwt.sign({ id: user.id }, `${process.env.TOKEN}`);
+      token = jwt.sign({ id: user.id }, `${process.env.TOKEN}`,{
+        expiresIn: "12h",
+      });
       res
         .status(200)
         .json({ token: token, userId: user.id, userRole: user.role });
@@ -210,24 +212,44 @@ exports.updateUser = async (req, res) => {
 
 //-----------DELETE USER----------------//
 
-exports.destroyUser = async (req, res) => {
-  //const params = req.query.id;
-  const params = req.body;
-  console.log("id TO DESTROY", params);
+// exports.destroyUser = async (req, res) => {
+//   //const params = req.query.id;
+//   const params = req.body;
+//   console.log("id TO DESTROY", params);
 
   
-  const supprimer = await User.destroy({ where: { id: params.id } });
-  console.log("SUPPRIMER",supprimer);
-  console.log("PARAMS.ID",params.id);
+//   const supprimer = await User.destroy({ where: { id: params.id } });
+//   console.log("SUPPRIMER",supprimer);
+//   console.log("PARAMS.ID",params.id);
 
-  if (supprimer) {
-    res.json({ message: "Compte Utilisateur supprimé" });
-  } else {
-    res.json({ message: "erreur 404" });
+//   if (supprimer) {
+//     res.json({ message: "Compte Utilisateur supprimé" });
+//   } else {
+//     res.json({ message: "erreur 404" });
+//   }
+// };
+
+exports.destroyUser = async (req, res) => {
+  const params = req.query.id;
+  console.log("id", params);
+  console.log("HEADERS------>>>", req.headers.authorization );
+  const UserTo = await user.findOne({
+    where: { id: `${params}` },
+    
+  });
+  if(!UserTo){
+    res.json({message:"l'utilisateur n'existe pas"})
+  }else{
+
+    console.log("id", params);
+    const suprimmer = await User.destroy({ where: { id: params } });
+    if (suprimmer) {
+      res.json({ message: "Compte utilisateur supprimé" });
+    } else {
+      res.json({ message: "erreur 404" });
+    }
   }
 };
-
-
 
 exports.GetAdminUser = async (req) => {
 

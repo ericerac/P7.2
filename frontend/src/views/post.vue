@@ -6,27 +6,16 @@
     <span class="visually-hidden">unread messages</span>
   </span>
 </button> -->
-
+  <navBar />
   <div id="post">
     <form id="formPost" @submit.prevent="articlePost">
       <div id="articleUser">
         <div id="postText">
-          <input
-            v-model="content"
-            class="commentaire"
-            type="texte"
-            placeholder="Ecrire"
-          />
-          <label
-            >choisir
+          <span>{{ user.firstName }}...</span>
+          <input v-model="content" class="commentaire" type="texte" placeholder="Ecrire" />
+          <label>choisir
 
-            <input
-              type="file"
-              id="mediaPost"
-              ref="file"
-              @change="FileUpload"
-              accept="image/png, image/jpeg"
-            />
+            <input type="file" id="mediaPost" ref="file" @change="FileUpload" accept="image/png, image/jpeg" />
           </label>
           <button class="Publier" @click="uploadPost">Publier</button>
         </div>
@@ -34,75 +23,116 @@
     </form>
     <div id="postPublié" v-for="article in dataArt" :key="article.id">
       <div id=" postUser ">
-        <!-- <div id="user">
-        <span class="user" >{{article.user }} {{ }} {{  }}</span>
-        
-        <span class="postDate"
-        
-          >posté le: {{ dateTime(article.createdAt) }}
-        </span>
-      </div> -->
-        <span class="postDate">
-          posté le: {{ dateTime(article.createdAt) }}
-        </span>
+
+        <div id="user">
+          <span class="user"> Publié par: <strong>{{ article.user.lastName }} {{ }} {{ article.user.firstName
+          }}</strong></span>
+
+          <span class="postDate">
+            le: {{ date(article.createdAt) }}
+          </span>
+        </div>
         <div id="article">
           <span class="content">{{ article.content }}</span>
-          <img class="postImg" alt="Image" v-bind:src="article.media" />
+          <img class="postImg" alt="Image" :src="article.media" />
         </div>
-        <template v-for="it in article.user" :key="it">
-          <div id="user">
-            <span class="user"> {{ it }} </span>
+
+        <!-- -----------------------BLOC LIKE ------------------------>
+        <div id="iconPost">
+          <div class="iconLike">
+            <span class="icon">
+              <fa class="like" :icon="['far', 'thumbs-up']" />120
+            </span>
+            <input type="checkbox"  name="dislike"  :value="article.id"
+              v-model="PostLiked" />
+            <label v-bind:for="dislike">
+              <fa class="like" :icon="['far', 'thumbs-down']" />
+            </label>
           </div>
-        </template>
-        <div id="options">
-          <span class="like">{{}} like {{}} dislike</span>
-          <div class="comment">commenter</div>
+          <span>
+            <fa :icon="['far', 'comment']" @click="commentInput = !commentInput"  v-model="PostLiked" />
+          </span>
         </div>
 
-        <div id="repondre">
-          <input v-model="ArticleDate" class="commentaire" type="texte" />
-          <button class="Valider" @click="filtreArticleDate()">Répondre</button>
-          <button class="Valider" @click="filtreMAP()">Répondre</button>
-        </div>
-        
-          <div id="commentaires">
 
-            <template v-for="commKey in article.comment" :item="commKey.id">
-            <div class="commentaire">{{ commKey.comment }}</div>
-            </template>
+        <!-- -----------------------COMMENTER ------------------------>
 
-            
-            <div id="identificationComment" >
-              <span id="UserComment" > name:{{ commKey }}</span>
-              <!-- <span id="dateComment">{{ dateTime(commKey.createdAt) }}</span>-->
-            </div>
-           
-            <!-- <div class="commentaire"  v-for="( comment, value,key ) in article.comment[0]" :Key="key">{{key}}:{{comment}}:{{value}}:</div> -->
-            <!-- <div class="commentaire"  v-for="( comments,value ) in comments" :Key="comments"> ARTICLE COMMENT ?  :    {{comments}}:{{value}}</div> -->
+        <form id="formPost" @submit.prevent="articleComment" v-show="commentInput">
+          <div id="articleUser">
+            <div id="postText">
+              <input v-model="contentComment" class="commentaire" type="texte" placeholder="Ecrire" />
 
-            <div id="options">
-              <span class="like" ><fa :icon="['fas','user']"  /> <fa :icon="['far','calendar-alt']" />
-               <fa :icon="['far','bell']" /><fa :icon="['far','paper-plane']" /><fa :icon="['far','thumbs-up']" />
-               <fa :icon="['far','thumbs-down']" /><fa :icon="['far','user-circle']" /><fa :icon="['far','trash-alt']" />
-               <fa :icon="['far','file-alt']" /><fa :icon="['fas','upload']" /><fa :icon="['fas','bars']" /><fa :icon="['fas','pencil-alt']" /></span>
-              <span class="comment"></span>
+              <fa :icon="['fas', 'upload']" />
+              <input type="file" id="mediaPost" ref="file" @change="FileUploadCom" accept="image/png, image/jpeg" />
+              <input type="file" class="custom-file-input">
+              <button class="Publier" @click="uploadComment">Publier</button>
             </div>
           </div>
-        
-        <button>Se connecter</button>
+        </form>
+        <!-- -----------------------COMMENTAIRE ------------------------>
+        <div id="commentaires">
+          <template v-for="commKey in article.comment" :key="commKey.id">
+            <div id="blocComment">
+              <div class="commentaire">{{ commKey.comment }}</div>
+              <img class="imgComment" alt="Image" :src="commKey.media" />
+              <div id="identificationComment">
+                <div id="ComData">
+                  <span class="ComData"> par:{{ commKey.user.firstName }}</span>
+                  <span class="ComData"> {{ commKey.user.lastName }}</span>
+                  <span class="ComData">le: à {{ date(commKey.user.createdAt) }}</span>
+                </div>
+                <div class="iconLike">
+                  <div>
+                    <fa class="like" :icon="['far', 'thumbs-up']" />{{ 25 }}
+                  </div>
+                  <div>
+                    <fa class="like" :icon="['far', 'thumbs-down']" />200
+                  </div>
+                </div>
+                <!-- <span id="dateComment">{{ dateTime(commKey.createdAt) }}</span>-->
+              </div>
+            </div>
+          </template>
+
+          <!-- <div class="commentaire"  v-for="( comment, value,key ) in article.comment[0]" :Key="key">{{key}}:{{comment}}:{{value}}:</div> -->
+          <!-- <div class="commentaire"  v-for="( comments,value ) in comments" :Key="comments"> ARTICLE COMMENT ?  :    {{comments}}:{{value}}</div> -->
+
+          <!-- <div id="options">
+            <span class="like">
+              <fa :icon="['fas', 'user']" />
+              <fa :icon="['far', 'calendar-alt']" />
+              <fa :icon="['far', 'bell']" />
+              <fa :icon="['far', 'paper-plane']" />
+              <fa :icon="['far', 'comment']" />
+              <fa :icon="['far', 'user-circle']" />
+              <fa :icon="['far', 'trash-alt']" />
+              <fa :icon="['far', 'file-alt']" />
+              <fa :icon="['fas', 'upload']" />
+              <fa :icon="['fas', 'bars']" />
+              <fa :icon="['fas', 'pencil-alt']" />
+            </span>
+            <span class="comment"></span>
+          </div> -->
+        </div>
+
+        <!-- <button>Se connecter</button> -->
       </div>
     </div>
   </div>
 </template>
 
 //**********************************************// */
-//**********************************************// */
+
+                  //**********************************************// */
+
+                                      //**********************************************// */
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import moment from "moment";
 import LoginVue from "../components/Login.vue";
-
+import store from '@/store/index.js';
+import navBar from "../components/Navbar.vue";
 const axios = require("axios");
 const FormData = require("form-data");
 
@@ -122,10 +152,16 @@ let commentaires = [];
 //***************    ******************// */
 
 export default {
-  name: "MyHome",
+
+  name: "post",
+  components: {
+    navBar,
+  },
   props: {},
   mounted: function () {
+
     console.log("MOUNTED");
+    console.log("USER-DATA-->", this.$store.state.userData);
   },
 
   updated: function () {
@@ -134,8 +170,9 @@ export default {
     console.log("COMMENT ALL DATA-->", this.$store.state.alldata);
     //this.comments=this.$store.state.comment;
     console.log("USER-DATA-->", this.$store.state.userData);
-    console.log("COMMENT 2-->", this.comments);
-    this.usersData(this.$store.state.artData);
+    console.log("COMMENT 2-->", this.$store.state.comments);
+
+
     // this.update(this.allData,this.comments)
   },
 
@@ -146,12 +183,23 @@ export default {
       // currentEntires:10,
       // filterEntries:[],
 
+      //-------COMMENT FORM POST----------------
+
+      commentInput: false,
+
+      commentContent: "",
+      fileSelectedComment: "",
+      articleId:"",
+
+
+      //-------ARTICLE FORM POST----------------//
+
       fileSelected: "",
-
-      commenter: commentaires,
-
       content: "",
       media: "",
+      PostLiked: [],
+      //-------COMMUN DATA--------------//
+
       userId: userId,
       token: userToken,
 
@@ -159,38 +207,40 @@ export default {
       //UsersId: [],
 
       UsersData: {
-        firstName: "",
+        firstName: user.firstName,
         lastName: "",
       },
     };
   },
   beforeMount: function () {
     this.getAllArticle();
+    this.userData(userId);
     console.log("BEFORE MOUNT");
+    console.log("USER-DATA-->", this.userD)
   },
   onMounted: function () {
     console.log("ON MOUNTED");
+    console.log("USER-DATA-->", this.userD)
   },
-  beforeCreate: function () {
-    console.log("BEFORE CREATED");
-  },
-  beforeUpdate: function () {
-    console.log("BEFORE UPDATE");
-  },
-
+  // beforeCreate: function () {
+  //   console.log("BEFORE CREATED");
+  //   console.log("USER-DATA-->", )
+  // },
+  // beforeUpdate: function () {
+  //   console.log("BEFORE UPDATE");
+  //   console.log("USER-DATA-->", )
+  // },
+  props: {},
   computed: {
     //   ...mapGetters({
     //     PostData:"allDatas"
     //   }),
     ...mapState({
-      // user: "userData",
+      userC: "useData",
+      user: "userData",
       dataArt: "artData",
-      
-      comments: "comments",
 
-      alldata: "alldata",
 
-      //dataCommenmt:"artDAta.comment"
     }),
   },
 
@@ -203,14 +253,21 @@ export default {
       console.log("fichier Image", this.fileSelected);
     },
 
+    liked: function (a) {
+      console.log("LIKED", a);
+
+    },
     //--------------COMPIL DATA ART ET COMMENT----------//
     // update:function(allData,comments){
     //   this.$store.dispatch("dat_Post",(allData,comments))
     // },
 
     //--------------FORMAT DATE----------------------//
-    dateTime(value) {
-      return moment(value).format("DD-MM-YYYY");
+    date(value) {
+      return moment(value).format("DD/MM/YYYY à hh:mm");
+    },
+    Hour(value) {
+      return moment(value).format("HH:mm");
     },
 
     //-------------ARTICLES DATE ----------------------//
@@ -268,16 +325,19 @@ export default {
     },
     //--------------USER DATA----------------------//
 
-    usersData: (ua) => {
+    userData: function (ud) {
+      this.$store
+        .dispatch("getUserData", ud)
+        .then((res) => {
+          console.log(" RES-DATA-USER-CONNECT", res);
+        })
+      console.log("DATA-USER-CONNECT 1", ud);
       let self = this;
       const UserId = [];
       const comm = [];
-      console.log("DATA-ART", ua);
-      for (let i of ua) {
-        UserId.push(i.userId);
-        comm.push(i.comment);
-      }
-      // console.log("UserId", UserId);
+
+
+      console.log("UserId", UserId);
       // console.log("Comment userData PostVue",comm);
 
       //this.UsersId=UserId;
@@ -285,6 +345,7 @@ export default {
 
     //------------ UPLOAD POST-----------------------//
     uploadPost: function () {
+      let self = this;
       var bodyFormData = new FormData();
       bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
       bodyFormData.append("content", this.content);
@@ -297,6 +358,7 @@ export default {
         .then(function (response) {
           //handle success
           console.log(response);
+
         })
         .catch(function (response) {
           //handle error
@@ -309,8 +371,36 @@ export default {
       this.fileSelected = event.target.files[0];
       console.log("fichier Image", this.fileSelected);
     },
+    //------------ UPLOAD COMMENT-----------------------//
+    uploadComment: function () {
+      let self = this;
+      var bodyFormData = new FormData();
+      bodyFormData.append("media", this.fileSelectedComment, this.fileSelectedComment.name);
+      bodyFormData.append("comment", this.CommentContent);
+      bodyFormData.append("userId", userId);
+      bodyFormData.append("articleId", articleId);
 
-    //------------ UPLOAD POST-----------------------//
+      console.table("FORMDATA-COMMENT------>", ...bodyFormData.entries());
+      this.$store
+        .dispatch("uploadComment", bodyFormData)
+
+        .then(function (response) {
+          //handle success
+          console.log(response);
+
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });
+    },
+
+    FileUploadCom(event) {
+      console.log("EVENT", event);
+      this.fileSelectedComment = event.target.files[0];
+      console.log("fichier Image", this.fileSelectedComment);
+    },
+    //------------ GET ALL ARTICLE-----------------------//
     getAllArticle: function () {
       const self = this;
       this.$store
@@ -334,8 +424,11 @@ export default {
 };
 </script>
 
-//***********   +++++++++++++  +++++++++++++ */
-        //***********   +++++++++++++  +++++++++++++ */
+//**********************************************// */
+
+                  //**********************************************// */
+
+                                      //**********************************************// */
 
 <style scoped>
 #post {
@@ -346,12 +439,19 @@ export default {
   margin: 0 auto;
   padding-bottom: 10px;
 }
+
 #user {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin: 5px 10px;
+
 }
+
+.user {
+  font-size: 16px;
+}
+
 #article {
   width: 95%;
 
@@ -361,11 +461,13 @@ export default {
   border-radius: 10px;
   height: auto;
 }
+
 #articleUser {
   border: 2px solid #fd2d01;
   border-radius: 5px;
   background-color: #fecdcd;
 }
+
 #postText {
   display: flex;
   flex-direction: column;
@@ -376,15 +478,18 @@ export default {
   border: 1px solid black;
   border-radius: 5px;
 }
+
 #postPublié {
   border: 1px solid #fd2d01;
   border-radius: 5px;
   margin-top: 20px;
   background-color: #ffd7d7;
 }
+
 .postDate {
-  font-size: 12px;
+  font-size: 16px;
 }
+
 .postImg {
   width: 98%;
   height: auto;
@@ -394,32 +499,107 @@ export default {
   border-radius: 5px;
   margin: 5px auto;
 }
+
+#iconPost {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+.iconLike {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 30%;
+
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.like {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 0px;
+
+  left: 10px;
+}
+
+.icon {
+  display: flex;
+}
+
 #options {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin: 5px 10px;
 }
+
 .commentaire {
   display: flex;
   flex-wrap: nowrap;
   text-align: justify;
 
-  margin: 5px auto 20px;
+  margin: 5px auto 5px;
   padding-top: 10px;
   background-color: rgb(255, 255, 255);
-  width: 95%;
+  width: 98%;
   height: auto;
-  border: 1px solid #fd2d01;
-  border-radius: 5px;
+  border: 1px solid #f8aa9b;
+  border-radius: 10px;
 }
+
+.imgComment {
+  width: 98%;
+  height: auto;
+  border: 1px solid black;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 10px;
+  margin: 5px auto;
+}
+
 .comment {
   border: 1px solid blue;
 }
+
+#commentaire {
+  height: auto;
+}
+
+#blocComment {
+  width: 95%;
+  height: auto;
+  background-color: #fde7e7;
+  border: 1px solid blue;
+
+  border-radius: 10px;
+  margin: 10px auto;
+}
+
+#ComData {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.ComData {
+  margin-left: 0;
+
+  text-align: left;
+}
+
 #repondre {
   width: 100%;
   margin: 10px auto;
 }
+
+.filestyle {
+  content: "image"
+}
+
 #identificationComment {
   display: flex;
   flex-direction: row;
@@ -427,5 +607,34 @@ export default {
   width: 95%;
   margin: 0 auto;
   padding-bottom: 0;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.custom-file-input::before {
+  content: 'Choisir une image';
+  display: inline-flex;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 0px 8px;
+  outline: none;
+
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+
+.custom-file-input:hover::before {
+  border-color: black;
+}
+
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 </style>

@@ -9,7 +9,7 @@ const auth = require('../../middleWare/auth')
 
 router.get("/all",  artControl.published); 
 router.get("/",  artControl.OnePublished); 
-router.put("/",auth,  artControl.destroyArt); 
+router.put("/",  artControl.destroyArt); 
 
 //router.post("/login",  artControl.publish);
 

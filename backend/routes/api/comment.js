@@ -7,9 +7,9 @@ const commentControl = require('../../controllers/comment');
 router.get("/all", commentControl.ArtComments)
 router.get("/", commentControl.UsersComments)
 
-router.post("/",multer, commentControl.publish)
+router.post("/post",multer, commentControl.publish)
 
-router.put("/", commentControl.destroyComment)
+router.put("/delete", commentControl.destroyComment)
 
 
 module.exports = router;

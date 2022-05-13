@@ -8,10 +8,10 @@ module.exports = (sequelize, type) => {
         autoIncrement: true,
       },
       like: {
-        type: type.INTEGER(),
+        type: type.INTEGER(255),
       },
       userId: {
-        type: type.INTEGER(36),
+        type: type.CHAR(36),
       },
   
       articleId: {
