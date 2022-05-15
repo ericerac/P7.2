@@ -19,7 +19,9 @@ const Sequelize = require("sequelize");
 //const articleRoute = require('./routes/articles')
 const userRoutes = require("./routes/api/user");
 const ArtRoutes = require("./routes/api/articles");
-const commentRoutes = require('./routes/api/comment')
+const commentRoutes = require('./routes/api/comment');
+const likeRoutes = require('./routes/api/like_dislike');
+
 //const UserModel = require('./models/users');
 //const userModel = UserModel(sequelize. Sequelize);
 
@@ -34,7 +36,7 @@ const commentRoutes = require('./routes/api/comment')
 //app.use(router);
 
 db.sequelize.sync({ force: false }).then(() => {
-  console.log("syncronizada");
+  console.log("Connectée");
   // User.hasMany(Article);
   // Article.belongsTo(User);
 
@@ -72,9 +74,13 @@ app.use(express.static(path.join(__dirname,"images")));
 
 app.use("/", userRoutes);
 app.use("/login", userRoutes);
+
 app.use("/article", ArtRoutes);
 // app.use("/comment", commentRoutes);
 app.use("/comment", commentRoutes);
+
+app.use("/like", likeRoutes);
+app.use("/dislike", likeRoutes);
 
 //app.use("/article", ArtRoutes);
 

@@ -64,7 +64,7 @@ module.exports = async (req, res, next) => {
 
   console.log("-----verify token-------", decodedToken);
   console.log("-----userId-------", userId);
-  console.log("-----req.body.id-------", req.body.id);
+  console.log("-----req.query.id-------", req.query.id); // **+* changer a body  ****
 
   const oneUser = await user
     .findOne({
@@ -72,11 +72,11 @@ module.exports = async (req, res, next) => {
     })
     .then((res) => {
       console.log("RES", res.role);
-      let adm = res.role;
+      let role = res.role;
       let admin = "admin";
-      console.log("RES2", adm);
+      console.log("RES2", role);
 
-      if (adm === admin) {
+      if (role === admin) {
         console.log(" ADMIN");
         return true;
       } else {
@@ -91,7 +91,7 @@ module.exports = async (req, res, next) => {
 
     console.log("oneUser", oneUser);
 
-    if (req.body.id == userId || oneUser == true) {
+    if (req.query.id == userId || oneUser == true) {
       // compare l'id du token avec l'id utilisateur
       next(); // si Id identhique ça continu " la route est protégée"
     } else {

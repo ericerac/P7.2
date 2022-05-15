@@ -24,8 +24,8 @@ db.sequelize = sequelize;
 db.users = userModel(sequelize, Sequelize);
 db.article = ArtModel(sequelize, Sequelize);
 db.comment = CommentModel(sequelize, Sequelize);
-// db.like = LikeModel(sequelize, Sequelize);
-// db.disLike = DislikeModel(sequelize, Sequelize);
+ db.like = LikeModel(sequelize, Sequelize);
+ db.disLike = DislikeModel(sequelize, Sequelize);
 
 db.users.hasMany(db.article, { as: "article" });
 db.users.hasMany(db.comment, { as: "comment" });
@@ -38,17 +38,16 @@ db.article.belongsTo(db.users, {
   as: "user",
 });
 
-// db.article.hasMany(db.like, { as: "like" });
-
-// db.like.belongsTo(db.article, {
-//   foreignKey: "articleId",
-//   as: "article",
-// });
-
-// db.like.belongsTo(db.users, {
-//   foreignKey: "userId",
-//   as: "user",
-// });
+ db.article.hasMany(db.like, { as: "like" })
+ 
+ db.like.belongsTo(db.article, {
+   foreignKey: "articleId",
+   as: "article",
+ })
+ db.like.belongsTo(db.users, {
+   foreignKey: "userId",
+   as: "user",
+ });
 
 db.comment.belongsTo(db.article, {
   foreignKey: "articleId",

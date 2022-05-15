@@ -10,18 +10,16 @@ module.exports = (sequelize, type) => {
       like: {
         type: type.INTEGER(),
       },
-      userId: {
-        type: type.INTEGER(36),
+      users_id: {
+        type: type.UUID,
       },
   
-      articleId: {
+      articles_id: {
         type: type.INTEGER(),
       },
   
        
     });
-    // Comment.associate = function(models) {
-    //   Comment.belongsTo(models.Article, {foreignKey: 'articleId', as: 'Article'})
-    // };
+    
     return Dislike;
   };

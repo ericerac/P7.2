@@ -3,26 +3,30 @@ module.exports = (sequelize, type) => {
       
       
       id: {
-        type: type.INTEGER(),
+        type: type.INTEGER(10),
         primaryKey: true,
         autoIncrement: true,
       },
+
       like: {
         type: type.INTEGER(255),
       },
+
+      dislike: {
+        type: type.INTEGER(255),
+      },
+
       userId: {
-        type: type.CHAR(36),
+        type: type.UUID,
       },
   
       articleId: {
-        type: type.INTEGER(),
+        type: type.INTEGER(10),
       },
   
        
     });
-    // Comment.associate = function(models) {
-    //   Comment.belongsTo(models.Article, {foreignKey: 'articleId', as: 'Article'})
-    // };
+    
     return Like;
   };
   

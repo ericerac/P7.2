@@ -5,8 +5,14 @@
     99+
     <span class="visually-hidden">unread messages</span>
   </span>
+
 </button> -->
+
+
+ <!--*** ----------------- NAVBAR ---------------------*** -->
   <navBar />
+ <!--*** ----------------- POST FORM ---------------------*** -->
+ 
   <div id="post">
     <form id="formPost" @submit.prevent="articlePost">
       <div id="articleUser">
@@ -21,6 +27,9 @@
         </div>
       </div>
     </form>
+
+    <!--*** ----------------- POST DISPLAY---------------------*** -->
+ 
     <div id="postPublié" v-for="article in dataArt" :key="article.id">
       <div id=" postUser ">
 
@@ -37,39 +46,43 @@
           <img class="postImg" alt="Image" :src="article.media" />
         </div>
 
-        <!-- -----------------------BLOC LIKE ------------------------>
-        <div id="iconPost">
+        <!-- -----------------------BLOC LIKE   POST DISPLAY------------------------>
+        <!-- <template v-for="like in article.like" :key="article.id"> -->
+        <div id="iconPost" v-for="like in article.like" :key="article.id">
           <div class="iconLike">
             <span class="icon">
-              <fa class="like" :icon="['far', 'thumbs-up']" />120
+              <fa class="like" :icon="['far', 'thumbs-up']" @click="liked(article.id)" />{{like.like}}
             </span>
-            <input type="checkbox"  name="dislike"  :value="article.id"
-              v-model="PostLiked" />
-            <label v-bind:for="dislike">
-              <fa class="like" :icon="['far', 'thumbs-down']" />
-            </label>
+            
+            <transitionGroup name="liked">
+              
+              <fa class="like" :icon="['far', 'thumbs-down']" @click="disliked(article.id)"/>{{like.dislike}}
+             
+           </transitionGroup >
           </div>
           <span>
             <fa :icon="['far', 'comment']" @click="commentInput = !commentInput"  v-model="PostLiked" />
           </span>
         </div>
+<!-- </template> -->
 
-
-        <!-- -----------------------COMMENTER ------------------------>
+        <!-- ----------------------- FORM COMMENTER ------------------------>
 
         <form id="formPost" @submit.prevent="articleComment" v-show="commentInput">
           <div id="articleUser">
             <div id="postText">
-              <input v-model="contentComment" class="commentaire" type="texte" placeholder="Ecrire" />
+              <input v-model="CommentContent" class="commentaire" type="texte" placeholder="Ecrire" />
 
               <fa :icon="['fas', 'upload']" />
               <input type="file" id="mediaPost" ref="file" @change="FileUploadCom" accept="image/png, image/jpeg" />
-              <input type="file" class="custom-file-input">
-              <button class="Publier" @click="uploadComment">Publier</button>
+              
+              <button class="Publier" @click="uploadComment(article.id)">Publier</button>
             </div>
           </div>
         </form>
-        <!-- -----------------------COMMENTAIRE ------------------------>
+
+        <!-- -----------------------COMMENTAIRE DISPLAY------------------------>
+
         <div id="commentaires">
           <template v-for="commKey in article.comment" :key="commKey.id">
             <div id="blocComment">
@@ -83,7 +96,10 @@
                 </div>
                 <div class="iconLike">
                   <div>
-                    <fa class="like" :icon="['far', 'thumbs-up']" />{{ 25 }}
+                    <button class="btnn"  @click="liked(article.id)">
+                    <fa class="like" :icon="['far', 'thumbs-up']" />
+                    </button>
+                    {{ 25 }}
                   </div>
                   <div>
                     <fa class="like" :icon="['far', 'thumbs-down']" />200
@@ -207,16 +223,16 @@ export default {
       //UsersId: [],
 
       UsersData: {
-        firstName: user.firstName,
+        firstName: "",
         lastName: "",
       },
     };
   },
   beforeMount: function () {
     this.getAllArticle();
-    this.userData(userId);
+    // this.userData(userId);
     console.log("BEFORE MOUNT");
-    console.log("USER-DATA-->", this.userD)
+    console.log("USER-DATA-->", userId)
   },
   onMounted: function () {
     console.log("ON MOUNTED");
@@ -246,12 +262,7 @@ export default {
 
   methods: {
     //-------------FILE NAME----------------//
-    FileUpload(event) {
-      console.log("EVENT", event);
-      this.fileSelected = event.target.files[0];
-
-      console.log("fichier Image", this.fileSelected);
-    },
+    
 
     liked: function (a) {
       console.log("LIKED", a);
@@ -268,6 +279,10 @@ export default {
     },
     Hour(value) {
       return moment(value).format("HH:mm");
+    },
+
+    count(value){
+      return value ++;
     },
 
     //-------------ARTICLES DATE ----------------------//
@@ -345,7 +360,7 @@ export default {
 
     //------------ UPLOAD POST-----------------------//
     uploadPost: function () {
-      let self = this;
+     
       var bodyFormData = new FormData();
       bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
       bodyFormData.append("content", this.content);
@@ -372,13 +387,16 @@ export default {
       console.log("fichier Image", this.fileSelected);
     },
     //------------ UPLOAD COMMENT-----------------------//
-    uploadComment: function () {
-      let self = this;
+    uploadComment: function (Aid) {
+   
+      console.log("POST-COMMENT-USER ID",userId);
+      console.log("POST-COMMENT-ARTICLE ID",Aid);
       var bodyFormData = new FormData();
       bodyFormData.append("media", this.fileSelectedComment, this.fileSelectedComment.name);
       bodyFormData.append("comment", this.CommentContent);
-      bodyFormData.append("userId", userId);
-      bodyFormData.append("articleId", articleId);
+      bodyFormData.append("users_id", userId);
+      bodyFormData.append("articles_id", Aid);
+      // bodyFormData.append("articleId", articleId);
 
       console.table("FORMDATA-COMMENT------>", ...bodyFormData.entries());
       this.$store
@@ -438,6 +456,18 @@ export default {
   border-radius: 10px;
   margin: 0 auto;
   padding-bottom: 10px;
+}
+
+.liked-enter-active,
+.liked-leave-active {
+  transition:  scale 0.5s ease;
+  animation: scale(1.5);
+}
+
+.liked-enter-from,
+.liked-leave-to {
+ 
+  animation:scale(1);
 }
 
 #user {
@@ -506,7 +536,14 @@ export default {
   justify-content: space-between;
   margin: 0 auto;
 }
-
+.btnn{
+  display:flex;
+  justify-content: center;
+  padding-top: 2px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
 .iconLike {
   display: inline-flex;
   flex-direction: row;

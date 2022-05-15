@@ -17,6 +17,8 @@ module.exports = (sequelize, type) => {
 
     articleId: {
       type: type.INTEGER(),
+      defaultValue: '1',
+    
     },
     
 

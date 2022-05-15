@@ -8,7 +8,7 @@ const db = require("../models");
 const Comment = db.comment;
 const articles = db.article;
 const User = db.users;
-
+const Like = db.like;
 // const sequelize = require('../config/db.config')
 
 const sequelize = new Sequelize(
@@ -29,23 +29,29 @@ exports.published = async (req, res, next) => {
   console.log("-------All Articles--------");
   console.log("-------req.params-------", req.query);
   const allArticle = await articles.findAll({
-    include: [
-      {
-        model: Comment,
-        as: "comment",
-        require: true,
-        include: {
-          model: User,
-          as: "user",
+      include: [
+        {
+          model: Comment,
+          as: "comment",
           require: true,
+
+         include: {
+           model: User,
+           as: "user",
+           require: true,
+         },
         },
-      },
-      {
-        model: User,
-        as: "user",
-        require: true,
-      },
-    ],
+       {
+         model: User,
+         as: "user",
+         require: true,
+       },
+       {
+         model: Like,
+         as: "like",
+         require: true,
+       },
+      ],
   });
   res.json(allArticle);
   console.log(allArticle);
@@ -89,9 +95,9 @@ exports.publish = async (req, res, next) => {
   let artPost = "";
 
   if (req.file) {
-    console.log("condition IF FILE TRUE");
+    console.log("condition IF FILE TRUE",);
     artPost = {
-      userId: req.body.userId,
+      userId: req.body.users_id,
       content: req.body.content,
 
       media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,

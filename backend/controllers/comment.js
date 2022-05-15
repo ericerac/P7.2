@@ -55,10 +55,10 @@ exports.publish = async (req, res, next) => {
   if (req.file) {
     console.log("condition IF FILE TRUE");
     artPost = {
-      userId: req.body.userId,
+      // userId: req.body.userId,
       comment: req.body.comment,
       articleId: req.body.articles_id,
-      userId: req.body.users_id,
+      userId: req.body.userId,
 
       media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     };
@@ -69,6 +69,7 @@ exports.publish = async (req, res, next) => {
       comment: req.body.comment,
       articleId: req.body.articles_id,
       userId: req.body.users_id,
+
     };
     console.log("REQ:BODY", req.body);
   }

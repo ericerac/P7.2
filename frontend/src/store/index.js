@@ -1,14 +1,11 @@
 import { _ } from "core-js";
 import { createStore } from "vuex";
 const axios = require("axios");
-
+import setHeaders from "../utils/setHaeaders";
 const mapState = require("vuex");
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
-  
-  
-  
 });
 // const config = {
 //   headers:{
@@ -38,6 +35,8 @@ const store = createStore({
 
     PostData: {},
 
+    likeLength: "",
+
     updateUser: {
       firstName: "",
       lastName: "",
@@ -55,11 +54,11 @@ const store = createStore({
       password: "",
       media: "",
     },
-    useData:"",
+    useData: "",
     allsUsersData: "",
-    userData: "",     // data user connected
+    userData: "", // data user connected
     alldata: "",
-    artData: "",      // contenu des article
+    artData: "", // contenu des articles
     comments: "",
     usersId: "",
   },
@@ -89,6 +88,9 @@ const store = createStore({
     },
     AllData: (state, alldata) => {
       state.alldata = alldata;
+    },
+    LikeLength: (state, likeLength) => {
+      state.likeLength = likeLength;
     },
     // dat_Post:(state,data)=>{
 
@@ -134,7 +136,7 @@ const store = createStore({
           .then(function (response) {
             commit("setStatus", "loading");
             resolve(response);
-            console.log("REPONSE SIGNUP ",response);
+            console.log("REPONSE SIGNUP ", response);
           })
           .catch((err) => {
             commit("setStatus", "error_create");
@@ -146,11 +148,12 @@ const store = createStore({
 
     loginPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
-      console.log("USER-DATA LOGIN INDEX",userData);
+      console.log("USER-DATA LOGIN INDEX", userData);
       return new Promise((resolve, reject) => {
         instance
           .post("/login", userData)
           .then((response) => {
+            // setHeaders(response.data.token)
             commit("setStatus", "");
             commit("logUser", response.data);
             resolve(response);
@@ -158,8 +161,8 @@ const store = createStore({
           })
           .catch((err) => {
             commit("setStatus", "error_login");
-            
-            console.log("ça deconne login index store",err);
+
+            console.log("ça deconne login index store", err);
             reject(err);
           });
       });
@@ -169,26 +172,25 @@ const store = createStore({
     deleteUser: ({ commit }, data) => {
       const token = userToken;
       const userId = data;
-      const headers ={
-        headers:{
-        "Authorization": `Bearer + ${token}`
-      }}
+      const headers = {
+        headers: {
+          Authorization: `Bearer + ${token}`,
+        },
+      };
       console.log("INDEX-TOKEN-DELETE------->", token);
       console.log("INDEX-ID-DELETE------>", data);
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
-          .put(`/user/delete?id=${userId}`, 
-          {
-            headers:{
-              "Authorization": `Bearer + ${token}`
-            }
+          .put(`/user/delete?id=${userId}`, {
+            headers: {
+              Authorization: `Bearer + ${token}`,
+            },
           })
           .then((response) => {
             commit("setStatus", "");
-            
+
             resolve(response);
-            
           })
           .catch((err) => {
             commit("setStatus", "error_login");
@@ -199,15 +201,15 @@ const store = createStore({
     },
 
     //----------DELETE USER FETCH---------------//
-// async deleteUser(data){
-//   try{
-// this.Saxios.setHeader('Authorization', `Bearer ${JSON.parse(localStorage.getItem("user")).token}`);
-// console.log("ENTRE THIS AXIOS ET AWAIT AXIOS");
-// await axios.post(`http://localhost:3000/user/delete?id=${data}`)
-//   } catch(e){
-// const error = new Error(" ça va pas bien");
-//   }
-// },
+    // async deleteUser(data){
+    //   try{
+    // this.Saxios.setHeader('Authorization', `Bearer ${JSON.parse(localStorage.getItem("user")).token}`);
+    // console.log("ENTRE THIS AXIOS ET AWAIT AXIOS");
+    // await axios.post(`http://localhost:3000/user/delete?id=${data}`)
+    //   } catch(e){
+    // const error = new Error(" ça va pas bien");
+    //   }
+    // },
 
     //----------DISCONNECT----------------//
     disconnect: () => {
@@ -224,7 +226,7 @@ const store = createStore({
 
       return new Promise((resolve, reject) => {
         instance
-          .put("/user/update", Data,)
+          .put("/user/update", Data)
           .then((response) => {
             console.log("RESPONSE INDEX -->", response);
 
@@ -242,7 +244,7 @@ const store = createStore({
     },
 
     //-----------------GET USER DATA----------------(())
-    getUserData: ({ commit },data ) => {
+    getUserData: ({ commit }, data) => {
       const token = userToken;
       console.log("TOKEN", token);
       const userId = data;
@@ -276,7 +278,7 @@ const store = createStore({
       const token = userToken;
       console.log("TOKEN", token);
       await instance
-        .get(`/user/all`,{
+        .get(`/user/all`, {
           headers: {
             Authorization: `Basic ${token}`,
           },
@@ -329,8 +331,8 @@ const store = createStore({
       });
     },
 
-     //-----------UPLOAD COMMENT-----------------//uploadComment
-     uploadComment: ({ commit }, data) => {
+    //-----------UPLOAD COMMENT-----------------//uploadComment
+    uploadComment: ({ commit }, data) => {
       console.log("UPLOAD-POST INDEX", ...data.entries());
       commit("setStatus", "loading");
       const token = userToken;
@@ -358,25 +360,29 @@ const store = createStore({
     //----------------GET ALL ARTICLES---------------//
     getAllArticle: ({ commit }) => {
       const token = userToken;
+      const Us = userId;
       console.log("TOKEN", token);
       commit("setStatus", "loading");
       const self = this;
       console.log("getAllArticle");
       return new Promise((resolve, reject) => {
         instance
-          .get("/article/all",{
+          .get(`/article/all`, {
             headers: {
-              'Authorization': `Basic ${token}` 
-            }
+              Authorization: `Basic ${token}`,
+            },
           })
           .then((res) => {
-            console.log(res);
+            console.log("ALL ARTICLES INDEX RES",res);
             const usersId = [];
             commit("setStatus", "loading");
             const revers = res.data.reverse();
             commit("ArtData", revers);
             const resData = res.data;
-
+            const art = res.data.article;
+            const like = art.like.length;
+            
+            console.log(" LIKE-LENGTH  INDEX");
             const comments = resData.map((a) => a.comment);
             commit("Comments", comments);
             commit("AllData", resData.comment);
