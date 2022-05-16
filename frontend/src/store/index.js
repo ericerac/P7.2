@@ -45,7 +45,7 @@ const store = createStore({
       token: "",
       media: "",
     },
-
+userToken:"",
     formData: {
       userId: "",
       firstName: "",
@@ -321,6 +321,7 @@ const store = createStore({
             console.log("RESPONSE INDEX -->", response);
 
             commit("setStatus", "loading");
+            commit("ArtData",response.data)
             resolve(response);
           })
           .catch((err) => {
@@ -376,11 +377,11 @@ const store = createStore({
             console.log("ALL ARTICLES INDEX RES",res);
             const usersId = [];
             commit("setStatus", "loading");
-            const revers = res.data.reverse();
-            commit("ArtData", revers);
+            const Artrevers = res.data.reverse();
+            commit("ArtData", Artrevers);
             const resData = res.data;
-            const art = res.data.article;
-            const like = art.like.length;
+            // const art = res.data.article;
+            // const like = art.like.length;
             
             console.log(" LIKE-LENGTH  INDEX");
             const comments = resData.map((a) => a.comment);
@@ -405,6 +406,35 @@ const store = createStore({
             commit("setStatus", "error_create");
             reject(err);
             console.log("ça ne fonctionne pas post art");
+          });
+      });
+    },
+
+    //---------------DELETE ARTICLE----------------//
+
+    deleteArticle: ({ commit }, data) => {
+      const token = userToken;
+      // const userId = userId;
+      
+      console.log("INDEX-TOKEN-DELETE ARTICLE------->", token);
+      console.log("INDEX-ID-DELETE ARTICLE------>", data);
+      commit("setStatus", "loading");
+      return new Promise((resolve, reject) => {
+        instance
+          .put(`/article/delete?id=${data}`, {
+            headers: {
+              Authorization: `Bearer + ${token}`,
+            },
+          })
+          .then((response) => {
+            commit("setStatus", "");
+
+            resolve(response);
+          })
+          .catch((err) => {
+            commit("setStatus", "error_login");
+            console.log("ça deconne delete index store");
+            reject(err);
           });
       });
     },

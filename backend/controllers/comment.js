@@ -57,7 +57,7 @@ exports.publish = async (req, res, next) => {
     artPost = {
       // userId: req.body.userId,
       comment: req.body.comment,
-      articleId: req.body.articles_id,
+      articleId: req.body.articleId,
       userId: req.body.userId,
 
       media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
@@ -67,8 +67,8 @@ exports.publish = async (req, res, next) => {
     artPost = {
       userId: req.body.userId,
       comment: req.body.comment,
-      articleId: req.body.articles_id,
-      userId: req.body.users_id,
+      articleId: req.body.articleId,
+      userId: req.body.userId,
 
     };
     console.log("REQ:BODY", req.body);

@@ -70,6 +70,7 @@ exports.OnePublished = async (req, res, next) => {
         model: Comment,
         as: "comment",
         require: true,
+
         include: {
           model: User,
           as: "user",
@@ -97,7 +98,7 @@ exports.publish = async (req, res, next) => {
   if (req.file) {
     console.log("condition IF FILE TRUE",);
     artPost = {
-      userId: req.body.users_id,
+      userId: req.body.userId,
       content: req.body.content,
 
       media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,

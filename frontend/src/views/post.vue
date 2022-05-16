@@ -9,10 +9,10 @@
 </button> -->
 
 
- <!--*** ----------------- NAVBAR ---------------------*** -->
+  <!--*** ----------------- NAVBAR ---------------------*** -->
   <navBar />
- <!--*** ----------------- POST FORM ---------------------*** -->
- 
+  <!--*** ----------------- POST FORM ---------------------*** -->
+
   <div id="post">
     <form id="formPost" @submit.prevent="articlePost">
       <div id="articleUser">
@@ -28,43 +28,49 @@
       </div>
     </form>
 
-    <!--*** ----------------- POST DISPLAY---------------------*** -->
- 
+    <!--*** -----------------BLOC  POST DISPLAY---------------------*** -->
+
     <div id="postPublié" v-for="article in dataArt" :key="article.id">
       <div id=" postUser ">
+        <div>
 
-        <div id="user">
-          <span class="user"> Publié par: <strong>{{ article.user.lastName }} {{ }} {{ article.user.firstName
-          }}</strong></span>
 
-          <span class="postDate">
-            le: {{ date(article.createdAt) }}
-          </span>
-        </div>
-        <div id="article">
-          <span class="content">{{ article.content }}</span>
-          <img class="postImg" alt="Image" :src="article.media" />
-        </div>
+          <div id="user">
+            <span class="user"> Publié par: <strong>{{ article.user.lastName }} {{ }} {{ article.user.firstName
+            }}</strong></span>
 
-        <!-- -----------------------BLOC LIKE   POST DISPLAY------------------------>
-        <!-- <template v-for="like in article.like" :key="article.id"> -->
-        <div id="iconPost" v-for="like in article.like" :key="article.id">
-          <div class="iconLike">
-            <span class="icon">
-              <fa class="like" :icon="['far', 'thumbs-up']" @click="liked(article.id)" />{{like.like}}
+            <span class="postDate">
+              le: {{ date(article.createdAt) }}
             </span>
-            
-            <transitionGroup name="liked">
-              
-              <fa class="like" :icon="['far', 'thumbs-down']" @click="disliked(article.id)"/>{{like.dislike}}
-             
-           </transitionGroup >
           </div>
-          <span>
-            <fa :icon="['far', 'comment']" @click="commentInput = !commentInput"  v-model="PostLiked" />
+          <div id="article">
+            <span class="content">{{ article.content }}</span>
+            <img class="postImg" alt="Image" :src="article.media" />
+          </div>
+          <div class="icoTrashEdit">
+            <fa :icon="['fas', 'pencil-alt']" />
+            <fa :icon="['far', 'trash-alt']" @click="deleteArticle(article.id)" />
+          </div>
+        </div>
+        <!-- -----------------------BLOC LIKE   POST DISPLAY------------------------>
+
+        <div id="iconPost">
+          <div class="iconLike" v-for="like in article.like" :key="article.id">
+            <span class="icon">
+              <fa class="like" :icon="['far', 'thumbs-up']" @click="liked(article.id)" />{{ like.like }}
+            </span>
+
+
+            <span class="icon">
+              <fa class="like" :icon="['far', 'thumbs-down']" @click="disliked(article.id)" />
+            </span>
+
+          </div>
+          <span class="commentIcon">
+            <fa :icon="['far', 'comment']" @click="commentInput = !commentInput" v-model="PostLiked" />
           </span>
         </div>
-<!-- </template> -->
+
 
         <!-- ----------------------- FORM COMMENTER ------------------------>
 
@@ -75,7 +81,7 @@
 
               <fa :icon="['fas', 'upload']" />
               <input type="file" id="mediaPost" ref="file" @change="FileUploadCom" accept="image/png, image/jpeg" />
-              
+
               <button class="Publier" @click="uploadComment(article.id)">Publier</button>
             </div>
           </div>
@@ -88,21 +94,30 @@
             <div id="blocComment">
               <div class="commentaire">{{ commKey.comment }}</div>
               <img class="imgComment" alt="Image" :src="commKey.media" />
+
+              <!-- -----------COMMENTAIRE DISPLAY BLOC INFO--------->
+
               <div id="identificationComment">
                 <div id="ComData">
                   <span class="ComData"> par:{{ commKey.user.firstName }}</span>
                   <span class="ComData"> {{ commKey.user.lastName }}</span>
                   <span class="ComData">le: à {{ date(commKey.user.createdAt) }}</span>
                 </div>
-                <div class="iconLike">
-                  <div>
-                    <button class="btnn"  @click="liked(article.id)">
-                    <fa class="like" :icon="['far', 'thumbs-up']" />
-                    </button>
-                    {{ 25 }}
+                <div id="blocInfo">
+                  <div class="iconLike">
+                    <div>
+                      <button class="btnn" @click="liked(article.id)">
+                        <fa class="like" :icon="['far', 'thumbs-up']" />
+                      </button>
+                      {{ 25 }}
+                    </div>
+                    <div>
+                      <fa class="like" :icon="['far', 'thumbs-down']" />200
+                    </div>
                   </div>
-                  <div>
-                    <fa class="like" :icon="['far', 'thumbs-down']" />200
+                  <div class="icoTrashEdit">
+                    <fa :icon="['fas', 'pencil-alt']" />
+                    <fa :icon="['far', 'trash-alt']" @click="deleteArticle(article.id)" />
                   </div>
                 </div>
                 <!-- <span id="dateComment">{{ dateTime(commKey.createdAt) }}</span>-->
@@ -205,8 +220,8 @@ export default {
 
       commentContent: "",
       fileSelectedComment: "",
-      articleId:"",
-
+      articleId: "",
+      likedArt: "",
 
       //-------ARTICLE FORM POST----------------//
 
@@ -260,14 +275,27 @@ export default {
     }),
   },
 
+  watch: {
+    likedArt: function (val) {
+      console.log("watch", val);
+    },
+
+    dataArt: function (val) {
+      console.log("WATCH ARTDATA MODIF LIVE", val);
+    }
+  },
+
   methods: {
     //-------------FILE NAME----------------//
-    
-
     liked: function (a) {
-      console.log("LIKED", a);
+      const likeData = { a, userId }
+      console.log("LIKED", a, userId);
+      this.likedArt = likeData;
 
     },
+
+
+
     //--------------COMPIL DATA ART ET COMMENT----------//
     // update:function(allData,comments){
     //   this.$store.dispatch("dat_Post",(allData,comments))
@@ -277,12 +305,10 @@ export default {
     date(value) {
       return moment(value).format("DD/MM/YYYY à hh:mm");
     },
-    Hour(value) {
-      return moment(value).format("HH:mm");
-    },
 
-    count(value){
-      return value ++;
+
+    count(value) {
+      return value++;
     },
 
     //-------------ARTICLES DATE ----------------------//
@@ -360,13 +386,22 @@ export default {
 
     //------------ UPLOAD POST-----------------------//
     uploadPost: function () {
-     
-      var bodyFormData = new FormData();
-      bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
-      bodyFormData.append("content", this.content);
-      bodyFormData.append("userId", userId);
-      console.log("FORMDATA", bodyFormData);
-      console.table("this.firstName ", ...bodyFormData.entries());
+      if (this.fileSelected) {
+
+
+        var bodyFormData = new FormData();
+        bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
+        bodyFormData.append("content", this.content);
+        bodyFormData.append("userId", userId);
+
+        console.table("FORM DATA AVEC IMAGE ", ...bodyFormData.entries());
+      } else {
+        var bodyFormData = new FormData();
+        bodyFormData.append("content", this.content);
+        bodyFormData.append("userId", userId);
+
+        console.table("FORM DATA SANS IMAGE ", ...bodyFormData.entries());
+      }
       this.$store
         .dispatch("uploadPost", bodyFormData)
 
@@ -388,17 +423,24 @@ export default {
     },
     //------------ UPLOAD COMMENT-----------------------//
     uploadComment: function (Aid) {
-   
-      console.log("POST-COMMENT-USER ID",userId);
-      console.log("POST-COMMENT-ARTICLE ID",Aid);
-      var bodyFormData = new FormData();
-      bodyFormData.append("media", this.fileSelectedComment, this.fileSelectedComment.name);
-      bodyFormData.append("comment", this.CommentContent);
-      bodyFormData.append("users_id", userId);
-      bodyFormData.append("articles_id", Aid);
-      // bodyFormData.append("articleId", articleId);
 
-      console.table("FORMDATA-COMMENT------>", ...bodyFormData.entries());
+      if (this.fileSelectedComment) {
+
+        var bodyFormData = new FormData();
+        bodyFormData.append("media", this.fileSelectedComment, this.fileSelectedComment.name);
+        bodyFormData.append("comment", this.CommentContent);
+        bodyFormData.append("userId", userId);
+        bodyFormData.append("articleId", Aid);
+
+        console.table("FORMDATA-COMMENT AVEC IMAGE------>", ...bodyFormData.entries());
+      } else {
+        var bodyFormData = new FormData();
+        bodyFormData.append("comment", this.CommentContent);
+        bodyFormData.append("usersId", userId);
+        bodyFormData.append("articleId", Aid);
+
+        console.table("FORMDATA-COMMENT SANS IMAGE------>", ...bodyFormData.entries());
+      }
       this.$store
         .dispatch("uploadComment", bodyFormData)
 
@@ -438,6 +480,26 @@ export default {
           console.log("Restons calme getAllArticle:postPage", err);
         });
     },
+
+    //------------------DELETE ARTICLE-------------------------//
+    deleteArticle(data) {
+
+      console.log("USER-ID PROFIL DELETE", data);
+      this.$store
+        .dispatch("deleteArticle", data)
+        .then((response) => {
+          if (response) {
+
+
+            response.json({ message: "Article supprimé" })
+            this.$router.push("login");
+          }
+        }).catch((err) => {
+          console.log("ERREUR REQUETE PROFIL DELETE ARTICLE----->", err);
+
+        })
+    }
+
   },
 };
 </script>
@@ -460,14 +522,14 @@ export default {
 
 .liked-enter-active,
 .liked-leave-active {
-  transition:  scale 0.5s ease;
+  transition: scale 0.5s ease;
   animation: scale(1.5);
 }
 
 .liked-enter-from,
 .liked-leave-to {
- 
-  animation:scale(1);
+
+  animation: scale(1);
 }
 
 #user {
@@ -536,14 +598,16 @@ export default {
   justify-content: space-between;
   margin: 0 auto;
 }
-.btnn{
-  display:flex;
+
+.btnn {
+  display: flex;
   justify-content: center;
   padding-top: 2px;
   width: 25px;
   height: 25px;
   border-radius: 50%;
 }
+
 .iconLike {
   display: inline-flex;
   flex-direction: row;
