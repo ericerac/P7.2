@@ -6,24 +6,28 @@
             class="btn btn-primary btn-sm follow pt-20px">
             Page administrateur
           </button>
+          <button class="btn btn-danger btn-sm follow mt-0" @click="deleteUser(user.id)">
+          Effacer mon compte
+        </button>
         </router-link>
-
-        <button class="btn btn-sm follow mt-0">Modifier mon profil</button>
+<div class="user text-center">
+        
+      </div>
+        <button class="btn btn-sm follow mt-0" @click="goToUpdateProfil">Modifier mon profil</button>
         <button class="btn btn-sm follow mt-0" @click="goToFilActu">
           Allez au fil d'actualité
         </button>
-        <button class="btn btn-danger btn-sm follow mt-0" @click="deleteUser(user.id)">
-          Effacer mon compte
-        </button>
+        
       </div>
-      <div class="upper"></div>
-
-      <div class="user text-center">
+      
+      <div class="upper">
         <div class="profile">
           <img id="userImg" v-bind:src="user.media" class="rounded-circle" width="80" alt="Photo de profil" />
           <!-- <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> -->
         </div>
       </div>
+
+      
 
       <div class="mt-5 text-center">
         <h4 class="mt-3">{{ user.firstName }} {{ user.lastName }}</h4>
@@ -141,7 +145,7 @@ export default {
     }),
   },
   methods: {
-    goToUpdateProfil: function () {
+    goToProfil: function () {
       this.mode = "profil";
     },
     goToFilActu: function () {
@@ -149,7 +153,7 @@ export default {
     },
 
     goToUpdateProfil: function () {
-      this.mode = "updateProfil";
+     this.$router.push("/updateProfil");
     },
 
     FileUpload(event) {
@@ -200,17 +204,20 @@ export default {
 
     //--------------------DELETE USER-------------------------//
 
-    deleteUser(data) {
-
+    deleteUser(data){
+      const result = window.confirm("Voulez-vous vraiment supprimer votre compte ?")
+      if(!result){
+return
+      }
       console.log("USER-ID PROFIL DELETE", data);
       this.$store
         .dispatch("deleteUser", data)
-        .then((response) => {
-          if(response){
-
-            
-            response.json({ message: "Compte supprimé" })
-          this.$router.push("login");
+        .then((resolve) => {
+          if(resolve){
+            console.log("RESOLVE PROFIL PAGE DELETE ------>",resolve.data.message);
+            alert("votre compte a été supprimé")
+            // response.json({ message: "Compte supprimé" })
+          this.$router.push("/");
             }
         }).catch((err)=>{
           console.log("ERREUR REQUETE PROFIL DELETE USER------>",err);
@@ -325,7 +332,7 @@ body {
 
 .profile {
   position: absolute;
-  top: -50px;
+  top: 100px;
   left: 38%;
   height: 90px;
   width: 90px;

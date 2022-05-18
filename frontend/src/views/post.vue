@@ -11,6 +11,7 @@
 
   <!--*** ----------------- NAVBAR ---------------------*** -->
   <navBar />
+
   <!--*** ----------------- POST FORM ---------------------*** -->
 
   <div id="post">
@@ -28,6 +29,9 @@
       </div>
     </form>
 
+    <!--*** ---------------- POST DISPLAY COMPONENT---------------------*** -->
+<postDisplay/>
+
     <!--*** -----------------BLOC  POST DISPLAY---------------------*** -->
 
     <div id="postPublié" v-for="article in dataArt" :key="article.id">
@@ -36,6 +40,7 @@
 
 
           <div id="user">
+            <img v-if="article.user.media" class="UserImgProfil" alt="Image" :src="article.user.media" />
             <span class="user"> Publié par: <strong>{{ article.user.lastName }} {{ }} {{ article.user.firstName
             }}</strong></span>
 
@@ -45,9 +50,9 @@
           </div>
           <div id="article">
             <span class="content">{{ article.content }}</span>
-            <img class="postImg" alt="Image" :src="article.media" />
+            <img v-if="article.media" class="postImg" alt="Image" :src="article.media" />
           </div>
-          <div class="icoTrashEdit">
+          <div class="icoTrashEdit" v-if=" article.user.role === 'admin'  ">
             <fa :icon="['fas', 'pencil-alt']" />
             <fa :icon="['far', 'trash-alt']" @click="deleteArticle(article.id)" />
           </div>
@@ -93,7 +98,7 @@
           <template v-for="commKey in article.comment" :key="commKey.id">
             <div id="blocComment">
               <div class="commentaire">{{ commKey.comment }}</div>
-              <img class="imgComment" alt="Image" :src="commKey.media" />
+              <img v-if="commKey.media" class="imgComment" alt="Image" :src="commKey.media" />
 
               <!-- -----------COMMENTAIRE DISPLAY BLOC INFO--------->
 
@@ -101,7 +106,7 @@
                 <div id="ComData">
                   <span class="ComData"> par:{{ commKey.user.firstName }}</span>
                   <span class="ComData"> {{ commKey.user.lastName }}</span>
-                  <span class="ComData">le: à {{ date(commKey.user.createdAt) }}</span>
+                  <span class="ComData">le:  {{ date(commKey.user.createdAt) }}</span>
                 </div>
                 <div id="blocInfo">
                   <div class="iconLike">
@@ -115,7 +120,7 @@
                       <fa class="like" :icon="['far', 'thumbs-down']" />200
                     </div>
                   </div>
-                  <div class="icoTrashEdit">
+                  <div v-if="commKey.user.id === userId" class="icoTrashEdit">
                     <fa :icon="['fas', 'pencil-alt']" />
                     <fa :icon="['far', 'trash-alt']" @click="deleteArticle(article.id)" />
                   </div>
@@ -164,6 +169,7 @@ import moment from "moment";
 import LoginVue from "../components/Login.vue";
 import store from '@/store/index.js';
 import navBar from "../components/Navbar.vue";
+import postDisplay from "../components/postDisplay.vue";
 const axios = require("axios");
 const FormData = require("form-data");
 
@@ -187,10 +193,11 @@ export default {
   name: "post",
   components: {
     navBar,
+    postDisplay,
   },
   props: {},
   mounted: function () {
-
+this.userData(userId);
     console.log("MOUNTED");
     console.log("USER-DATA-->", this.$store.state.userData);
   },
@@ -245,6 +252,7 @@ export default {
   },
   beforeMount: function () {
     this.getAllArticle();
+    
     // this.userData(userId);
     console.log("BEFORE MOUNT");
     console.log("USER-DATA-->", userId)
@@ -278,10 +286,12 @@ export default {
   watch: {
     likedArt: function (val) {
       console.log("watch", val);
+
     },
 
     dataArt: function (val) {
       console.log("WATCH ARTDATA MODIF LIVE", val);
+
     }
   },
 
@@ -436,7 +446,7 @@ export default {
       } else {
         var bodyFormData = new FormData();
         bodyFormData.append("comment", this.CommentContent);
-        bodyFormData.append("usersId", userId);
+        bodyFormData.append("userId", userId);
         bodyFormData.append("articleId", Aid);
 
         console.table("FORMDATA-COMMENT SANS IMAGE------>", ...bodyFormData.entries());
@@ -737,5 +747,10 @@ export default {
 
 .custom-file-input:active::before {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+.UserImgProfil{
+  width:40px;
+  height: 40px;
+  border-radius: 50%;
 }
 </style>

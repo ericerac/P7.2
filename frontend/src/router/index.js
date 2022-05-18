@@ -23,6 +23,11 @@ const routes =[
         path:'/post',
         component: post,
     },
+    {
+        name:'postPage',
+        path:'/postPage',
+        component: () => import("@/views/PostPage.vue"),
+    },
      {
          name:'adminPage',
          path:'/user/admin',
@@ -38,6 +43,16 @@ const routes =[
          name:'profil',
          path:'/profil',
          component: profil,
+     },
+     {
+         name:'updateProfil',
+         path:'/updateProfil',
+         component: () => import("@/views/updateProfil.vue"),
+     },
+     {
+         name:'UserList',
+         path:'/UserList',
+         component: () => import("../components/UserList.vue"),
      },
     
 ];

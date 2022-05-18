@@ -156,6 +156,7 @@ import { mapState } from "vuex";
 //import{$array}from"alga.js";
 const axios = require("axios");
 import moment from "moment";
+import UserList from "../components/UserList.vue";
 export default {
   name: "adminPage",
 
@@ -213,7 +214,7 @@ this.$store
              console.log("REPONSE USER-DATA",res);
          });
         
-      this.mode = "usersData";
+      this.$router.push("../components/UserList ");
     },
 
     goToAdminPage: function (){

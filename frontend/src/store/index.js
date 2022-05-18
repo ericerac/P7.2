@@ -45,7 +45,7 @@ const store = createStore({
       token: "",
       media: "",
     },
-userToken:"",
+    userToken: "",
     formData: {
       userId: "",
       firstName: "",
@@ -189,7 +189,9 @@ userToken:"",
           })
           .then((response) => {
             commit("setStatus", "");
-
+            if (response) {
+              localStorage.removeItem("user");
+            }
             resolve(response);
           })
           .catch((err) => {
@@ -321,7 +323,7 @@ userToken:"",
             console.log("RESPONSE INDEX -->", response);
 
             commit("setStatus", "loading");
-            commit("ArtData",response.data)
+            commit("ArtData", response.data);
             resolve(response);
           })
           .catch((err) => {
@@ -362,6 +364,7 @@ userToken:"",
     getAllArticle: ({ commit }) => {
       const token = userToken;
       const Us = userId;
+      const sommeLike =[];
       console.log("TOKEN", token);
       commit("setStatus", "loading");
       const self = this;
@@ -374,7 +377,7 @@ userToken:"",
             },
           })
           .then((res) => {
-            console.log("ALL ARTICLES INDEX RES",res);
+            console.log("ALL ARTICLES INDEX RES", res);
             const usersId = [];
             commit("setStatus", "loading");
             const Artrevers = res.data.reverse();
@@ -382,19 +385,20 @@ userToken:"",
             const resData = res.data;
             // const art = res.data.article;
             // const like = art.like.length;
-            
-            console.log(" LIKE-LENGTH  INDEX");
+
+            // console.log(" LIKE-LENGTH  INDEX");
             const comments = resData.map((a) => a.comment);
+            //  sommeLike = resData.map(item => item.like).reduce((a, b) => a + b);
             commit("Comments", comments);
-            commit("AllData", resData.comment);
-            console.log("ArtData  INDEX", resData);
+            commit("ALL COMMENTS", resData.comment);
+            console.log("RESDATA  INDEX", resData.like);
 
             let dat = res.data;
-            console.log("res GET INDEX COMMENTS", comments);
-            for (let i of dat) {
-              usersId.push(i.userId);
+            // console.log("res GET INDEX LIKE", sommeLike);
+            for (let i of resData) {
+              sommeLike.push(i.like);
             }
-
+            console.log("RESDATA  INDEX", sommeLike);
             // console.log("BOUCLE INDEX USER-ID", usersId);
             commit("UsersId", usersId);
             commit("AllData", comments);
@@ -415,13 +419,41 @@ userToken:"",
     deleteArticle: ({ commit }, data) => {
       const token = userToken;
       // const userId = userId;
-      
+
       console.log("INDEX-TOKEN-DELETE ARTICLE------->", token);
       console.log("INDEX-ID-DELETE ARTICLE------>", data);
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
           .put(`/article/delete?id=${data}`, {
+            headers: {
+              Authorization: `Bearer + ${token}`,
+            },
+          })
+          .then((response) => {
+            commit("setStatus", "");
+
+            resolve(response);
+          })
+          .catch((err) => {
+            commit("setStatus", "error_login");
+            console.log("ça deconne delete index store");
+            reject(err);
+          });
+      });
+    },
+    //---------------DELETE COMMENT----------------//
+
+    deleteComment: ({ commit }, data) => {
+      const token = userToken;
+      // const userId = userId;
+
+      console.log("INDEX-TOKEN-DELETE COMMENT------->", token);
+      console.log("INDEX-ID-DELETE COMMENT------>", data);
+      commit("setStatus", "loading");
+      return new Promise((resolve, reject) => {
+        instance
+          .put(`/comment/delete?id=${data}`, {
             headers: {
               Authorization: `Bearer + ${token}`,
             },

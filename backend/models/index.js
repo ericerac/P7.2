@@ -77,3 +77,4 @@ module.exports = db;
 //     otherKey: "roleId"
 //   });
 //   db.ROLES = ["user", "admin", "moderator"];
+// `likes_ibfk_2` index table likes articleId

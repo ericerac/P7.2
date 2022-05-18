@@ -24,14 +24,12 @@
                         <label>Mot de passe</label>
                         <input  v-model="password" type="password" name="password" class="form-control" placeholder=" Votre mot de passe" required>
                     </div>
+                    
                     <div class="form-group">
-                        <span class="forgot-link"><a href="register.php">Mot de passe oublié?</a></span>
+                        <input v-if="mode == 'login'"  name="submit" class="btn btn-primary btn-lg btn-block" :keyUp="enter" value="Se connecter" @click="loginPost()">
                     </div>
                     <div class="form-group">
-                        <input v-if="mode == 'login'"  name="submit" class="btn btn-primary btn-lg btn-block" value="Se connecter" @click="loginPost()">
-                    </div>
-                    <div class="form-group">
-                        <input v-if="mode == 'signup'"  name="submit" class="btn btn-primary btn-lg btn-block" value="S'enregistrer" @click="signupPost()">
+                        <input v-if="mode == 'signup'"  name="submit" class="btn btn-primary btn-lg btn-block"  keyUp="enter" value="S'enregistrer" @click="signupPost()">
                     </div>
                     <p v-if="mode == 'login'">Vous n´êtes pas encore inscrit <span @click="goToSignup">Inscrivez-vous</span>.</p>
                     <p v-if="mode == 'signup'">Vous êtes déjà inscrit <span @click="goToLogin">Connectez-vous</span>.</p>
@@ -114,6 +112,14 @@ export default {
           password: this.password,
         })
         .then((response) => {
+//             const updatedConnect =  User.update(
+//   {
+//     connect: DateNow(),
+//   },
+//   {
+//     where: { userId: response.data.userId },
+//   }
+// );
           console.log(response.data); // userId token
           self.$router.push("profil");
         })

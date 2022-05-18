@@ -47,7 +47,7 @@ exports.AllLike = async (req, res, next) => {
 
 exports.postLike = async (req, res, next) => {
   console.log("req.body", req.body);
-  console.log("req.file", req.file);
+  
   const params = req.body;
   let likePost = req.body;
 
@@ -73,7 +73,7 @@ exports.postLike = async (req, res, next) => {
   // });
   // if (!OneLike){
 
-  const createLike = await Like.create({
+  const createLike = await Dislike.create({
     ...likePost,
   });
   console.log("ART-POST", likePost);
