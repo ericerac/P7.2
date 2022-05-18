@@ -377,31 +377,31 @@ const store = createStore({
             },
           })
           .then((res) => {
-            console.log("ALL ARTICLES INDEX RES", res);
+            // console.log("ALL ARTICLES INDEX RES", res);
             const usersId = [];
             commit("setStatus", "loading");
             const Artrevers = res.data.reverse();
             commit("ArtData", Artrevers);
             const resData = res.data;
-            // const art = res.data.article;
+             const art = resData.article;
             // const like = art.like.length;
 
             // console.log(" LIKE-LENGTH  INDEX");
             const comments = resData.map((a) => a.comment);
             //  sommeLike = resData.map(item => item.like).reduce((a, b) => a + b);
             commit("Comments", comments);
-            commit("ALL COMMENTS", resData.comment);
-            console.log("RESDATA  INDEX", resData.like);
+            // commit("ALL COMMENTS", comments);
+            console.log("RESDATA  INDEX", res.data);
 
             let dat = res.data;
             // console.log("res GET INDEX LIKE", sommeLike);
-            for (let i of resData) {
-              sommeLike.push(i.like);
+            for (let i of resData.like) {
+              sommeLike.push(i);
             }
-            console.log("RESDATA  INDEX", sommeLike);
+            console.log("RES.DATA  INDEX",sommeLike);
             // console.log("BOUCLE INDEX USER-ID", usersId);
             commit("UsersId", usersId);
-            commit("AllData", comments);
+            
 
             resolve(res);
           })
@@ -466,6 +466,35 @@ const store = createStore({
           .catch((err) => {
             commit("setStatus", "error_login");
             console.log("ça deconne delete index store");
+            reject(err);
+          });
+      });
+    },
+
+    //----------------- LIKE POST----------------//
+    
+    likePost: ({ commit }, data) => {
+      const token = userToken;
+      // const userId = userId;
+
+      console.log("INDEX-TOKEN-DELETE COMMENT------->", token);
+      console.log("INDEX-ID-DELETE COMMENT------>", data);
+      commit("setStatus", "loading");
+      return new Promise((resolve, reject) => {
+        instance
+          .post(`/like/post`, data, {
+            headers: {
+              Authorization: `Bearer + ${token}`,
+            },
+          })
+          .then((response) => {
+            commit("setStatus", "");
+
+            resolve(response);
+          })
+          .catch((err) => {
+            commit("setStatus", "error_login");
+            console.log("ça deconne LIKE-POST index store");
             reject(err);
           });
       });

@@ -14,17 +14,16 @@
                             </div>
                         </div>
 
-                        <div class="list-card-user">
-                            <ul>
-                                <li>Mon profil</li>
-                                <li>Mes articles</li>
-                                <li>Mes articles préférés</li>
-                                <li>je les suis</li>
-                    
-                            </ul>
-
-
-                        </div>
+                        <div class="card-body ">
+                   
+                    <ul class="list-aside">
+                        <li class="">Lorem ipsum .</li>
+                        <li class="">Consectetur</li>
+                        <li class="">Sed do .</li>
+                        <li class="">Ut labore . </li>
+                        <li class="">Exercitation .</li>
+                    </ul>
+                </div>
                     </div>
                     <div class="card-footer">
                         <a href="javascript:void(0)" class="d-inline-block text-muted">
@@ -40,19 +39,22 @@
                 </div>
             </div>
             <!-- ++++----------------------CENTRE CARD TOP  ----------------**** -->
-<div class="col-lg-6 col-xl-3 ">
+            <!-- <div class="col-lg-6 col-xl-3 ">
+
+                </div> -->
+            <div class="col-lg-6 col-xl-3 ">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="media mb-3">
                             <img src="https://bootdey.com/img/Content/avatar/avatar3.png"
                                 class="d-block ui-w-40 rounded-circle" alt="" />
                             <div class="media-body ml-3 mt-0">
-                               
+
                                 <div class="text-muted small">3 days ago</div>
                             </div>
                         </div>
 
-                        
+
                     </div>
                     <div class="card-footer">
                         <a href="javascript:void(0)" class="d-inline-block text-muted">
@@ -66,6 +68,34 @@
                         </a>
                     </div>
                 </div>
+
+                <div class="col-lg-12 col-xl-3 articlePost">
+                        <form id="formPost" @submit.prevent="articlePost" >
+                            <div id="articleUser">
+                                <div id="postText">
+                                    <!-- <input v-model="CommentContent" class="commentaire" type="text" size="4"
+                                        placeholder="Ecrire" /> -->
+                                    <textarea v-model="content" class="commentaire form-control" col="6" rows="2"
+                                        type="text" size="6" placeholder="Ecrire"></textarea>
+                                    <div class="iconComment">
+                                        <span>
+                                            <fa :icon="['fas', 'upload']" type="file" id="mediaPost" ref="file" />
+                                        </span>
+                                        <input type="file" id="mediaPost" ref="file" @change="FileUpload"
+                                        accept="image/png, image/jpeg" />
+
+
+                                        <!-- <button class="Publier" @click="uploadComment(article.id)"> -->
+                                        <span>
+                                            <fa :icon="['far', 'paper-plane']" class="Publier"
+                                                @click="uploadPost" />
+                                        </span>
+                                        <!-- </button> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
             </div>
             <!-- ++++----------------------ASIDE RIGHT-TOP  ----------------**** -->
             <div class="col-lg-3 col-xl-3 sticky-top">
@@ -86,7 +116,7 @@
                                 <li>Messages</li>
                                 <li>Articles populaires</li>
                                 <li>ils vous suivent</li>
-                    
+
                             </ul>
 
 
@@ -113,7 +143,8 @@
                             <img v-if="article.user.media" alt="ImageProfil" :src="article.user.media"
                                 class="d-block ui-w-40 rounded-circle" />
                             <div class="media-body fw-bold ml-3">
-                                {{ article.user.lastName }} {{ }} {{ article.user.firstName }}
+                                {{ article.user.lastName }} 
+                                {{ }} {{ article.user.firstName }} 
                                 <div class="text-muted small">le: {{ date(article.createdAt) }}</div>
                             </div>
                         </div>
@@ -125,18 +156,31 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <fa class="like" :icon="['far', 'thumbs-up']" @click="liked(article.id, 1)" />
-                        <fa class="like" :icon="['far', 'thumbs-down']" @click="disliked(article.id, -1)" />
-                        <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                            <strong>12</strong> Commentaires
-                        </a>
+                        <div class="like">
+                        <fa class="like-r" :icon="['far', 'thumbs-up']" @click="liked(article.id, 1)" />
+                        <fa class="like-sl" :icon="['fas', 'thumbs-up']" @click="liked(article.id, 0)" />
+                        </div>
+                        <div class="like">
+                        <fa class="like-r" :icon="['far', 'thumbs-down']" @click="disliked(article.id, -1)" />
+                        <fa class="like-sd" :icon="['fas', 'thumbs-down']" @click="disliked(article.id, 0)" />
+                        </div>
+                        <span class="countComment">commentaires: 12</span>
+
 
                         <fa class="d-inline-block text-muted ml-3" :icon="['far', 'comment']"
                             @click="commentInput = !commentInput" v-model="PostLiked" />
-
+                        <div class="IconEditTrash">
+                            <span>
+                                <fa v-if="user.role === 'admin'" icon="['fas', 'pencil-alt']" />
+                            </span>
+                            <span>
+                                <fa :icon="['far', 'trash-alt']" @click="deleteComment(commKey.id)" />
+                            </span>
+                        </div>
                     </div>
 
                     <!--  **   -------- ** COMMENT  FORM ** HIDDEN -------   **  -->
+
                     <div class="col-lg-12 col-xl-3">
                         <form id="formPost" @submit.prevent="articleComment" v-show="commentInput">
                             <div id="articleUser">
@@ -164,7 +208,9 @@
                             </div>
                         </form>
                     </div>
+
                     <!--  **   -------- ** COMMENT   ** -------   **  -->
+
                     <div class="col-lg-12" v-for="commKey in article.comment" :key="commKey.id">
 
                         <div class="card-comment"></div>
@@ -220,7 +266,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="media mb-0">
-                            
+
                             <div class="media-body ml-3 mt-0">
                                 Georges du foix
                                 <div class="text-muted small">3 days ago</div>
@@ -232,7 +278,7 @@
                             finibus commodo bibendum. Vivamus laoreet blandit odio, vel
                             finibus quam dictum ut.
                         </p>
-                        
+
                     </div>
                     <div class="card-footer">
                         <a href="javascript:void(0)" class="d-inline-block text-muted">
@@ -288,6 +334,7 @@ export default {
         this.userData(userId);
         console.log("MOUNTED");
         console.log("USER-DATA-->", this.$store.state.userData);
+        // this.GetNextUser()
     },
 
     updated: function () {
@@ -391,9 +438,22 @@ export default {
     methods: {
 
         liked: function (a, b) {
-            const likeData = { a, userId, b }
+            const likeData = { articleId: a, userId: userId, like: b }
+
             console.log("LIKED", a, userId, b);
             this.likedArt = likeData;
+            this.$store
+                .dispatch("likePost", likeData)
+
+                .then(function (response) {
+                    //handle success
+                    console.log("RES LIKE-POST POST-PAGE", response);
+
+                })
+                .catch(function (response) {
+                    //handle error
+                    console.log(response);
+                });
 
         },
         disliked: function (a, b) {
@@ -576,7 +636,7 @@ export default {
 
                     console.log("POST VUE COMMENT PUSH", commentes);
 
-                    
+
                 })
                 .catch((err) => {
                     console.log("Restons calme getAllArticle:postPage", err);
@@ -618,7 +678,19 @@ export default {
                     console.log("ERREUR REQUETE PROFIL DELETE COMMENT----->", err);
 
                 })
-        }
+        },
+
+    //     GetNextUser() {
+    //   window.onscroll = () => {
+    //     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+    //     if (bottomOfWindow) {
+    //     //   axios.get(`https://randomuser.me/api/`).then(response => {
+    //     //     this.users.push(response.data.results[0]);
+    //     //   });
+    //     alert("il n'y en a plus ")
+    //     }
+    //   }
+    // }
 
     },
 };
@@ -636,14 +708,17 @@ export default {
     box-sizing: border-box;
 
 }
-html{
+
+html {
     background-attachment: fixed;
     background-color: blanchedalmond;
 }
-.root{
+
+.root {
     background-color: blanchedalmond;
 
 }
+
 .container {
     background-color: antiquewhite;
 }
@@ -653,7 +728,21 @@ body {
     max-width: 1000px;
     background-color: antiquewhite;
 }
+/* // ------------------ ASIDE LEFT------------------- */
+li{
+    list-style-type: none;
+}
+.list-aside{
+    text-align: left;
+    padding-left: 0;
+}
 
+/* // ------------------ CENTRE TOP------------------- */
+
+.articlePost{
+    border: 1px solid black;
+}
+/* //---------------------POST------------------------_// */
 /* .colonne-centree
 {
 float: none;
@@ -682,7 +771,23 @@ margin: 0 auto;
 .media-body {
     text-align: left;
 }
-
+.like{
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+    justify-content: space-between;
+    position: relative;
+    padding-left: .5rem;
+}
+.like-sl{
+    position: absolute;
+   
+}
+.like-sd{
+    position: absolute;
+   
+    
+}
 span {
     margin-right: 1rem;
 }

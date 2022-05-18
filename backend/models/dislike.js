@@ -10,11 +10,12 @@ module.exports = (sequelize, type) => {
       like: {
         type: type.INTEGER(),
       },
-      users_id: {
+      
+      userId: {
         type: type.UUID,
       },
   
-      articles_id: {
+      articleId: {
         type: type.INTEGER(),
       },
   

@@ -40,9 +40,9 @@
 
 
           <div id="user">
-            <img v-if="article.user.media" class="UserImgProfil" alt="Image" :src="article.user.media" />
-            <span class="user"> Publié par: <strong>{{ article.user.lastName }} {{ }} {{ article.user.firstName
-            }}</strong></span>
+            <!-- <img v-if="article.user.media" class="UserImgProfil" alt="Image" :src="article.user.media" /> -->
+            <!-- <span class="user"> Publié par: <strong>{{ article.user.lastName }} {{ }} {{ article.user.firstName
+            }}</strong></span> -->
 
             <span class="postDate">
               le: {{ date(article.createdAt) }}
@@ -52,7 +52,8 @@
             <span class="content">{{ article.content }}</span>
             <img v-if="article.media" class="postImg" alt="Image" :src="article.media" />
           </div>
-          <div class="icoTrashEdit" v-if=" article.user.role === 'admin'  ">
+          <div class="icoTrashEdit" >
+          <!-- <div class="icoTrashEdit" v-if=" article.user.role === 'admin'  "> -->
             <fa :icon="['fas', 'pencil-alt']" />
             <fa :icon="['far', 'trash-alt']" @click="deleteArticle(article.id)" />
           </div>

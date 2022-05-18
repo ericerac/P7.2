@@ -30,7 +30,7 @@ const dislike = DislikeModel(sequelize, Sequelize);
 exports.AllLike = async (req, res, next) => {
   console.log("-------All Articles--------");
   console.log("-------req.params-------", req.query);
-  const allLike = await Like.findAll({
+  const allLike = await Dislike.findAll({
     include: [
       {
         model: User,
@@ -46,7 +46,7 @@ exports.AllLike = async (req, res, next) => {
 //-----------------POST LIKE---------------------//
 
 exports.postLike = async (req, res, next) => {
-  console.log("req.body", req.body);
+  console.log("REQ:BODY LIKE BACK", req.body);
   
   const params = req.body;
   let likePost = req.body;
