@@ -33,6 +33,11 @@ const routes =[
          path:'/user/admin',
          component: () => import("@/views/AdminPage.vue"),
      },
+     {
+         name:'admin',
+         path:'/admin',
+         component: () => import("@/views/admin.vue"),
+     },
     
      {
          name:'login',

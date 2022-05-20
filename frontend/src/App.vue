@@ -16,8 +16,8 @@ export default {
 </script>
 
 <style>
-#logo{
-  width: 200px;
+html{
+ background-color: rgb(252, 217, 164);
 }
 *{
   margin:0;
@@ -31,6 +31,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+ 
   
 }
 </style>

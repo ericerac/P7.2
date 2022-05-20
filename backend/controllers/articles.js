@@ -8,7 +8,7 @@ const db = require("../models");
 const Comment = db.comment;
 const articles = db.article;
 const User = db.users;
-const Like = db.like;
+const Dislike = db.disLike;
 // const sequelize = require('../config/db.config')
 
 const sequelize = new Sequelize(
@@ -47,8 +47,8 @@ exports.published = async (req, res, next) => {
          require: true,
        },
        {
-         model: Like,
-         as: "like",
+         model: Dislike,
+         as: "dislike",
          require: true,
        },
       ],

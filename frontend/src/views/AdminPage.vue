@@ -210,24 +210,26 @@ this.$store
     },
     goToUsersData: function () {
          this.$store.dispatch("getAllUsersData")
-         .then((res)=>{
-             console.log("REPONSE USER-DATA",res);
-         });
+         
+            this.$router.push("../components/UserList ");
+       
         
-      this.$router.push("../components/UserList ");
+      // this.$router.push("../components/UserList ");
     },
 
     goToAdminPage: function (){
       this.$router.push("../homePage");
     },
     
-    getUsersData: function () {
-       const self = this;
-       this.$store
-         .dispatch("getAllUsersData")
+  //   getUsersData: function () {
+  //      const self = this;
+  //      this.$store
+  //        .dispatch("getAllUsersData")
+  // .then((res)=>{
+  //            console.log("REPONSE USER-DATA",res);
+  //        });
   
-  
-     },
+  //    },
      dateTime(value) {
       return moment(value).format('DD-MM-YYYY');
     },

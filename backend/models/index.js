@@ -39,6 +39,7 @@ db.article.belongsTo(db.users, {
 });
 
  db.article.hasMany(db.like, { as: "like" })
+ db.article.hasMany(db.disLike, { as: "dislike" })
  
  db.disLike.belongsTo(db.article, {
    foreignKey: "articleId",

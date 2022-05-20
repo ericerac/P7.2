@@ -3,14 +3,16 @@
 <div class="wrapper">
             <div class="container">
                 <form class="updateProfil-form">
-                     <img src="../assets/icon-left-font-monochrome-white.png" alt="logo" width="100" height="80">
+                     <img class="logo" src="../assets/icon-left-font-monochrome-white.svg" alt="logo" width="200" height="160">
+                     <div class="line-logo"></div>
+                     <div class="fond-form">
                     <span class="form-title"> Modifiez votre profil</span>
                        
                    <div class=" form-group">
-        <div class="profile ">
+        <!-- <div class="profile ">
           <img id="userImg" v-bind:src="user.media" class="rounded-circle" width="80" alt="Photo de profil" />
-          <!-- <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> -->
-        </div>
+     <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> 
+        </div> -->
                 </div>
                     
                     <div class="form-group" >
@@ -43,8 +45,9 @@
                     
                     <div class="form-group">
                         <input  name="submit" class="btn btn-primary btn-lg btn-block" keyUp="enter" value="Modifier" @click="updateUser(userId)">
+                        <input  name="retour" class="btn btn-primary btn-lg btn-block" keyUp="enter" value="Retour" @click="goToProfil">
                     </div>
-                    
+                    </div>
    
                     
                 </form>
@@ -174,6 +177,7 @@ export default {
       // upload file
       
       var bodyFormData = new FormData();
+      
       bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
       bodyFormData.append("firstName", this.user.firstName);
       bodyFormData.append("lastName", this.user.lastName);
@@ -292,6 +296,7 @@ return
     margin: 0;
     padding: 0;
     font-weight: 300;
+    
 }
 body {
     font-family: 'Lato', sans-serif;
@@ -360,12 +365,19 @@ body :-ms-input-placeholder {
     height: auto;
     border-radius: 15px;
     background-color: #FFE53B;
-    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+    background-image: linear-gradient(147deg, #b94d54 40%, #073985 80%);
 
 }
+.fond-form{
+  background-color: #FFF;
+  border-radius: 10px;
+  padding:0 4rem;
+  
+}
+/* #073985 7f141c*/
 .profile {
   position: absolute;
-  top: -50px;
+  top: 50px;
   left: 38%;
   height: 90px;
   width: 90px;
@@ -381,7 +393,9 @@ body :-ms-input-placeholder {
     display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
-    padding: 50px;
+    padding: 0 3rem 3rem ;
+    justify-content: space-around;
+    position: relative;
 }
 .login-logo {
     font-size: 60px;
@@ -398,6 +412,16 @@ body :-ms-input-placeholder {
     border-radius: 50%;
     background-color: #fff;
     margin: 0 auto;    
+}
+.logo{
+  
+}
+.line-logo{
+  width: 88%;
+  border:2px solid white;
+  position:absolute;
+  top:100px;
+  border-radius: 2px;
 }
 .form-title {
     font-size: 25px;
@@ -440,6 +464,7 @@ button, input, optgroup, select, textarea {
 }
 button, input {
     overflow: visible;
+    box-shadow: 1px 1px  5px #7f141c ;
 }
 [type="button"], [type="reset"], [type="submit"], button {
     -webkit-appearance: button;

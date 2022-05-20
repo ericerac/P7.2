@@ -2,195 +2,79 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
     <div class="container">
+        <DetailUser v-if="detailUser === true" />
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-12">
                 <div class="card ccard radius-t-0 h-100">
                     <div class="position-tl w-102 border-t-3 brc-primary-tp3 ml-n1px mt-n1px"></div>
                     <!-- the blue line on top -->
 
                     <div class="card-header  pb-2 brc-secondary-l3">
-                        <h5 class="card-title mb-2 mb-md-0 text-dark-m3">
-                            UTILISATEURS
-                        </h5>
+                        <div>
+                            <span @click="goToProfilPage()">
+                                Page profil
+                            </span>
+                            <span @click="goToPageAdmin()">
+                                Page administrateur
+                            </span>
+                            <i class="fa fa-arrow-left  text-95"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-2 mb-md-0 text-dark-m3">
+                                UTILISATEURS
+                            </h5>
+                        </div>
+                        <div>
+                            <input v-model="searchUser" type="search" id="search" placeholder="rechercher"
+                                autocomplete="off" />
+
+                        </div>
                     </div>
-                    <div class="card-header  list pb-3 brc-secondary-l3">
-                        <span>
+                    <div role="button"
+                        class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
+                        <span class="mr-25  overflow text-center  brc-secondary-m2  shadow-sm d-zoom-2">
+                            Avatar
+                        </span>
 
+                        <span class="text-default-d3 text-90 text-600">
+                            Nom Prénom
                         </span>
-                        <span>
-                            Nom
+
+                        <span class="ml-auto text-dark-l2 text-wrap">
+                            Inscrit depuis le:
+                            <span class="text-80">
+
+                            </span>
                         </span>
-                        <span>
-                            Prénom
-                        </span>
-                        <span>
-                            Membre depuis le:
-                        </span>
+
 
                     </div>
-
-                    <div class="card-body pt-2 pb-1">
-                        <div role="button" @click="UserDetail()"
+                    <div class="card-body pl-1 pt-1 pb-1" v-for="user in filterUser">
+                        <div role="button" @click="UserDetail(user.id)"
                             class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
                             <span
                                 class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                <img alt="Alexa's avatar" src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                    class="h-4 w-4" />
+                                <fa :icon="['far', 'trash-alt']" @click="deleteUser(user.id)" />
                             </span>
-
-                            <span class="text-default-d3 text-90 text-600">
-                                Alexa
-                            </span>
-
-                            <span class="ml-auto text-dark-l2 text-nowrap">
-                                1,250
-                                <span class="text-80">
-                                    USD
-                                </span>
-                            </span>
-
-                            <span class="ml-2">
-                                <i class="fa fa-arrow-up text-green-m1 text-95"></i>
-                            </span>
-                        </div>
-                        <div role="button"
-                            class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
                             <span
                                 class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                <img alt="Derek's avatar" src="https://bootdey.com/img/Content/avatar/avatar2.png"
-                                    class="h-4 w-4" />
+                                <img v-if="user.media" alt="avatar" :src="user.media" class="h-4 w-4" />
+                                <img v-else alt="avatar" src="../assets/icon.svg" class="h-4 w-4" />
                             </span>
 
                             <span class="text-default-d3 text-90 text-600">
-                                Derek
+                                {{ user.firstName }} {{ }} {{ user.lastName }}
                             </span>
 
-                            <span class="ml-auto text-dark-l2 text-nowrap">
-                                350
-                                <span class="text-80">
-                                    EUR
-                                </span>
+                            <span class="ml-auto fs-6 text-dark-l2 text-wrap">
+                                {{ date(user.createdAt) }}
+
                             </span>
 
-                            <span class="ml-2">
-                                <i class="fa fa-arrow-up text-green-m1 text-95"></i>
-                            </span>
+
                         </div>
-                        <div role="button"
-                            class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                            <span
-                                class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                <img alt="Antonio's avatar" src="https://bootdey.com/img/Content/avatar/avatar3.png"
-                                    class="h-4 w-4" />
-                            </span>
 
-                            <span class="text-default-d3 text-90 text-600">
-                                Antonio
-                            </span>
 
-                            <span class="ml-auto text-dark-l2 text-nowrap">
-                                120
-                                <span class="text-80">
-                                    CAD
-                                </span>
-                            </span>
-
-                            <span class="ml-2">
-                                <i class="fa fa-arrow-down text-danger-m1 text-95"></i>
-                            </span>
-                        </div>
-                        <div role="button"
-                            class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                            <span
-                                class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                <img alt="Gabriel's avatar" src="https://bootdey.com/img/Content/avatar/avatar4.png"
-                                    class="h-4 w-4" />
-                            </span>
-
-                            <span class="text-default-d3 text-90 text-600">
-                                Gabriel
-                            </span>
-
-                            <span class="ml-auto text-dark-l2 text-nowrap">
-                                620
-                                <span class="text-80">
-                                    GBP
-                                </span>
-                            </span>
-
-                            <span class="ml-2">
-                                <i class="fa fa-arrow-up text-green-m1 text-95"></i>
-                            </span>
-                        </div>
-                        <div role="button"
-                            class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                            <span
-                                class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                <img alt="David's avatar" src="https://bootdey.com/img/Content/avatar/avatar5.png"
-                                    class="h-4 w-4" />
-                            </span>
-
-                            <span class="text-default-d3 text-90 text-600">
-                                David
-                            </span>
-
-                            <span class="ml-auto text-dark-l2 text-nowrap">
-                                330
-                                <span class="text-80">
-                                    AUD
-                                </span>
-                            </span>
-
-                            <span class="ml-2">
-                                <i class="fa fa-arrow-down text-danger-m1 text-95"></i>
-                            </span>
-                        </div>
-                        <div role="button"
-                            class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                            <span
-                                class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                <img alt="Jason's avatar" src="https://bootdey.com/img/Content/avatar/avatar6.png"
-                                    class="h-4 w-4" />
-                            </span>
-
-                            <span class="text-default-d3 text-90 text-600">
-                                Jason
-                            </span>
-
-                            <span class="ml-auto text-dark-l2 text-nowrap">
-                                1,400
-                                <span class="text-80">
-                                    AED
-                                </span>
-                            </span>
-
-                            <span class="ml-2">
-                                <i class="fa fa-arrow-down text-danger-m1 text-95"></i>
-                            </span>
-                        </div>
-                        <div role="button"
-                            class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                            <span
-                                class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
-                                <img alt="Rebecca's avatar" src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                    class="h-4 w-4" />
-                            </span>
-
-                            <span class="text-default-d3 text-90 text-600">
-                                Rebecca
-                            </span>
-
-                            <span class="ml-auto text-dark-l2 text-nowrap">
-                                350
-                                <span class="text-80">
-                                    USD
-                                </span>
-                            </span>
-
-                            <span class="ml-2">
-                                <i class="fa fa-arrow-up text-green-m1 text-95"></i>
-                            </span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -204,23 +88,99 @@
 
 <script>
 
-import DetailUser from "../components/DetailUser.vue";
-
+import { mapState } from "vuex";
+import DetailUser from "./DetailUser.vue";
+import moment from "moment"
 
 export default {
     name: "UserList",
     data: function () {
         return {
-           DetailUser: false,
+            detailUser: true,
+            searchUser: "",
         };
     },
-    methods: {
-        UserDetail() {
-            this.DetailUser;
-            console.log("BOUTON USER",this.DetailUser);
-        },
+    components: {
+        DetailUser
     },
-    components: { DetailUser }
+
+    beforeMount: function () {
+        // this.getAllArticle();
+        // this.$store
+        //     .dispatch("getAllUsersData")
+        // this.$store
+        //     .dispatch("getAllArticle")
+
+        // this.userData(userId);
+
+        console.log("USER-DATA-->")
+    },
+    mounted: function () {
+        this.$store
+            .dispatch("getAllUsersData")
+        console.log(" MOUNTED USER-LIST ARTICLES");
+    },
+    computed: {
+        ...mapState({
+            AllUsers: "allsUsersData",
+            dataArt: "artData",
+            OneUserData: "useData",
+            ArtCount: "articles",
+        }),
+        filterUser() {
+            return this.AllUsers.filter((a) => {
+return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
+            })
+        }
+    },
+
+    methods: {
+        UserDetail: async function (userId) {
+            this.detailUser === true;
+            console.log("this.DetailUser", this.detailUser);
+            await this.$store
+                .dispatch("getUserData", userId)
+                .then((res) => {
+                    console.log("RES USER-DATA ADMINPAGE ------->", res);
+
+                })
+            console.log("BOUTON USER", this.DetailUser);
+        },
+
+        date(value) {
+            return moment(value).format("DD/MM/YYYY ");
+        },
+
+        goToProfilPage: function () {
+            this.$router.push("../profil");
+        },
+        goToAdminPage: function () {
+            console.log("GO-TO-ADMIN-PAGE");
+            this.$router.push("../user/admin");
+        },
+
+        deleteUser(data) {
+            const result = window.confirm("Voulez-vous vraiment supprimer ce compte ?")
+            if (!result) {
+                return
+            }
+            console.log("USER-ID PROFIL DELETE", data);
+            this.$store
+                .dispatch("deleteUser", data)
+                .then((resolve) => {
+                    if (resolve) {
+                        console.log("RESOLVE PROFIL PAGE DELETE ------>", resolve.data.message);
+                        alert("le compte a bien été supprimé")
+                        // response.json({ message: "Compte supprimé" })
+                        this.$router.push("/UserList");
+                    }
+                }).catch((err) => {
+                    console.log("ERREUR REQUETE PROFIL DELETE USER------>", err);
+
+                })
+        }
+    },
+
 }
 </script>
 
@@ -230,8 +190,20 @@ body {
     background: #eee;
 }
 
+.card-header {
+
+    display: flex;
+    justify-content: space-between;
+     background-color: #FFE53B;
+    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+}
+
 .card {
     box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+}
+
+.card-body {
+    width: 100%;
 }
 
 .list {
@@ -241,7 +213,7 @@ body {
 }
 
 span {
-    width: 25%;
+    width: 30%;
 
 }
 
@@ -250,6 +222,8 @@ span {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    margin: 0 auto;
+    width: 90%;
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;

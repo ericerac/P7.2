@@ -3,6 +3,8 @@ import { createStore } from "vuex";
 const axios = require("axios");
 import setHeaders from "../utils/setHaeaders";
 const mapState = require("vuex");
+import Vue from 'vue'
+import VueCookies from 'vue-cookies'
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
@@ -26,6 +28,8 @@ if (!user) {
   userToken = User.token;
 }
 
+
+
 console.log(userId, userToken);
 
 const store = createStore({
@@ -34,8 +38,9 @@ const store = createStore({
     user: user,
 
     PostData: {},
-
+likeArr:"",
     likeLength: "",
+    articles:"",
 
     updateUser: {
       firstName: "",
@@ -66,10 +71,14 @@ const store = createStore({
     setStatus: (state, status) => {
       state.status = status;
     },
+    LikeArr: (state, likeArr) => {
+      state.likeArr = likeArr;
+    },
     logUser: (state, user) => {
-      localStorage.setItem("user", JSON.stringify(user));
+      // localStorage.setItem("user", JSON.stringify(user));
       console.log("LOCALSTORAGE", user);
       state.user = user;
+      $cookies.set("user",JSON.stringify(user));
     },
     UserData: (state, userData) => {
       state.userData = userData;
@@ -255,7 +264,7 @@ const store = createStore({
         .get(`/user?id=${userId}`)
         .then((res) => {
           console.log("REPONSE USER-DATA INDEX STORE", res.data);
-          commit("UseData", res.data);
+         
           const countArticle = res.data.article.length;
           commit("Articles", countArticle);
           const countComment = res.data.comment.length;
@@ -288,10 +297,10 @@ const store = createStore({
         .then((res) => {
           console.log("reponse", res.data);
           commit("AllsUsersData", res.data);
-          //const countArticle = res.data.article.length;
-          //commit("Articles",countArticle);
-          //const countComment = res.data.comment.length;
-          //console.log("Articles",countComment);
+          // const countArticle = res.data.article;
+          // commit("Articles",countArticle);
+          // //const countComment = res.data.comment.length;
+          // console.log("ARTICLES INDEX",countArticle);
           //commit("Comments",countComment);
 
           if (res) {
@@ -364,7 +373,7 @@ const store = createStore({
     getAllArticle: ({ commit }) => {
       const token = userToken;
       const Us = userId;
-      const sommeLike =[];
+      
       console.log("TOKEN", token);
       commit("setStatus", "loading");
       const self = this;
@@ -388,17 +397,21 @@ const store = createStore({
 
             // console.log(" LIKE-LENGTH  INDEX");
             const comments = resData.map((a) => a.comment);
-            //  sommeLike = resData.map(item => item.like).reduce((a, b) => a + b);
+         const sommeLike = resData.map(item => item.dislike);
+         commit("LikeArr",sommeLike)
+          const liked = sommeLike.map(l => l.like).reduce((a, b) => a + b);
             commit("Comments", comments);
             // commit("ALL COMMENTS", comments);
-            console.log("RESDATA  INDEX", res.data);
-
-            let dat = res.data;
+            console.log("RESDATA  COMMENTS", res.data);
+            
             // console.log("res GET INDEX LIKE", sommeLike);
-            for (let i of resData.like) {
-              sommeLike.push(i);
-            }
-            console.log("RES.DATA  INDEX",sommeLike);
+            // for (let l of sommeLike)  {
+            //   const liked = sommeLike.map(l => l[0]);
+            //   // .reduce((a, b) => a + b);
+            //   likeData.push(liked)
+            // }
+            console.table("RES.DATA LIKE INDEX 1",sommeLike);
+            console.table("RES.DATA LIKE INDEX 2",sommeLike[2]);
             // console.log("BOUCLE INDEX USER-ID", usersId);
             commit("UsersId", usersId);
             

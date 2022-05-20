@@ -61,9 +61,9 @@
         <!-- -----------------------BLOC LIKE   POST DISPLAY------------------------>
 
         <div id="iconPost">
-          <div class="iconLike" v-for="like in article.like" :key="article.id">
+          <div class="iconLike" v-for="like in article.dislike" :key="like.id">
             <span class="icon">
-              <fa class="like" :icon="['far', 'thumbs-up']" @click="liked(article.id)" />{{ like.like }}
+              <fa class="like" :icon="['far', 'thumbs-up']" @click="liked(article.id)" />{{ like.like + like.like}}
             </span>
 
 
@@ -73,6 +73,7 @@
 
           </div>
           <span class="commentIcon">
+            
             <fa :icon="['far', 'comment']" @click="commentInput = !commentInput" v-model="PostLiked" />
           </span>
         </div>

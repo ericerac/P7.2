@@ -2,11 +2,11 @@
   <div class="container d-flex justify-content-center align-items-center">
     <div class="card">
       <div class="mt-2 text-center">
-        <router-link class="text d-block mb-3" to="/user/admin" v-if="user.role == 'admin'"><button
+        <router-link class="text d-block mb-3" to="/user/admin" v-if="userData.role == 'admin'"><button
             class="btn btn-primary btn-sm follow pt-20px">
             Page administrateur
           </button>
-          <button class="btn btn-danger btn-sm follow mt-0" @click="deleteUser(user.id)">
+          <button class="btn btn-danger btn-sm follow mt-0" @click="deleteUser(userData.id)">
           Effacer mon compte
         </button>
         </router-link>
@@ -22,7 +22,9 @@
       
       <div class="upper">
         <div class="profile">
-          <img id="userImg" v-bind:src="user.media" class="rounded-circle" width="80" alt="Photo de profil" />
+          <img v-if="!userData.media" id="userImg" src="../assets/icon.png " class="rounded-circle" width="80" alt="logo groupomanias" />
+          <div class=" mt-1 text-center "><span  v-if="!userData.media">Choisissez une photo de profil</span></div>
+          <img v-if="userData.media" id="userImg" v-bind:src="userData.media" class="rounded-circle" width="80" alt="Photo de profil" />
           <!-- <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> -->
         </div>
       </div>
@@ -30,9 +32,9 @@
       
 
       <div class="mt-5 text-center">
-        <h4 class="mt-3">{{ user.firstName }} {{ user.lastName }}</h4>
+        <h4 class="mt-3">{{ userData.firstName }} {{ userData.lastName }}</h4>
 
-        <p id="adminUser" v-if="user.role == 'admin'">Compte administrateur</p>
+        <p id="adminUser" v-if="userData.role == 'admin'">Compte administrateur</p>
 
         <div class="d-flex justify-content-between align-items-center mt-4 px-3">
           <div class="stats">
@@ -47,7 +49,7 @@
 
           <div class="stats">
             <h6 class="mt-3">Inscrit le:</h6>
-            <span class="stat">{{ dateTime(user.createdAt) }}</span>
+            <span class="stat">{{ dateTime(userData.createdAt) }}</span>
           </div>
         </div>
       </div>
@@ -62,9 +64,11 @@ const FormData = require("form-data");
 import { axios } from "axios";
 import moment from "moment";
 
-let user = localStorage.getItem("user");
-let userId = "";
-let userToken = "";
+
+// let userCookies = $cookies.get("user");
+// console.log("USER COOKIES",userCookies);
+// let userId = userCookies.userId;
+// let userToken = userCookies.token;
 
 // const User = JSON.parse(user);
 // if (User) {
@@ -73,47 +77,60 @@ let userToken = "";
 // } else {
 // }
 
-console.log(userId, userToken);
+// console.log(userId, userToken);
 
 export default {
   name: "profil",
-  beforeMount: function () {
 
+  beforeMount: function () {
     console.log("BEFORE MOUNT");
-    console.log("USER-DATA-->", user)
+let userCookies = $cookies.get("user");
+console.log("USER COOKIES",userCookies);
+this.userId = userCookies.userId;
+this.userToken = userCookies.token;
+    
+    console.log("USER-DATA-->", this.userData);
+    this.getUserData(this.userId);
   },
-  onMounted: function () {
-    console.log("ON MOUNTED");
-    console.log("USER-DATA-->", user)
-  },
-  beforeCreate: function () {
-    console.log("BEFORE CREATED");
-    console.log("USER-DATA-->", user)
-  },
-  beforeUpdate: function () {
-    console.log("BEFORE UPDATE");
-    console.log("USER-DATA-->", user)
-  },
+  // onMounted: function () {
+  //   console.log("ON MOUNTED");
+  
+  // },
+   beforeCreate: function () {
+     console.log("BEFORE CREATED");
+   console.log("USER-DATA-->", this.userData);
+  // beforeUpdate: function () {
+  //   console.log("BEFORE UPDATE");
+  
+   },
+   created: function () {
+     console.log("CREATED");
+   console.log("USER-DATA-->", this.userData);
+  // beforeUpdate: function () {
+  //   console.log("BEFORE UPDATE");
+  
+   },
+   
   mounted: function () {
 
+console.log("USER-DATA MOOUNTED PROFIL",this.userData);
+    // let user = $cookies.get(JSON.parse("user"));
+    // let userId =user.useiId;
+    // let userToken = user.token;
+    // if (!user) {
+    //   user = {
+    //     userId: -1,
+    //     token: "",
+    //   };
+    // } else if (user) {
+    //   // const User = JSON.parse(user);
+    //   // userId = User.userId;
+    //   // userToken = User.token;
+    // }
 
-    let user = localStorage.getItem("user");
-    let userId = "";
-    let userToken = "";
-    if (!user) {
-      user = {
-        userId: -1,
-        token: "",
-      };
-    } else if (user) {
-      const User = JSON.parse(user);
-      userId = User.userId;
-      userToken = User.token;
-    }
+    // console.log("USER-ID i TOKEN 1-------->", userId, userToken,this.user);
 
-    console.log("USER-ID i TOKEN 1-------->", userId, userToken);
-
-    this.getUserData(userId);
+    // this.getUserData(userId);
   },
 
 
@@ -125,19 +142,19 @@ export default {
 
       url: "http://localhost:8080",
 
-      userId: userId,
+      userId: "",
       firstName: "",
       lastName: "",
       email: "",
       password: "",
 
-      token: userToken,
+      userToken:"",
     };
   },
   props: {},
   computed: {
     ...mapState({
-      user: "userData",
+      userData: "userData",
       CountArticle: "articles",
       CountComment: "comments",
       UpdateData: "formData",
@@ -149,7 +166,7 @@ export default {
       this.mode = "profil";
     },
     goToFilActu: function () {
-      this.$router.push("/post");
+      this.$router.push("/postPage");
     },
 
     goToUpdateProfil: function () {
@@ -170,8 +187,8 @@ export default {
     getUserData(UserId) {
       this.$store
         .dispatch("getUserData", UserId)
-        .then(function (response) {
-          console.log("reponse Get USER DATA Profil", response);
+        .then((response)=> {
+          console.log("REPONSE USER DATA Profil", response);
         })
         .catch((err) => {
           console.log(err);
@@ -314,11 +331,11 @@ body {
   height: 70px;
 }
 
-.upper img {
+/* .upper img {
   width: 100%;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-}
+} */
 
 .user {
   position: relative;

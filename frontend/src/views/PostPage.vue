@@ -9,32 +9,24 @@
                             <img src="https://bootdey.com/img/Content/avatar/avatar3.png"
                                 class="d-block ui-w-40 rounded-circle" alt="" />
                             <div class="media-body ml-3 mt-0">
-                                {{ user.lastName }}
+                                {{ user.lastName }}{{  }} {{user.firstName}}
                                 <div class="text-muted small">3 days ago</div>
                             </div>
                         </div>
+<fa :icon="['far', 'bell']"  @click="disconnect(userId)" />
+                        <div class="card-body">
 
-                        <div class="card-body ">
-                   
-                    <ul class="list-aside">
-                        <li class="">Lorem ipsum .</li>
-                        <li class="">Consectetur</li>
-                        <li class="">Sed do .</li>
-                        <li class="">Ut labore . </li>
-                        <li class="">Exercitation .</li>
-                    </ul>
-                </div>
+                            <ul class="list-aside text-start">
+                                <li class="">Lorem ipsum .</li>
+                                <li class="">Consectetur</li>
+                                <li class="">Sed do .</li>
+                                <li class="">Ut labore . </li>
+                                <li class="">Exercitation .</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <a href="javascript:void(0)" class="d-inline-block text-muted">
-                            <small class="align-middle"> <strong>123</strong> Likes</small>
-                        </a>
-                        <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                            <small class="align-middle"> <strong>12</strong> Comments</small>
-                        </a>
-                        <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                            <small class="align-middle">Repost</small>
-                        </a>
+                        <img class="logoAside" src="../assets/icon-left-font-monochrome-black.svg" alt="">
                     </div>
                 </div>
             </div>
@@ -42,7 +34,7 @@
             <!-- <div class="col-lg-6 col-xl-3 ">
 
                 </div> -->
-            <div class="col-lg-6 col-xl-3 ">
+            <div class="col-lg-6 col-xl-6 ">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="media mb-3">
@@ -69,33 +61,32 @@
                     </div>
                 </div>
 
-                <div class="col-lg-12 col-xl-3 articlePost">
-                        <form id="formPost" @submit.prevent="articlePost" >
-                            <div id="articleUser">
-                                <div id="postText">
-                                    <!-- <input v-model="CommentContent" class="commentaire" type="text" size="4"
+                <div class="col-lg-12 col-xl-12 articlePost">
+                    <form id="formPost" @submit.prevent="articlePost">
+                        <div id="articleUser">
+                            <div id="postText">
+                                <!-- <input v-model="CommentContent" class="commentaire" type="text" size="4"
                                         placeholder="Ecrire" /> -->
-                                    <textarea v-model="content" class="commentaire form-control" col="6" rows="2"
-                                        type="text" size="6" placeholder="Ecrire"></textarea>
-                                    <div class="iconComment">
-                                        <span>
-                                            <fa :icon="['fas', 'upload']" type="file" id="mediaPost" ref="file" />
-                                        </span>
-                                        <input type="file" id="mediaPost" ref="file" @change="FileUpload"
+                                <textarea v-model="content" class="commentaire form-control" col="6" rows="2"
+                                    type="text" size="6" placeholder="Ecrire"></textarea>
+                                <div class="iconComment">
+                                    <span>
+                                        <fa :icon="['fas', 'upload']" type="file" id="mediaPost" ref="file" />
+                                    </span>
+                                    <input type="file" id="mediaPost" ref="file" @change="FileUpload"
                                         accept="image/png, image/jpeg" />
 
 
-                                        <!-- <button class="Publier" @click="uploadComment(article.id)"> -->
-                                        <span>
-                                            <fa :icon="['far', 'paper-plane']" class="Publier"
-                                                @click="uploadPost" />
-                                        </span>
-                                        <!-- </button> -->
-                                    </div>
+                                    <!-- <button class="Publier" @click="uploadComment(article.id)"> -->
+                                    <span>
+                                        <fa :icon="['far', 'paper-plane']" class="Publier" @click="uploadPost" />
+                                    </span>
+                                    <!-- </button> -->
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <!-- ++++----------------------ASIDE RIGHT-TOP  ----------------**** -->
             <div class="col-lg-3 col-xl-3 sticky-top">
@@ -143,8 +134,8 @@
                             <img v-if="article.user.media" alt="ImageProfil" :src="article.user.media"
                                 class="d-block ui-w-40 rounded-circle" />
                             <div class="media-body fw-bold ml-3">
-                                {{ article.user.lastName }} 
-                                {{ }} {{ article.user.firstName }} 
+                                {{ article.user.lastName }}
+                                {{ }} {{ article.user.firstName }}
                                 <div class="text-muted small">le: {{ date(article.createdAt) }}</div>
                             </div>
                         </div>
@@ -155,14 +146,19 @@
                         <div class=""><img v-if="article.media" class="postImg" alt="Image" :src="article.media" />
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div v-for="(like, index) in article.dislike" :key="like.id">
+                    <div class="card-footer " >
                         <div class="like">
-                        <fa class="like-r" :icon="['far', 'thumbs-up']" @click="liked(article.id, 1)" />
-                        <fa class="like-sl" :icon="['fas', 'thumbs-up']" @click="liked(article.id, 0)" />
+
+                            <fa class="like-r" :icon="['far', 'thumbs-up']" @click="liked(article.id, 1)" />{{like.like}}
+
+                            <!-- <fa v-if="user.id === like.userId" class="like-sl" :icon="['fas', 'thumbs-up']"
+                                @click="liked(article.id, 0)" />{{ LikeSum(like.like) }} -->
                         </div>
                         <div class="like">
-                        <fa class="like-r" :icon="['far', 'thumbs-down']" @click="disliked(article.id, -1)" />
-                        <fa class="like-sd" :icon="['fas', 'thumbs-down']" @click="disliked(article.id, 0)" />
+                            <fa class="like-r" :icon="['far', 'thumbs-down']" @click="disliked(article.id, -1)" />{{ }}
+                            <fa  class="like-sd" :icon="['fas', 'thumbs-down']"
+                                @click="disliked(article.id, 0)" />
                         </div>
                         <span class="countComment">commentaires: 12</span>
 
@@ -177,6 +173,7 @@
                                 <fa :icon="['far', 'trash-alt']" @click="deleteComment(commKey.id)" />
                             </span>
                         </div>
+                    </div>
                     </div>
 
                     <!--  **   -------- ** COMMENT  FORM ** HIDDEN -------   **  -->
@@ -213,8 +210,8 @@
 
                     <div class="col-lg-12" v-for="commKey in article.comment" :key="commKey.id">
 
-                        <div class="card-comment"></div>
-                        <div class="card mb-1">
+                        <div class="card-line-top"></div>
+                        <div class="card card-comment mb-1">
                             <div class="card-body">
                                 <div class="media media-comment mb-3">
                                     <img src="https://bootdey.com/img/Content/avatar/avatar3.png"
@@ -307,17 +304,17 @@ import postDisplay from "../components/postDisplay.vue";
 const axios = require("axios");
 const FormData = require("form-data");
 
-let user = localStorage.getItem("user");
+let user = $cookies.get("user");
 let userId = "";
 let userToken = "";
-const User = JSON.parse(user);
-if (User) {
-    userId = User.userId;
-    userToken = User.token;
-} else {
-}
+// const User = JSON.parse(user);
+// if (User) {
+//     userId = User.userId;
+//     userToken = User.token;
+// } else {
+// }
 
-console.log(userId, userToken);
+// console.log(userId, userToken);
 
 
 //***************    ******************// */
@@ -396,6 +393,7 @@ export default {
     onMounted: function () {
         console.log("ON MOUNTED");
         console.log("USER-DATA-->", this.userD)
+        this.countLike()
     },
     // beforeCreate: function () {
     //   console.log("BEFORE CREATED");
@@ -414,9 +412,12 @@ export default {
             userC: "useData",
             user: "userData",
             dataArt: "artData",
+            likeArray:"likeArr"
 
 
         }),
+
+        
     },
 
     watch: {
@@ -428,6 +429,7 @@ export default {
             console.log("watch", val);
 
         },
+
 
         dataArt: function (val) {
             console.log("WATCH ARTDATA MODIF LIVE", val);
@@ -462,6 +464,29 @@ export default {
             this.dislikedArt = likeData;
 
         },
+        
+LikeSum(a){
+    console.log("LIKE-SUM",a);
+    var sum = 0;
+
+    for(let value in a){
+       sum += value ;
+    }
+   return sum
+},
+disconnect(userId){
+    console.log("DISCONNECT",userId);
+    $cookies.remove("user");
+     this.$router.push("/");
+},
+//         countLike: function () {
+//            const result = [];
+//            const liked =this.dataArt ;
+//            for(let l of liked){
+// result.push(l.dislike.like)
+//            }
+//            console.log("COUNT-LIKE",result);
+//         },
 
         //--------------FORMAT DATE----------------------//
         date(value) {
@@ -469,8 +494,9 @@ export default {
         },
 
 
-        count(value) {
-            return value++;
+        count(a, b) {
+            console.log("COUNT LIKED", a, b);
+            return a + b;
         },
 
         //-------------ARTICLES DATE ----------------------//
@@ -680,17 +706,17 @@ export default {
                 })
         },
 
-    //     GetNextUser() {
-    //   window.onscroll = () => {
-    //     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-    //     if (bottomOfWindow) {
-    //     //   axios.get(`https://randomuser.me/api/`).then(response => {
-    //     //     this.users.push(response.data.results[0]);
-    //     //   });
-    //     alert("il n'y en a plus ")
-    //     }
-    //   }
-    // }
+        //     GetNextUser() {
+        //   window.onscroll = () => {
+        //     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+        //     if (bottomOfWindow) {
+        //     //   axios.get(`https://randomuser.me/api/`).then(response => {
+        //     //     this.users.push(response.data.results[0]);
+        //     //   });
+        //     alert("il n'y en a plus ")
+        //     }
+        //   }
+        // }
 
     },
 };
@@ -711,7 +737,7 @@ export default {
 
 html {
     background-attachment: fixed;
-    background-color: blanchedalmond;
+    /* background-color: blanchedalmond; */
 }
 
 .root {
@@ -728,20 +754,25 @@ body {
     max-width: 1000px;
     background-color: antiquewhite;
 }
+
 /* // ------------------ ASIDE LEFT------------------- */
-li{
+li {
     list-style-type: none;
 }
-.list-aside{
+.logoAside{
+    width: 90%;
+}
+.list-aside {
     text-align: left;
     padding-left: 0;
 }
 
 /* // ------------------ CENTRE TOP------------------- */
 
-.articlePost{
+.articlePost {
     border: 1px solid black;
 }
+
 /* //---------------------POST------------------------_// */
 /* .colonne-centree
 {
@@ -757,7 +788,12 @@ margin: 0 auto;
     border-radius: 5px;
     margin: 5px auto;
 }
-
+.card{
+    box-shadow: 2px 5px 15px rgba(24, 28, 33, 0.2);
+}
+.card-footer{
+    border:2px solid black;
+}
 .media {
     display: flex;
     padding-bottom: 1rem;
@@ -771,7 +807,8 @@ margin: 0 auto;
 .media-body {
     text-align: left;
 }
-.like{
+
+.like {
     display: flex;
     flex-direction: row;
     width: 30%;
@@ -779,15 +816,18 @@ margin: 0 auto;
     position: relative;
     padding-left: .5rem;
 }
-.like-sl{
+
+.like-sl {
     position: absolute;
-   
+
 }
-.like-sd{
+
+.like-sd {
     position: absolute;
-   
-    
+
+
 }
+
 span {
     margin-right: 1rem;
 }
@@ -896,7 +936,7 @@ span {
 
 /* // -----------------COMMENT ------------------ */
 
-.card-comment {
+.card-line-top {
     width: 90%;
     margin: 10px auto 5px;
     height: 0.2rem;
@@ -946,6 +986,9 @@ span {
     padding-left: .2rem;
     padding-top: .2rem;
     margin-bottom: 0rem;
+}
+.card-comment{
+      box-shadow: 2px 2px 20px 2px rgba(24, 28, 33, 0.3);
 }
 
 .IconEditTrash {
