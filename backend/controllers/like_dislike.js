@@ -105,12 +105,12 @@ console.log("COUNTLIKE--->",countdisLike);
          dislikes: countdisLike,
        },
        {
-         where: { id:`${params2}`},
+         where: { id:`${params2}`, userId:`${params1}`},
        }
      )
 console.log("UPDATE ART PUSH--->","ARTICLE-ID--->",params2,"LIKE--->",likePost,"DISLIKE--->",dislikePost);
     if(artLike){
-//  res.status(201).json({message:"avis enregistré"},createLike);
+  res.status(201).json({message:"avis enregistré"});
  return
     }
    

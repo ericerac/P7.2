@@ -6,7 +6,10 @@
                 <div class="card card-nav mb-4">
                     <div class="card-footer">
                         <img class="fondLogoNavbar" src="../assets/Fondnav.png" alt="" title="Page Profil" />
-                        <img class="logo" src="../assets/icon-left-font-monochrome-white.svg" alt="" />
+                        <img class="logo col-md-0" src="../assets/icon-left-font-monochrome-white.svg" alt="" />
+                        <img class="userMedia avatar" :src="user.media" alt="">
+                        <span class="NameUser"> {{user.firstName}} {{user.lastName}}</span>
+                       
                     </div>
                     <div class="navbar">
                         <div class="link">
@@ -36,7 +39,7 @@
                                 <!-- <input v-model="CommentContent" class="commentaire" type="text" size="4"
                                         placeholder="Ecrire" /> -->
                                 <textarea v-model="content" class="commentaire mt-3 form-control" col="6" rows="2"
-                                    type="text" size="6" placeholder="Ecrire"></textarea>
+                                    type="text" size="6" placeholder="Une petite pensée à partager ?"></textarea>
                                 <!-- <div class="imagePreview" :style="{'background-image': url`(${previewImg})`}" ></div> -->
                                 <div class="iconComment pt-1">
                                     <div class="ico">
@@ -108,12 +111,12 @@
                                         {{ article.likes }}
                                     </span>
                                     <!-- <span> -->
-                                    <!-- <span e>
+                                    <span >
                                         <fa class="like-sl" :icon="['far', 'thumbs-up']"
                                             @click="liked(article.id, 1, 0)" />
 
                                         {{ article.likes }}
-                                    </span> -->
+                                    </span>
                                 </div>
                                 <!-- ------------DISLIKE-------------- -->
                                 <div class="like">
@@ -749,7 +752,11 @@ li {
 .card-nav {
     background-image: url("../assets/fondNavRed.png");
 }
-
+.NameUser{
+    color:white;
+    position: absolute;
+     bottom:.15rem;
+}
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -758,14 +765,22 @@ li {
 /* // ------------------  TOP------------------- */
 .fondLogoNavbar {
     width: 100%;
+    height: 70px;
     border-radius: 0.7rem;
 }
 
 .logo {
     position: absolute;
     left: 1rem;
-    width: 5rem;
-    bottom: 0.5rem;
+    width: 20%;
+    top: 0.5rem;
+   
+}
+.userMedia{
+    width:2.5rem;
+    height: 2.5rem;
+    position: absolute;
+    top:.3rem;
 }
 
 /* // ------------------ CENTRE TOP------------------- */
