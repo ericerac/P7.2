@@ -16,7 +16,7 @@ const auth = require('../../middleWare/auth')
 
 
  router.post("/post",  likeDislike.postLike); //table relationelle
-  router.put("/like",  likeDislike.pushLike); // ajout table a
+//   router.put("/like",  likeDislike.pushLike); // ajout table a
 
  router.get("/all",  likeDislike.AllLike);
 // router.post("/dislike",  likeDislike.publish);

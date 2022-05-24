@@ -27,4 +27,6 @@ main.js
 app.js
 router "pages"
 
+# backend
+nodemon
 

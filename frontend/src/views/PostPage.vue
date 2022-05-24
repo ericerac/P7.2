@@ -39,13 +39,12 @@
                                 <!-- <input v-model="CommentContent" class="commentaire" type="text" size="4"
                                         placeholder="Ecrire" /> -->
                                 <textarea v-model="content" class="commentaire mt-3 form-control" col="6" rows="2"
-                                    type="text" size="6" placeholder="Une petite pensée à partager ?"></textarea>
+                                    type="text" size="6" placeholder="Une petite pensée à partager  ?"></textarea>
                                 <!-- <div class="imagePreview" :style="{'background-image': url`(${previewImg})`}" ></div> -->
                                 <div class="iconComment pt-1">
                                     <div class="ico">
                                         <span class="select-wrapper">
-                                            <!-- <input type="file" id="mediaPost" ref="file" @change="FileUpload"
-                                        accept="image/png, image/jpeg" /> -->
+                                            
                                             <label class="labelImgUpload" for="image_src">i</label>
                                             <input type="file" name="image_src" id="image_src" @change="FileUpload" />
 
@@ -171,7 +170,16 @@
 
                                         <!-- <input type="file" id="mediaPost" ref="file" @change="FileUploadCom"
                                         accept="image/png, image/jpeg" /> -->
+<div class="ico">
+                                        <span class="select-wrapper">
+                                            
+                                            <label class="labelImgUpload" for="image_src">i</label>
+                                            <input type="file" name="image_src" id="image_src" @change="FileUpload" />
 
+                                        </span>
+
+                                        <span> {{ fileSelected.name }}</span>
+                                    </div>
                                         <!-- <button class="Publier" @click="uploadComment(article.id)"> -->
                                         <span>
                                             <fa :icon="['far', 'paper-plane']" class="Publier"
@@ -397,15 +405,7 @@ let left = this;
             this.dislikedArt = likeData;
         },
 
-        LikeSum(a) {
-            console.log("LIKE-SUM", a);
-            var sum = 0;
-
-            for (let value in a) {
-                sum += value;
-            }
-            return sum;
-        },
+        
 
         //----------------DISCONNECT-----------------//
         disconnect() {
@@ -497,7 +497,7 @@ let left = this;
         //------------ UPLOAD POST-----------------------//
         uploadPost: function () {
             if (this.fileSelected == "" && this.content == "") {
-                alert(" Votre poste est vide");
+                alert(" Votre article est vide");
                 return;
             }
             if (this.fileSelected) {
@@ -508,7 +508,7 @@ let left = this;
                 bodyFormData.append("likes", this.likes);
                 bodyFormData.append("dislikes", this.dislikes);
 
-                console.table("FORM DATA AVEC IMAGE ", ...bodyFormData.entries());
+                console.table("FORM DATA AVEC IMAGE 1", ...bodyFormData.entries());
             } else {
                 var bodyFormData = new FormData();
                 bodyFormData.append("content", this.content);
@@ -534,67 +534,27 @@ let left = this;
         FileUpload(event) {
             console.log("EVENT", event);
             this.fileSelected = event.target.files[0];
-            console.log("fichier Image", this.fileSelected);
+            console.log("fichier Image ", this.fileSelected);
         },
+//-----------------------UPLOAD COMMENT---------------------------
 
-        updatePost: function () {
+        uploadComment: function (Aid) {
             if (this.fileSelected) {
                 var bodyFormData = new FormData();
                 bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
-                bodyFormData.append("content", this.content);
+                bodyFormData.append("comment", this.CommentContent);
                 bodyFormData.append("userId", userId);
-                bodyFormData.append("likes", this.likes);
-                bodyFormData.append("dislikes", this.dislikes);
+                bodyFormData.append("articleId", Aid);
+                
 
-                console.table("FORM DATA AVEC IMAGE ", ...bodyFormData.entries());
+                console.table("FORM DATA AVEC IMAGE 2", ...bodyFormData.entries());
             } else {
                 var bodyFormData = new FormData();
-                bodyFormData.append("content", this.content);
+                bodyFormData.append("comment", this.CommentContent);
                 bodyFormData.append("userId", userId);
-                bodyFormData.append("likes", this.likes);
-                bodyFormData.append("dislikes", this.dislikes);
+                bodyFormData.append("articleId", Aid);
 
                 console.table("FORM DATA SANS IMAGE ", ...bodyFormData.entries());
-            }
-            this.$store
-                .dispatch("updatePost", bodyFormData)
-
-                .then(function (response) {
-                    //handle success
-                    console.log(response);
-                })
-                .catch(function (response) {
-                    //handle error
-                    console.log(response);
-                });
-        },
-        //------------ UPLOAD COMMENT-----------------------//
-        uploadComment: function (Aid) {
-            if (this.fileSelectedComment) {
-                var bodyFormData = new FormData();
-                bodyFormData.append(
-                    "media",
-                    this.fileSelectedComment,
-                    this.fileSelectedComment.name
-                );
-                bodyFormData.append("comment", this.CommentContent);
-                bodyFormData.append("userId", userId);
-                bodyFormData.append("articleId", Aid);
-
-                console.table(
-                    "FORMDATA-COMMENT AVEC IMAGE------>",
-                    ...bodyFormData.entries()
-                );
-            } else {
-                var bodyFormData = new FormData();
-                bodyFormData.append("comment", this.CommentContent);
-                bodyFormData.append("userId", userId);
-                bodyFormData.append("articleId", Aid);
-
-                console.table(
-                    "FORMDATA-COMMENT SANS IMAGE------>",
-                    ...bodyFormData.entries()
-                );
             }
             this.$store
                 .dispatch("uploadComment", bodyFormData)
@@ -608,12 +568,55 @@ let left = this;
                     console.log(response);
                 });
         },
-
-        FileUploadCom(event) {
+        //------------ UPLOAD COMMENT-----------------------//
+FileUploadCom(event) {
             console.log("EVENT", event);
             this.fileSelectedComment = event.target.files[0];
             console.log("fichier Image", this.fileSelectedComment);
         },
+
+        // uploadComment: function (Aid) {
+        //     console.log("fichier Image UPLOAD", this.fileSelectedComment);
+        //     if (this.fileSelectedComment) {
+        //         var bodyFormData = new FormData();
+        //         bodyFormData.append(
+        //             "media",
+        //             this.fileSelectedComment,
+        //             this.fileSelectedComment.name
+        //         );
+        //         bodyFormData.append("comment", this.CommentContent);
+        //         bodyFormData.append("userId", userId);
+        //         bodyFormData.append("articleId", Aid);
+
+        //         console.table(
+        //             "FORMDATA-COMMENT AVEC IMAGE------>",
+        //             ...bodyFormData.entries()
+        //         );
+        //     } else {
+        //         var bodyFormData = new FormData();
+        //         bodyFormData.append("comment", this.CommentContent);
+        //         bodyFormData.append("userId", userId);
+        //         bodyFormData.append("articleId", Aid);
+
+        //         console.table(
+        //             "FORMDATA-COMMENT SANS IMAGE------>",
+        //             ...bodyFormData.entries()
+        //         );
+        //     }
+        //     this.$store
+        //         .dispatch("uploadComment", bodyFormData)
+
+        //         .then(function (response) {
+        //             //handle success
+        //             console.log(response);
+        //         })
+        //         .catch(function (response) {
+        //             //handle error
+        //             console.log(response);
+        //         });
+        // },
+
+        
         //------------ GET ALL ARTICLE-----------------------//
         getAllArticle: function () {
             const self = this;

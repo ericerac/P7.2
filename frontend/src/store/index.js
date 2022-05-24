@@ -543,7 +543,7 @@ listLike:"",
           .then((response) => {
             
             console.log("RESPONSE LIKE INDEX",response);
-            instance.put(`/art/like`);
+            
             
             resolve(response);
           })
