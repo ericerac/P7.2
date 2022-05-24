@@ -1,8 +1,8 @@
 <template>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<!-- <Navbar/> -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+
     <div class="container">
-        <DetailUser v-if="detailUser === true" />
+
         <div class="row">
             <div class="col-md-12 bloc-list">
                 <div class="card ccard radius-t-0 h-auto">
@@ -12,19 +12,19 @@
                     <div class="card-header  pb-2 brc-secondary-l3">
                         <div>
                             <span class="retour" @click="goToProfilPage()">
-                            <i class="fa fa-arrow-left  text-95"></i>
+                                <i class="fa fa-arrow-left  text-95"></i>
                                 Retour
                             </span>
-                            
-                            
+
+
                         </div>
                         <div>
                             <h5 class="card-title mb-0 mb-md-0 text-dark-m3">
                                 UTILISATEURS
                             </h5>
-                        
-                            <input class="search-input mb-0 mt-1 pb-0" v-model="searchUser" type="search" id="search" placeholder="rechercher"
-                                autocomplete="off" />
+
+                            <input class="search-input mb-0 mt-1 pb-0" v-model="searchUser" type="search" id="search"
+                                placeholder="rechercher" autocomplete="off" />
 
                         </div>
                     </div>
@@ -87,10 +87,9 @@
 <script>
 
 import { mapState } from "vuex";
-import DetailUser from "./DetailUser.vue";
+ console.log(" BEFORE tout");
 import moment from "moment"
-import NavbarVue from "./Navbar.vue";
-import Navbar from "./Navbar.vue";
+
 
 export default {
     name: "UserList",
@@ -100,36 +99,36 @@ export default {
             searchUser: "",
         };
     },
-    components: {
-    DetailUser,
-    NavbarVue,
-    Navbar
+watch:{
+
+ AllUsers: function (val) {
+            if(val){
+location.reload();
+            }
+        },
 },
 
-    beforeMount: function () {
-        //  this.$store
-        //     .dispatch("getAllUsersData")
-        // this.getAllArticle();
-        // this.$store
-        //     .dispatch("getAllUsersData")
-        // this.$store
-        //     .dispatch("getAllArticle")
-
-        // this.userData(userId);
-
-        console.log("USER-DATA-->")
+beforeCreate:()=>{
+    console.log(" BEFORE CREATE");
+},
+beforeRouteEnter:()=>{
+    console.log(" BEFORE ROUTE");
+},
+    beforeMount:()=>{
+        location.reload();
+         console.log(" BEFORE MOUNT");
     },
     mounted: function () {
-        // this.$store
-        //     .dispatch("getAllUsersData")
+       
         console.log(" MOUNTED USER-LIST ARTICLES");
     },
-    created:function (){
-this.$store
+    created: function () {
+        this.$store
             .dispatch("getAllUsersData")
+            location.reload();
     },
-    update:function(){
-this.$store
+    update: function () {
+        this.$store
             .dispatch("getAllUsersData")
     },
     computed: {
@@ -137,12 +136,12 @@ this.$store
             AllUsers: "allsUsersData",
             dataArt: "artData",
             OneUserData: "useData",
-            ArtCount: "articles",
+           
         }),
 
         filterUser() {
             return this.AllUsers.filter((a) => {
-return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
+                return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
             })
         }
     },
@@ -198,36 +197,38 @@ return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
 </script>
 
 <style scoped>
-html{
-      background: rgb(252, 85, 85);
+html {
+    background: rgb(252, 85, 85);
 }
+
 body {
     margin-top: 0px;
     background: #eee;
 }
-.row{
-   
+
+.row {
+
     background: rgb(252, 85, 85);
     border-radius: 20px;
 }
-/* .bloc-list{
-    margin:0 auto;
-} */
-.retour{
+
+.retour {
     cursor: pointer;
 }
+
 .card-header {
 
     display: flex;
     justify-content: space-between;
-     background-color: #FFE53B;
+    background-color: #FFE53B;
     background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
 }
 
 .card {
     box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
-    
+
 }
+
 .ccard {
     box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
     width: 100%;

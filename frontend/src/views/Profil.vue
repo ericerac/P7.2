@@ -15,7 +15,7 @@
           </div>
           <div class="user text-center">
             <span v-if="userData.role == 'admin'">
-              <button class="btn btn-sm follow mt-0" @click="goToUsersData">
+              <button class="btn btn-sm follow mt-0" @click="goToUsersData()">
                 Liste Des utilsateurs
               </button>
             </span>
@@ -108,14 +108,7 @@ let userId = userCookies.userId;
 let userToken = userCookies.token;}
 
 
-// const User = JSON.parse(user);
-// if (User) {
-//   userId = User.userId;
-//   userToken = User.token;
-// } else {
-// }
 
-// console.log(userId, userToken);
 
 export default {
   name: "profil",
@@ -130,46 +123,21 @@ export default {
     console.log("USER-DATA-->", this.userData);
     this.getUserData(this.userId);
   },
-  // onMounted: function () {
-  //   console.log("ON MOUNTED");
-
-  // },
+  
   beforeCreate: function () {
     console.log("BEFORE CREATED");
     console.log("USER-DATA-->", this.userData);
-    // beforeUpdate: function () {
-    //   console.log("BEFORE UPDATE");
+    
 
   },
   created: function () {
     console.log("CREATED");
     console.log("USER-DATA-->", this.userData);
-    // beforeUpdate: function () {
-    //   console.log("BEFORE UPDATE");
+    
 
   },
 
-  mounted: function () {
-
-    console.log("USER-DATA MOOUNTED PROFIL", this.userData);
-    // let user = $cookies.get(JSON.parse("user"));
-    // let userId =user.useiId;
-    // let userToken = user.token;
-    // if (!user) {
-    //   user = {
-    //     userId: -1,
-    //     token: "",
-    //   };
-    // } else if (user) {
-    //   // const User = JSON.parse(user);
-    //   // userId = User.userId;
-    //   // userToken = User.token;
-    // }
-
-    // console.log("USER-ID i TOKEN 1-------->", userId, userToken,this.user);
-
-    // this.getUserData(userId);
-  },
+  
 
 
   data: () => {
@@ -211,9 +179,9 @@ export default {
       this.$router.push("/updateProfil");
     },
     goToUsersData: function () {
-      this.$store.dispatch("getAllUsersData")
+       this.$store.dispatch("getAllUsersData")
 
-      this.$router.push("../components/UserList ");
+      this.$router.push("../components/UserList.vue ");
     },
     //----------------DISCONNECT-----------------//
     disconnect() {
@@ -291,71 +259,13 @@ export default {
 
         })
     }
-    //--------------------UPDATE-USER 1.1---------------------//
-
-    // updateUser: function () {
-    //   console.log("UPDATE USER HOME PAGE");
-    //   const getFormData = (formData =>
-    //     Object.entries(formData).reduce((fd, [key, val]) => {
-    //       if (Array.isArray(val)) {
-    //         val.forEach((v) => fd.append(key, v));
-    //       } else {
-    //         fd.append(key, val);
-    //       }
-    //       return fd;
-    //     }), new FormData());
-
-    //   console.log("media", this.fileSelected)
-    //   this.$store
-    //     .dispatch("updateUser", this.getFormData
-    //     //{
-    //       //  userId: this.formData.userId,
-    //       //  firstName: this.formData.firstName,
-    //       //  lastName: this.formData.lastName,
-    //       //  email: this.formData.email,
-    //       //  password: this.formData.password,
-    //       //  media: this.formData.media,
-    //     //}
-    //     )
-    //     .then(function (response) {
-    //       console.log("reponse", response);
-    //       // self.loginPost();
-    //       self.$router.push("/HomePage");
-    //       goToHomePage();
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
-    //-------------UPDATE USER 2--------------_();
-    // updateUser(e) {
-    //   e.preventDefault();
-    //   const fd = new FormData();
-    //   fd.append(e.currentTarget);
-    //   console.log("NEW FORM-->", fd);
-
-    //   //Data.append('corp',this.formData);
-    //   // let fileName = this.fileSelected;
-    //   // let naame = fileName.name;
-    //   // fd.append('file',this.fileSelected,this.fileSelected.name);
-
-    //   // console.log("DATA",fd);
-    //   // console.log("file", this.fileSelected);
-    //   // this.$store.dispatch("updateUser", fd);
-    // },
-
-    //----------------LOGOUT-------------------(())
-
-    // logOut: (state) => {
-    //   localStorage.removeItem('user')
-    //   return
-    // },
+    
   },
 };
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
+
 
 body {
   background-color: #545454;
@@ -405,11 +315,7 @@ body {
   height: 70px;
 }
 
-/* .upper img {
-  width: 100%;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-} */
+
 
 .user {
   position: relative;
@@ -444,9 +350,7 @@ body {
   height: 35px;
 }
 
-/* .stats span {
-  font-size: 20px;
-} */
+
 
 .footerList {
   display: flex;

@@ -16,33 +16,11 @@ const sequelize = new Sequelize(
 // Objet sequelize
 const comment = CommentModel(sequelize, Sequelize);
 
-//------------GET ALL ARTICLE'S COMMENTS--------------//
 
-exports.ArtComments = async (req, res, next) => {
-  console.log("requete Params", req.query);
-  const allComment = await comment.findAll();
-  res.json(allComment);
-};
 
-//------------GET ALL USER'S COMMENTS--------------//
-exports.UsersComments = async (req, res, next) => {
-  console.log("requete Params", req.query);
-  const Comment = await comment.findAll({
-    where: {
-      userId: req.query.id,
-    },
-  });
-  res.json(Comment);
-};
 
-//------------GET ONE COMMENT--------------//
 
-exports.OnePublished = async (req, res, next) => {
-  console.log("-------req.query One--------", req.query.id);
-  const params = req.query.id;
-  const oneComment = await comment.findOne({ where: { id: `${params}` } });
-  res.json(oneComment);
-};
+
 
 //-----------PUBLISH A COMMENT ---------------//
 
@@ -84,20 +62,10 @@ exports.publish = async (req, res, next) => {
     res.json({ message: "erreur 404" });
   }
 };
-//-----------DELETE A COMMENT---------------//
 
-// exports.destroyComment = async (req, res) => {
-//   const params = req.query.id;
-//   console.log("id", params);
-//   const suprimmer = await comment.destroy({ where: { id: params } });
-//   if (suprimmer) {
-//     res.json({ message: "comment supprimé" });
-//   } else {
-//     res.json({ message: "erreur 404" });
-//   }
-// };
 
-//------------_-___------__--_____--__//
+//-----------DELETE COMMENT ---------------//
+
 exports.destroyComment = async (req, res) => {
   const params = req.query.id;
   console.log(params);

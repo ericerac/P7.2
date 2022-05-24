@@ -7,16 +7,15 @@
                     <div class="card-footer">
                         <img class="fondLogoNavbar" src="../assets/Fondnav.png" alt="" title="Page Profil" />
                         <img class="logo col-md-0" src="../assets/icon-left-font-monochrome-white.svg" alt="" />
-                        <img class="userMedia avatar" :src="user.media" alt="">
-                        <span class="NameUser"> {{user.firstName}} {{user.lastName}}</span>
-                       
+                        <img class="userMedia avatar" :src="user.media" alt="" />
+                        <span class="NameUser">
+                            {{ user.firstName }} {{ user.lastName }}</span>
                     </div>
                     <div class="navbar">
                         <div class="link">
                             <span>
                                 <fa :icon="['fas', 'home']" @click="goToProfil()" />
                             </span>
-                            <span @click="mesArticles(user.id)">Mes articles</span>
                         </div>
                         <span class="powerOff">
                             <fa :icon="['fas', 'power-off']" @click="disconnect()" />
@@ -25,12 +24,7 @@
                 </div>
             </div>
 
-            <!-- ++++----------------------CENTRE CARD TOP  ----------------**** -->
-
-
-
             <div class="col-lg-12 col-xl-12">
-
                 <!-- //----------------------- EDITION POST-------------------------// -->
                 <div class="col-lg-12 col-xl-12 articlePost bg-white mb-3 pb-2 pt-1">
                     <form id="formPost" @submit.prevent="articlePost">
@@ -44,22 +38,17 @@
                                 <div class="iconComment pt-1">
                                     <div class="ico">
                                         <span class="select-wrapper">
-                                            
                                             <label class="labelImgUpload" for="image_src">i</label>
                                             <input type="file" name="image_src" id="image_src" @change="FileUpload" />
-
                                         </span>
 
                                         <span> {{ fileSelected.name }}</span>
                                     </div>
                                     <div class="ico">
-                                        <!-- <button class="Publier" @click="uploadComment(article.id)"> -->
                                         <span>
                                             <fa :icon="['far', 'paper-plane']" class="Publier" @click="uploadPost" />
-                                            <!-- <fa :icon="['fas', 'camera']" class="Publier" @click="uploadPost" /> -->
                                         </span>
                                     </div>
-                                    <!-- </button> -->
                                 </div>
                             </div>
                         </div>
@@ -92,60 +81,20 @@
                     </div>
 
                     <div>
-                        <!-- <div> -->
-                        <!-- <div class="card-footer card-post-icon" v-for="(like) in article.dislike" :key="like.id"
-                  > -->
-                        <div class="card-footer card-post-icon ">
 
-                            <!-- <div class="likedislike" v-for="(like) in article.dislike" :key="like.id"> -->
-                            <div class="likedislike">
-                                <!-- <div class="like" > -->
-                                    <div class="like" > 
+                        <div class="card-footer card-post-icon">
 
-                                    <!-- ------------LIKE-------------- -->
-                                    <!-- <span > -->
-                                        <span >
-                                        <fa v-model="likes" class="like-r" :icon="['fas', 'thumbs-up']"
-                                            @click="liked(article.id, 0, 0)" />
-                                        {{ article.likes }}
-                                    </span>
-                                    <!-- <span> -->
-                                    <span >
-                                        <fa class="like-sl" :icon="['far', 'thumbs-up']"
-                                            @click="liked(article.id, 1, 0)" />
 
-                                        {{ article.likes }}
-                                    </span>
-                                </div>
-                                <!-- ------------DISLIKE-------------- -->
-                                <div class="like">
-                                    <span v-if="article.dislike.userId = userId">
-                                        <fa class="like-sd" :icon="['fas', 'thumbs-down']"
-                                            @click="liked(article.id, 0, 0)" />
-                                        {{ article.dislikes }}
-                                    </span>
-                                    <span v-else>
-                                        <fa v-model="dislikes" class="like-r" :icon="['far', 'thumbs-down']"
-                                            @click="liked(article.id, 0, 1)" />
-                                        {{ article.dislikes }}
-                                    </span>
-                                </div>
-                           
-                            </div>
                             <!-- ------------ICON COMMENTAIRE------------- -->
                             <div class="com-com">
-                                <span class="countComment">commentaires</span>
 
-                                <span>
+
+                                <span>Donnez votre avis
                                     <fa class="d-inline-block text-muted ml-1" :icon="['far', 'comment']"
                                         @click="commentInput = !commentInput" v-model="PostLiked" />
                                 </span>
                             </div>
-                            <div class="IconEditTrash">
-                                <span>
-                                    <fa v-if="user.role === 'admin'" icon="['fas', 'pencil-alt']" />
-                                </span>
-                            </div>
+
                             <div>
                                 <span>
                                     <fa v-if="user.role === 'admin' || userId === article.userId"
@@ -154,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                                    <div class="erreurMessageLike"  @click="likeErreur= false" v-show="likeErreur">{{"Vous avez déjà donner votre avis. X"}}</div>
+
 
                     <!--  **   -------- ** COMMENT  FORM ** HIDDEN -------   **  -->
 
@@ -167,25 +116,23 @@
                                     <textarea v-model="CommentContent" class="commentaire form-control" col="6" rows="2"
                                         type="text" size="6" placeholder="Ecrire"></textarea>
                                     <div class="iconComment">
-
                                         <!-- <input type="file" id="mediaPost" ref="file" @change="FileUploadCom"
                                         accept="image/png, image/jpeg" /> -->
-<div class="ico">
-                                        <span class="select-wrapper">
-                                            
-                                            <label class="labelImgUpload" for="image_src">i</label>
-                                            <input type="file" name="image_src" id="image_src" @change="FileUpload" />
+                                        <div class="ico">
+                                            <span class="select-wrapper">
+                                                <label class="labelImgUpload" for="image_src">i</label>
+                                                <input type="file" name="image_src" id="image_src"
+                                                    @change="FileUpload" />
+                                            </span>
 
-                                        </span>
+                                            <span> {{ fileSelected.name }}</span>
+                                        </div>
 
-                                        <span> {{ fileSelected.name }}</span>
-                                    </div>
-                                        <!-- <button class="Publier" @click="uploadComment(article.id)"> -->
                                         <span>
                                             <fa :icon="['far', 'paper-plane']" class="Publier"
                                                 @click="uploadComment(article.id)" />
                                         </span>
-                                        <!-- </button> -->
+
                                     </div>
                                 </div>
                             </div>
@@ -218,21 +165,31 @@
                                 </div>
                                 <div class="IconEditTrash" v-if="commKey.user.id === userId || user.role === 'admin'">
                                     <span>
-                                        <fa :icon="['fas', 'pencil-alt']" />
-                                    </span>
-                                    <span>
                                         <fa :icon="['far', 'trash-alt']" @click="deleteComment(commKey.id)" />
                                     </span>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- ---------------------FOOTER---------------------  -->
+            <div class="col-12 col-lg-12 col-xl-12">
+                <div class="card card-nav card-foot mb-4">
+                    <div class="card-footer">
+                        <img class="fondLogoNavbar footer-blue" src="../assets/Fondnav.png" alt=""
+                            title="Page Profil" />
+                        <img class="logo col-md-0" src="../assets/icon-left-font-monochrome-white.svg"
+                            alt="logo groupomania" />
 
-
-
+                        <!-- <a class="contact" mailto:contact@groupomanis.com >Contact</a> -->
+                    </div>
+                    <div class="navbar">
+                        <div class="link"></div>
+                        <span class="powerOff"> </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -242,8 +199,7 @@ import { mapGetters, mapState } from "vuex";
 import moment from "moment";
 import LoginVue from "../components/Login.vue";
 import store from "@/store/index.js";
-import navBar from "../components/Navbar.vue";
-import postDisplay from "../components/postDisplay.vue";
+
 const axios = require("axios");
 const FormData = require("form-data");
 
@@ -255,28 +211,10 @@ let userToken = user.token;
 
 export default {
     name: "post",
-    components: {
-        navBar,
-        postDisplay,
-    },
+    components: {},
     props: {},
     mounted: function () {
         this.userData(userId);
-        console.log("MOUNTED");
-        console.log("USER-DATA-->", this.$store.state.userData);
-
-        // this.GetNextUser()
-    },
-
-    updated: function () {
-        console.log("UPDATED");
-        console.log("ARTICLES-->", this.$store.state.artData);
-        console.log("COMMENT ALL DATA-->", this.$store.state.alldata);
-        //this.comments=this.$store.state.comment;
-        console.log("USER-DATA-->", this.$store.state.userData);
-        console.log("COMMENT 2-->", this.$store.state.comments);
-
-        // this.update(this.allData,this.comments)
     },
 
     data: function () {
@@ -288,8 +226,7 @@ export default {
             commentContent: "",
             fileSelectedComment: "",
             articleId: "",
-            likedArt: "",
-            dislikedArt: "",
+
 
             //-------ARTICLE FORM POST----------------//
 
@@ -297,71 +234,37 @@ export default {
             content: "",
             media: "",
 
-            // PostLiked: [],
-            likes: false,
-            dislikes: 0,
-            error:[],
-            likeErreur:false,
+
             //-------COMMUN DATA--------------//
 
             userId: userId,
             token: userToken,
 
             ArticleDate: "",
-            //UsersId: [],
 
-            UsersData: {
-                firstName: "",
-                lastName: "",
-            },
+
+
         };
     },
     beforeMount: function () {
         this.getAllArticle();
-        console.log("BEFORE MOUNT");
 
-        console.log("USER-DATA-->", userId);
     },
-    onMounted: function () {
-        console.log("ON MOUNTED");
 
-        console.log("USER-DATA-->", this.userD);
-        this.countLike();
-    },
-    // beforeCreate: function () {
-    //   console.log("BEFORE CREATED");
-    //   console.log("USER-DATA-->", )
-    // },
-    // beforeUpdate: function () {
-    //   console.log("BEFORE UPDATE");
-    //   console.log("USER-DATA-->", )
-    // },
+
     props: {},
     computed: {
-        //   ...mapGetters({
-        //     PostData:"allDatas"
-        //   }),
         ...mapState({
-            userC: "useData",
+
             user: "userData",
             dataArt: "artData",
-            likeArray: "likeArr",
-            CookUser: "user",
-            erreurLike:"errorLike",
-            likeList:"listLike",
+
+
         }),
     },
 
     watch: {
-        likedArt: function (val) {
-            console.log("watch", val);
-        },
-        likes: function (val) {
-            console.log("watch", val);
-        },
-        dislikedArt: function (val) {
-            console.log("watch", val);
-        },
+
 
         dataArt: function (val) {
             console.log("WATCH ARTDATA MODIF LIVE", val);
@@ -369,43 +272,13 @@ export default {
         user: function (val) {
             console.log("WATCH USER ", val);
         },
-        error: function (val) {
-            console.log("WATCH LIKE ", val);
-            this.likeErreur=true
-        },
+
     },
 
     methods: {
         goToProfil: function () {
             this.$router.push("/profil");
         },
-        liked: function (a, b, c) {
-            const likeData = { articleId: a, userId: userId, like: b, dislike: c };
-let left = this;
-            // console.log("LIKED", a, userId, b, c);
-            console.log("LIKED", a, b, c);
-            this.likedArt = likeData;
-            this.$store
-                .dispatch("likePost", likeData)
-
-                .then(function (response) {
-                    //handle success
-                    console.log("RES LIKE-POST POST-PAGE", response);
-                })
-                .catch(function (response) {
-                    //handle error
-                    console.log(response);
-                    left.error = response;
-                    
-                });
-        },
-        disliked: function (a, b) {
-            const likeData = { a, userId };
-            console.log("LIKED", a, userId, b);
-            this.dislikedArt = likeData;
-        },
-
-        
 
         //----------------DISCONNECT-----------------//
         disconnect() {
@@ -419,64 +292,6 @@ let left = this;
             return moment(value).format("DD/MM/YYYY à hh:mm");
         },
 
-        count(a, b) {
-            console.log("COUNT LIKED", a, b);
-            return a + b;
-        },
-
-        //-------------ARTICLES DATE ----------------------//
-
-        filtreArticleDate: function () {
-            const Arts = this.dataArt;
-            const date = this.ArticleDate;
-            const arts = Arts.filter((a) => a.createdAt < date);
-
-            console.log("Arts", Arts);
-            console.log(arts);
-            this.artsDate = arts;
-        },
-        //-----------------MAP---------------//
-        filtreMAP: function () {
-            const Arts = this.dataArt;
-            console.log("ARTS", Arts);
-            const comments = Arts.map((a) => a.comment);
-            //-----------indexation des article------------//
-            //  const indexed = Arts.reduce((acc, el)=>({
-            //    ...acc,
-            //    [el.createdAt]:el, // indexe les objets avec la clé argument "createdAt"
-            //  }),{});
-            //  console.log("INDEXED",indexed);
-            //---------------------------------------------//
-            //-----------indexation des article------------//
-            const indexed = Arts.reduce(
-                (acc, el) => ({
-                    ...acc,
-                    [el.id]: el, // indexe les objets avec la clé argument "createdAt"
-                }),
-                {}
-            );
-            console.log("INDEXED ", indexed);
-
-            //----------------CONCAT------------------//
-            const plano = Arts.reduce((acc, el) => acc.concat(el), []);
-            console.log("PLANO", plano);
-
-            //-----------------FOREACH-------------------//
-
-            const articul = this.articulos;
-            const foritch = Arts.forEach((item, index) => {
-                console.log("ITEM INDEX", index, item);
-            });
-            //  articul.push(foritch);
-            //   console.log("ARTICULOS", articul);
-            //   console.log("ARTICULOS", articul);
-            //   this.comment = comments;
-            //   const IdComments = comments.map((id) => id);
-
-            console.log("comments", this.comments);
-            console.log("comments2", comments);
-            console.log("Idcomments", IdComments);
-        },
         //--------------USER DATA----------------------//
 
         userData: function (ud) {
@@ -489,9 +304,6 @@ let left = this;
             const comm = [];
 
             console.log("UserId", UserId);
-            // console.log("Comment userData PostVue",comm);
-
-            //this.UsersId=UserId;
         },
 
         //------------ UPLOAD POST-----------------------//
@@ -524,6 +336,7 @@ let left = this;
                 .then(function (response) {
                     //handle success
                     console.log(response);
+                    location.reload();
                 })
                 .catch(function (response) {
                     //handle error
@@ -536,7 +349,7 @@ let left = this;
             this.fileSelected = event.target.files[0];
             console.log("fichier Image ", this.fileSelected);
         },
-//-----------------------UPLOAD COMMENT---------------------------
+        //-----------------------UPLOAD COMMENT---------------------------
 
         uploadComment: function (Aid) {
             if (this.fileSelected) {
@@ -545,7 +358,6 @@ let left = this;
                 bodyFormData.append("comment", this.CommentContent);
                 bodyFormData.append("userId", userId);
                 bodyFormData.append("articleId", Aid);
-                
 
                 console.table("FORM DATA AVEC IMAGE 2", ...bodyFormData.entries());
             } else {
@@ -561,6 +373,7 @@ let left = this;
 
                 .then(function (response) {
                     //handle success
+                    location.reload();
                     console.log(response);
                 })
                 .catch(function (response) {
@@ -568,55 +381,7 @@ let left = this;
                     console.log(response);
                 });
         },
-        //------------ UPLOAD COMMENT-----------------------//
-FileUploadCom(event) {
-            console.log("EVENT", event);
-            this.fileSelectedComment = event.target.files[0];
-            console.log("fichier Image", this.fileSelectedComment);
-        },
 
-        // uploadComment: function (Aid) {
-        //     console.log("fichier Image UPLOAD", this.fileSelectedComment);
-        //     if (this.fileSelectedComment) {
-        //         var bodyFormData = new FormData();
-        //         bodyFormData.append(
-        //             "media",
-        //             this.fileSelectedComment,
-        //             this.fileSelectedComment.name
-        //         );
-        //         bodyFormData.append("comment", this.CommentContent);
-        //         bodyFormData.append("userId", userId);
-        //         bodyFormData.append("articleId", Aid);
-
-        //         console.table(
-        //             "FORMDATA-COMMENT AVEC IMAGE------>",
-        //             ...bodyFormData.entries()
-        //         );
-        //     } else {
-        //         var bodyFormData = new FormData();
-        //         bodyFormData.append("comment", this.CommentContent);
-        //         bodyFormData.append("userId", userId);
-        //         bodyFormData.append("articleId", Aid);
-
-        //         console.table(
-        //             "FORMDATA-COMMENT SANS IMAGE------>",
-        //             ...bodyFormData.entries()
-        //         );
-        //     }
-        //     this.$store
-        //         .dispatch("uploadComment", bodyFormData)
-
-        //         .then(function (response) {
-        //             //handle success
-        //             console.log(response);
-        //         })
-        //         .catch(function (response) {
-        //             //handle error
-        //             console.log(response);
-        //         });
-        // },
-
-        
         //------------ GET ALL ARTICLE-----------------------//
         getAllArticle: function () {
             const self = this;
@@ -666,18 +431,6 @@ FileUploadCom(event) {
                     console.log("ERREUR REQUETE PROFIL DELETE COMMENT----->", err);
                 });
         },
-
-        //     GetNextUser() {
-        //   window.onscroll = () => {
-        //     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-        //     if (bottomOfWindow) {
-        //     //   axios.get(`https://randomuser.me/api/`).then(response => {
-        //     //     this.users.push(response.data.results[0]);
-        //     //   });
-        //     alert("il n'y en a plus ")
-        //     }
-        //   }
-        // }
     },
 };
 </script>
@@ -732,11 +485,13 @@ body {
     background-color: antiquewhite;
     background-attachment: fixed;
 }
-.erreurMessageLike{
+
+.erreurMessageLike {
     width: 100%;
-    display:flex;
+    display: flex;
     color: red;
 }
+
 /* // ------------------ ASIDE LEFT------------------- */
 li {
     list-style-type: none;
@@ -755,11 +510,13 @@ li {
 .card-nav {
     background-image: url("../assets/fondNavRed.png");
 }
-.NameUser{
-    color:white;
+
+.NameUser {
+    color: white;
     position: absolute;
-     bottom:.15rem;
+    bottom: 0.15rem;
 }
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -777,13 +534,13 @@ li {
     left: 1rem;
     width: 20%;
     top: 0.5rem;
-   
 }
-.userMedia{
-    width:2.5rem;
+
+.userMedia {
+    width: 2.5rem;
     height: 2.5rem;
     position: absolute;
-    top:.3rem;
+    top: 0.3rem;
 }
 
 /* // ------------------ CENTRE TOP------------------- */
@@ -801,21 +558,11 @@ li {
     align-items: center;
     justify-content: space-around;
 }
-.ico{
+
+.ico {
     display: flex;
 }
 
-/* .commentaire{
-    margin-top:;
-} */
-/* //---------------------POST EDIT------------------------_// */
-
-/* //---------------------POST------------------------_// */
-/* .colonne-centree
-{
-float: none;
-margin: 0 auto;
-} */
 .postImg {
     width: 98%;
     height: auto;
@@ -866,7 +613,7 @@ margin: 0 auto;
 .like {
     display: flex;
     flex-direction: row;
-   
+
     justify-content: space-around;
     position: relative;
     padding-left: 0.5rem;
@@ -1063,5 +810,16 @@ span {
 
 .default-style .ui-bordered {
     border: 1px solid rgba(24, 28, 33, 0.06);
+}
+
+.footer-blue {
+    height: 50px;
+}
+
+.contact {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    right: 2rem;
 }
 </style>

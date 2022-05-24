@@ -1,29 +1,31 @@
 <template>
- 
-  <router-view/>
+
+  <router-view />
 </template>
 
 <script>
-//import MyHome from './components/MyHome.vue'
+
 
 
 export default {
   name: 'App',
   components: {
-   //MyHome   
+
   }
 }
 </script>
 
 <style>
-html{
- background-color: rgb(252, 217, 164);
+html {
+  background-color: rgb(252, 217, 164);
 }
-*{
-  margin:0;
-  padding:0;
+
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,6 +34,6 @@ html{
   background-color: rgb(252, 217, 164);
   margin-top: 0px;
   background-attachment: fixed;
-  
+
 }
 </style>

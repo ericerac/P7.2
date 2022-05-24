@@ -223,21 +223,7 @@ if(!req.file){
   res.json(response);
 };
 
-//-----------DELETE USER----------------//
 
-//  exports.destroyUser = async (req, res) => {
-//    const params = req.query.id;
-//    const params1 = req.body.id;
-//    console.log("id TO DESTROY", params)
-//    const supprimer = await User.destroy({ where: { id: params.id } });
-//    console.log("SUPPRIMER",supprimer);
-//    console.log("PARAMS.ID",params.id)
-//    if (supprimer) {
-//      res.json({ message: "Compte Utilisateur supprimé" });
-//    } else {
-//      res.json({ message: "erreur 404" });
-//    }
-//  };
 
 exports.destroyUser = async (req, res) => {
   const params = req.query.id;
@@ -255,11 +241,7 @@ exports.destroyUser = async (req, res) => {
   } else {
     console.log("REQ.BODY.ID", params1);
     
-      // console.log("-------req--------", req);
-      // console.log("-------req.body One--------", req.body.Id);
-      // console.log("-------req.query One--------", req.query.role);
-      //const params = req.query.id;
-      // const params = req;
+      
       const UserOne = await user.findOne({
         where: { id: `${params1}` },
       });
@@ -278,14 +260,4 @@ exports.destroyUser = async (req, res) => {
   }
 };
 
-// exports.GetAdminUser = async (req) => {
-//   console.log("-------req--------", req);
-//   console.log("-------req.body One--------", req.body.Id);
-//   console.log("-------req.query One--------", req.query.role);
-//   //const params = req.query.id;
-//   const params = req;
-//   const adminUser = await user.findOne({
-//     where: { id: `${params}` },
-//   });
-//   res.json(adminUser);
-// };
+

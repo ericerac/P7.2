@@ -19,18 +19,10 @@ const Sequelize = require("sequelize");
 //const articleRoute = require('./routes/articles')
 const userRoutes = require("./routes/api/user");
 const ArtRoutes = require("./routes/api/articles");
-const commentRoutes = require('./routes/api/comment');
+ const commentRoutes = require('./routes/api/comment');
 const likeRoutes = require('./routes/api/like_dislike');
 
-//const UserModel = require('./models/users');
-//const userModel = UserModel(sequelize. Sequelize);
 
-// const user = require('./models/users')
-// const User = user(sequelize, Sequelize);
-// const article = require('./models/article')
-// const Article = article(sequelize, Sequelize);
-
-//db.sequelize.sync();
 
 //const router = express.Router;
 //app.use(router);

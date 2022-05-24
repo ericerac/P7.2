@@ -9,24 +9,7 @@ import VueCookies from "vue-cookies";
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
 });
-// const config = {
-//   headers:{
-//     Authorization:this.token
-//   }
-// };
-// let user = localStorage.getItem("user");
-// let userId = "";
-// let userToken = "";
-// if (!user) {
-//   user = {
-//     userId: -1,
-//     token: "",
-//   };
-// } else if (user) {
-//   const User = JSON.parse(user);
-//   userId = User.userId;
-//   userToken = User.token;
-// }
+
 let userId="";
 let userToken="";
 
@@ -46,12 +29,10 @@ const store = createStore({
     user: "",
     userId: "",
 //----------------_LIKE--------------//
-    errorLike:"",
-listLike:"",
+    
 
     PostData: {},
-    likeArr: "",
-    likeLength: "",
+    
     articles: "",
 
     updateUser: {
@@ -76,8 +57,7 @@ listLike:"",
     userData: "", // data user connected
     alldata: "",
     artData: "", // contenu des articles
-    comments: "",
-    usersId: "",
+    
   },
   mutations: {
     setStatus: (state, status) => {
@@ -308,16 +288,12 @@ listLike:"",
         .then((res) => {
           console.log("reponse", res.data);
           commit("AllsUsersData", res.data);
-          // const countArticle = res.data.article;
-          // commit("Articles",countArticle);
-          // //const countComment = res.data.comment.length;
-          // console.log("ARTICLES INDEX",countArticle);
-          //commit("Comments",countComment);
-
+          
           if (res) {
+            
             console.log("reponse", res.data);
           } else {
-            console.log("pas de data");
+            console.log("erreur data");
           }
         })
         .catch((err) => {

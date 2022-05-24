@@ -81,25 +81,11 @@ export default {
             password: "",
         };
     },
-    mounted: function () {
-        //  localStorage.removeItem("user");
-
-    },
+    
     computed: {
         ...mapState(["status"]),
     },
-    watch: {
-        //  firstName: (value) => {
-        //      console.log(value);
-        //    if (!value.match(/^[a-zA-Z-._àâéèêô´` ñÑî'ùûïÏäëüöÖÄçÀÂÉÈÔÙÛÇ]*$/)) {
-        //      console.log( "veuillez saisir uniquement des lettres et tirets. (pas de chiffres ni caractères spéciaux).")
-
-        //    } else {
-        //      firstNameErrorMsg.textContent = "";
-        //    }
-        //  },
-
-    },
+    
     methods: {
         goToSignup: function () {
             this.mode = "signup";
@@ -109,97 +95,7 @@ export default {
             this.mode = "login";
         },
 
-        //------------REGEX CONTROL---------------------//
-        // -------------------FORM-----------------------
-        // ------Grapping Span Error Messages----------
-        // let firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
-        // let lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
-        // let addressErrorMsg = document.querySelector("#addressErrorMsg");
-        // let cityErrorMsg = document.querySelector("#cityErrorMsg");
-        // let emailErrorMsg = document.querySelector("#emailErrorMsg");
-
-        // // -----function of inputs validation REGEX-----
-
-        // const firstNameCheck = (value) => {
-        //   if (!value.match(/^[a-zA-Z-._àâéèêô´` ñÑî'ùûïÏäëüöÖÄçÀÂÉÈÔÙÛÇ]*$/)) {
-        //     firstNameErrorMsg.textContent =
-        //       "veuillez saisir uniquement des lettres et tirets. (pas de chiffres ni caractères spéciaux).";
-        //   } else {
-        //     firstNameErrorMsg.textContent = "";
-        //   }
-        // };
-
-        // const lastNameCheck = (value) => {
-        //   if (!value.match(/^[a-zA-Z-._àâéèêô´`¨ ñÑî'ùûïÏäëüöÖÄçÀÂÉÈÔÙÛÇ]*$/)) {
-        //     lastNameErrorMsg.textContent =
-        //       "veuillez saisir uniquement des lettres et tirets (pas de chiffres ni caractères spéciaux).";
-        //   } else {
-        //     lastNameErrorMsg.textContent = "";
-        //   }
-        // };
-
-        // const addressCheck = (value) => {
-        //   if (!value.match(/^[a-zA-Z0-9 -._àâéèêô´` ñÑî'ùûïÏäÄçÀÂÉÈÔÙÛÇ]*$/)) {
-        //     addressErrorMsg.textContent =
-        //       "Veuillez ne pas saisir de caractères spéciaux.";
-        //   } else {
-        //     addressErrorMsg.textContent = "";
-        //   }
-        // };
-
-        // const cityCheck = (value) => {
-        //   if (!value.match(/^[a-zA-Zàâéèêô´` ñÑî'ùûïÏäÄçÀÂÉÈÔÙÛÇ]*$/)) {
-        //     cityErrorMsg.textContent = "Veuillez saisir uniquement des letrres.";
-        //   } else {
-        //     cityErrorMsg.textContent = "";
-        //   }
-        // };
-
-        // const emailCheck = (value) => {
-        //   if (!value.match(/^([\w\.\-][\&\+)@([\w\-]+)((\.(\w){2,3})+)$/)) {
-        //     emailErrorMsg.textContent =
-        //       "veuillez saisir une adresse électronique valide.";
-        //   } else {
-        //     emailErrorMsg.textContent = "";
-        //   }
-        // };
-
-        // //----- grap the form inputs-----
-
-        // let inputs = document.querySelectorAll('input[type="text"],[type="email"]');
-
-        // // ----listening the form inputs----
-
-        // const inputForm = inputs.forEach((input) => {
-        //   input.addEventListener("input", (e) => {
-        //     switch (e.target.id) {
-        //       case "firstName":
-        //         firstNameCheck(e.target.value);
-        //         break;
-
-        //       case "lastName":
-        //         lastNameCheck(e.target.value);
-        //         break;
-
-        //       case "address":
-        //         addressCheck(e.target.value);
-        //         break;
-
-        //       case "city":
-        //         cityCheck(e.target.value);
-        //         break;
-
-        //       case "email":
-        //         emailCheck(e.target.value);
-        //         break;
-        //       default:
-        //         null;
-        //         return input;
-        //     }
-        //   });
-        // });
-
-        // //  ------END FORM---------
+        
         // --------------- VALIDATION FORM-------------------//
         checkForm: function () {
             const errorFirstName = [];
@@ -222,9 +118,7 @@ export default {
                 this.errorLastName.push('* Le prénom ne doit pas contenir de caractères spéciaux');
                 return false
             }
-            //   else if(!this.validLastName(this.lastName)){
-
-            //   }
+            
             if (!this.Email) {
                 this.errorEmail.push("* l'adresse Email doit être renseignée.");
                 return false
@@ -234,11 +128,7 @@ export default {
                 return false
             }
 
-            //  if (!this.errorFirstName.length< 1 && !this.errorlastName.length< 1 && !this.errorEmail.length< 1) {
-            //      console.log("TOUT LE TEST FORM VALID");
-            //      this.signupPost();
-            //      return true;
-            //  }
+            
             this.signupPost();
 
         },
@@ -304,7 +194,7 @@ export default {
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 * {
     box-sizing: border-box;

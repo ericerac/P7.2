@@ -9,14 +9,14 @@ const Comment = db.comment;
 const articles = db.article;
 const User = db.users;
 const Dislike = db.disLike;
-// const sequelize = require('../config/db.config')
+
 
 const sequelize = new Sequelize(
   `${process.env.DB_NAME}`,
   `${process.env.USER_NAME}`,
   `${process.env.PASSWORD_DB}`,
   {
-    //require('../config/db.config)
+   
     host: "localhost",
     dialect: "mysql",
   }
@@ -118,6 +118,8 @@ exports.publish = async (req, res, next) => {
   }
 };
 
+
+
 //---------------UPDATEPOST---------------------//
 
 exports.updatePost = async (req, res) => {
@@ -135,11 +137,7 @@ exports.updatePost = async (req, res) => {
     {
       formData,
       content: formData.content,
-      userId: formData.userId,
-      likes: formData.likes,
-      // password:formData.password,
-
-      dislikes: formData.dislike,
+     
       media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     },
     {
@@ -166,7 +164,7 @@ exports.updatePost = async (req, res) => {
     });
   res.json(response);
 };
-//---------------DELETE-------------------- OK--//
+//---------------DELETE POST-------------------- OK--//
 exports.destroyArt = async (req, res) => {
   const params = req.query.id;
   console.log(params);

@@ -50,10 +50,6 @@ module.exports = (sequelize,type) => {
     }
     
   });
-  // User.associate = function(models) {
-    
-  //   User.hasMany(models.comment, {foreignKey: 'articletId', as: 'article'})
-  //   User.hasMany(models.comment, {foreignKey: 'commentId', as: 'comment'})
-  // };
+  
   return User;
 };

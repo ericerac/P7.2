@@ -11,7 +11,7 @@ router.get("/all",  artControl.published);
 router.get("/",  artControl.OnePublished); 
 router.put("/delete",  artControl.destroyArt); 
 
-//router.post("/login",  artControl.publish);
+
 
 router.post("/post", multer, artControl.publish);
 

@@ -7,18 +7,13 @@ const artControl = require('../../controllers/articles');
 const auth = require('../../middleWare/auth')
 
 
-// router.get("/",  likeDislike.liked);                 // FALTA AUTH
-// router.get("/",  likeDislike.disliked);  
-//     // FALTA AUTH
-// router.put("/",  likeDislike.liker);                // FALTA AUTH
-// router.put("/",  likeDislike.disliker);        // FALTA AUTH
 
 
 
- router.post("/post",  likeDislike.postLike); //table relationelle
-//   router.put("/like",  likeDislike.pushLike); // ajout table a
+ router.post("/post",auth,  likeDislike.postLike); //table relationelle
 
- router.get("/all",  likeDislike.AllLike);
-// router.post("/dislike",  likeDislike.publish);
+
+//  router.get("/all",  likeDislike.AllLike);
+
 
 module.exports = router;

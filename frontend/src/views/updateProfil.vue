@@ -9,10 +9,7 @@
                     <span class="form-title"> Modifiez votre profil</span>
                        
                    <div class=" form-group">
-        <!-- <div class="profile ">
-          <img id="userImg" v-bind:src="user.media" class="rounded-circle" width="80" alt="Photo de profil" />
-     <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> 
-        </div> -->
+        
                 </div>
                     
                     <div class="form-group" >
@@ -38,10 +35,7 @@
                         <label>Email</label>
                         <input v-model="user.email"  type="email" name="email" class="form-control" placeholder="Email" required />
                     </div>    
-                    <!-- <div class="form-group">
-                        <label>Mot de passe</label>
-                        <input  v-model="password" type="password" name="password" class="form-control" placeholder=" Votre mot de passe" required>
-                    </div> -->
+                    
                     
                     <div class="form-group">
                       <label class="btn-action">Modifier</label>
@@ -117,13 +111,7 @@ export default {
       token: userToken,
     };
   },
-  props: {
-      // firstNameDefault:{
-      //     type:String,
-      //     default:user.firstName,}
-      
-
-  },
+  
   computed: {
     ...mapState({
       user: "userData",
@@ -217,65 +205,7 @@ return
          
         })
     }
-    //--------------------UPDATE-USER 1.1---------------------//
-
-    // updateUser: function () {
-    //   console.log("UPDATE USER HOME PAGE");
-    //   const getFormData = (formData =>
-    //     Object.entries(formData).reduce((fd, [key, val]) => {
-    //       if (Array.isArray(val)) {
-    //         val.forEach((v) => fd.append(key, v));
-    //       } else {
-    //         fd.append(key, val);
-    //       }
-    //       return fd;
-    //     }), new FormData());
-
-    //   console.log("media", this.fileSelected)
-    //   this.$store
-    //     .dispatch("updateUser", this.getFormData
-    //     //{
-    //       //  userId: this.formData.userId,
-    //       //  firstName: this.formData.firstName,
-    //       //  lastName: this.formData.lastName,
-    //       //  email: this.formData.email,
-    //       //  password: this.formData.password,
-    //       //  media: this.formData.media,
-    //     //}
-    //     )
-    //     .then(function (response) {
-    //       console.log("reponse", response);
-    //       // self.loginPost();
-    //       self.$router.push("/HomePage");
-    //       goToHomePage();
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
-    //-------------UPDATE USER 2--------------_();
-    // updateUser(e) {
-    //   e.preventDefault();
-    //   const fd = new FormData();
-    //   fd.append(e.currentTarget);
-    //   console.log("NEW FORM-->", fd);
-
-    //   //Data.append('corp',this.formData);
-    //   // let fileName = this.fileSelected;
-    //   // let naame = fileName.name;
-    //   // fd.append('file',this.fileSelected,this.fileSelected.name);
-
-    //   // console.log("DATA",fd);
-    //   // console.log("file", this.fileSelected);
-    //   // this.$store.dispatch("updateUser", fd);
-    // },
-
-    //----------------LOGOUT-------------------(())
-
-    // logOut: (state) => {
-    //   localStorage.removeItem('user')
-    //   return
-    // },
+    
   },
 };
 

@@ -61,22 +61,6 @@ db.comment.belongsTo(db.users, {
   as: "user",
 });
 
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//       db[modelName].associate(db);
-//   }
-// });
+
 module.exports = db;
 
-// db.role.belongsToMany(db.user, {
-//     through: "user_roles",
-//     foreignKey: "roleId",
-//     otherKey: "userId"
-//   });
-//   db.user.belongsToMany(db.role, {
-//     through: "user_roles",
-//     foreignKey: "userId",
-//     otherKey: "roleId"
-//   });
-//   db.ROLES = ["user", "admin", "moderator"];
-// `likes_ibfk_2` index table likes articleId
