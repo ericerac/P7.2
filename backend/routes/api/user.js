@@ -9,7 +9,7 @@ const bruteforce = new ExpressBrute(store);
 
 
 
-router.post("/signup",  userControl.signup);
+router.post("/signup",passWord,  userControl.signup);
 //router.post("/login",  userControl.login);
 router.post(
     "/login",
@@ -23,10 +23,10 @@ router.post(
 router.get("/user/multi",  userControl.GetMultiUsers);
 router.get("/user",  userControl.GetOneUser);
 
-router.put("/user/delete",  userControl.destroyUser);
-router.put("/user/update", multer,  userControl.updateUser);
+router.put("/user/delete",auth,  userControl.destroyUser);
+router.put("/user/update",auth, multer,  userControl.updateUser);
 
-router.get("/user/all",  userControl.GetAllUsers);
-router.get("/adminUser",  userControl.GetAdminUser);
+router.get("/user/all",auth,  userControl.GetAllUsers);
+// router.get("/adminUser",auth,  userControl.GetAdminUser);
 
 module.exports = router;

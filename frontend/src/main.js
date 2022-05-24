@@ -11,7 +11,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { faCaretSquareDown } from "@fortawesome/free-regular-svg-icons";
 import { fa } from "@fortawesome/free-regular-svg-icons";
-import { f } from '@fortawesome/free-solid-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faUser);
 //Vue.component('font-awesome-icon', FontAwesomeIcon)

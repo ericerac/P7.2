@@ -1,38 +1,36 @@
 <template>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
+<!-- <Navbar/> -->
     <div class="container">
         <DetailUser v-if="detailUser === true" />
         <div class="row">
-            <div class="col-md-12">
-                <div class="card ccard radius-t-0 h-100">
+            <div class="col-md-12 bloc-list">
+                <div class="card ccard radius-t-0 h-auto">
                     <div class="position-tl w-102 border-t-3 brc-primary-tp3 ml-n1px mt-n1px"></div>
                     <!-- the blue line on top -->
 
                     <div class="card-header  pb-2 brc-secondary-l3">
                         <div>
-                            <span @click="goToProfilPage()">
-                                Page profil
-                            </span>
-                            <span @click="goToPageAdmin()">
-                                Page administrateur
-                            </span>
+                            <span class="retour" @click="goToProfilPage()">
                             <i class="fa fa-arrow-left  text-95"></i>
+                                Retour
+                            </span>
+                            
+                            
                         </div>
                         <div>
-                            <h5 class="card-title mb-2 mb-md-0 text-dark-m3">
+                            <h5 class="card-title mb-0 mb-md-0 text-dark-m3">
                                 UTILISATEURS
                             </h5>
-                        </div>
-                        <div>
-                            <input v-model="searchUser" type="search" id="search" placeholder="rechercher"
+                        
+                            <input class="search-input mb-0 mt-1 pb-0" v-model="searchUser" type="search" id="search" placeholder="rechercher"
                                 autocomplete="off" />
 
                         </div>
                     </div>
                     <div role="button"
                         class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
-                        <span class="mr-25  overflow text-center  brc-secondary-m2  shadow-sm d-zoom-2">
+                        <span class="text-default-d3 text-90 text-600">
                             Avatar
                         </span>
 
@@ -40,7 +38,7 @@
                             Nom Prénom
                         </span>
 
-                        <span class="ml-auto text-dark-l2 text-wrap">
+                        <span class="text-default-d3 text-90 text-600 text-wrap">
                             Inscrit depuis le:
                             <span class="text-80">
 
@@ -53,7 +51,7 @@
                         <div role="button" @click="UserDetail(user.id)"
                             class="d-flex flex-wrap align-items-center my-2 bgc-secondary-l4 bgc-h-secondary-l3 radius-1 p-25 d-style">
                             <span
-                                class="mr-25 w-4 h-4 overflow-hidden text-center border-1 brc-secondary-m2 radius-round shadow-sm d-zoom-2">
+                                class="mr-25 w-4 h-4 overflow-hidden text-center border-3 text-default-d3 text-90 text-600 radius-round shadow-sm d-zoom-1">
                                 <fa :icon="['far', 'trash-alt']" @click="deleteUser(user.id)" />
                             </span>
                             <span
@@ -66,7 +64,7 @@
                                 {{ user.firstName }} {{ }} {{ user.lastName }}
                             </span>
 
-                            <span class="ml-auto fs-6 text-dark-l2 text-wrap">
+                            <span class="ml-auto text-default-d3 text-90 text-600 text-wrap">
                                 {{ date(user.createdAt) }}
 
                             </span>
@@ -91,6 +89,8 @@
 import { mapState } from "vuex";
 import DetailUser from "./DetailUser.vue";
 import moment from "moment"
+import NavbarVue from "./Navbar.vue";
+import Navbar from "./Navbar.vue";
 
 export default {
     name: "UserList",
@@ -101,10 +101,14 @@ export default {
         };
     },
     components: {
-        DetailUser
-    },
+    DetailUser,
+    NavbarVue,
+    Navbar
+},
 
     beforeMount: function () {
+        //  this.$store
+        //     .dispatch("getAllUsersData")
         // this.getAllArticle();
         // this.$store
         //     .dispatch("getAllUsersData")
@@ -116,9 +120,17 @@ export default {
         console.log("USER-DATA-->")
     },
     mounted: function () {
-        this.$store
-            .dispatch("getAllUsersData")
+        // this.$store
+        //     .dispatch("getAllUsersData")
         console.log(" MOUNTED USER-LIST ARTICLES");
+    },
+    created:function (){
+this.$store
+            .dispatch("getAllUsersData")
+    },
+    update:function(){
+this.$store
+            .dispatch("getAllUsersData")
     },
     computed: {
         ...mapState({
@@ -127,6 +139,7 @@ export default {
             OneUserData: "useData",
             ArtCount: "articles",
         }),
+
         filterUser() {
             return this.AllUsers.filter((a) => {
 return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
@@ -152,7 +165,7 @@ return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
         },
 
         goToProfilPage: function () {
-            this.$router.push("../profil");
+            this.$router.push("../components/profil");
         },
         goToAdminPage: function () {
             console.log("GO-TO-ADMIN-PAGE");
@@ -172,7 +185,7 @@ return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
                         console.log("RESOLVE PROFIL PAGE DELETE ------>", resolve.data.message);
                         alert("le compte a bien été supprimé")
                         // response.json({ message: "Compte supprimé" })
-                        this.$router.push("/UserList");
+                        this.$router.push("/profil");
                     }
                 }).catch((err) => {
                     console.log("ERREUR REQUETE PROFIL DELETE USER------>", err);
@@ -185,11 +198,24 @@ return a.firstName.toLowerCase().includes(this.searchUser.toLowerCase());
 </script>
 
 <style scoped>
+html{
+      background: rgb(252, 85, 85);
+}
 body {
-    margin-top: 20px;
+    margin-top: 0px;
     background: #eee;
 }
-
+.row{
+   
+    background: rgb(252, 85, 85);
+    border-radius: 20px;
+}
+/* .bloc-list{
+    margin:0 auto;
+} */
+.retour{
+    cursor: pointer;
+}
 .card-header {
 
     display: flex;
@@ -200,6 +226,11 @@ body {
 
 .card {
     box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+    
+}
+.ccard {
+    box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+    width: 100%;
 }
 
 .card-body {
@@ -210,6 +241,9 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.search-input{
+
 }
 
 span {

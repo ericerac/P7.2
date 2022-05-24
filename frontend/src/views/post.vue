@@ -237,7 +237,9 @@ this.userData(userId);
       fileSelected: "",
       content: "",
       media: "",
-      PostLiked: [],
+      // PostLiked: [],
+      likes:"",
+      dislikes:"",
       //-------COMMUN DATA--------------//
 
       userId: userId,
@@ -405,12 +407,16 @@ this.userData(userId);
         bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
         bodyFormData.append("content", this.content);
         bodyFormData.append("userId", userId);
+        bodyFormData.append("likes",this.likes);
+        bodyFormData.append("dislikes",this.dislikes);
 
         console.table("FORM DATA AVEC IMAGE ", ...bodyFormData.entries());
       } else {
         var bodyFormData = new FormData();
         bodyFormData.append("content", this.content);
         bodyFormData.append("userId", userId);
+        bodyFormData.append("likes",this.likes);
+        bodyFormData.append("dislikes",this.dislikes);
 
         console.table("FORM DATA SANS IMAGE ", ...bodyFormData.entries());
       }

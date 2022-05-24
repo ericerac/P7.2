@@ -29,9 +29,9 @@ html{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
- 
+  background-color: rgb(252, 217, 164);
+  margin-top: 0px;
+  background-attachment: fixed;
   
 }
 </style>

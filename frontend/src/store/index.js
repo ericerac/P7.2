@@ -3,8 +3,8 @@ import { createStore } from "vuex";
 const axios = require("axios");
 import setHeaders from "../utils/setHaeaders";
 const mapState = require("vuex");
-import Vue from 'vue'
-import VueCookies from 'vue-cookies'
+import Vue from "vue";
+import VueCookies from "vue-cookies";
 
 const instance = axios.create({
   baseURL: "http://localhost:3000/",
@@ -14,33 +14,45 @@ const instance = axios.create({
 //     Authorization:this.token
 //   }
 // };
-let user = localStorage.getItem("user");
-let userId = "";
-let userToken = "";
-if (!user) {
-  user = {
-    userId: -1,
-    token: "",
-  };
-} else if (user) {
-  const User = JSON.parse(user);
-  userId = User.userId;
-  userToken = User.token;
-}
+// let user = localStorage.getItem("user");
+// let userId = "";
+// let userToken = "";
+// if (!user) {
+//   user = {
+//     userId: -1,
+//     token: "",
+//   };
+// } else if (user) {
+//   const User = JSON.parse(user);
+//   userId = User.userId;
+//   userToken = User.token;
+// }
+let userId="";
+let userToken="";
 
+let userCookies = $cookies.get("user");
+if(!userCookies){
+  
+}else{
+console.log("USER COOKIES", userCookies);
+ userId = userCookies.userId;
+ userToken = userCookies.token;}
 
-
-console.log(userId, userToken);
+// console.log(userId, userToken);
 
 const store = createStore({
   state: {
     status: "",
-    user: user,
+    user: "",
+    userId: "",
+//----------------_LIKE--------------//
+    errorLike:"",
+listLike:"",
 
     PostData: {},
-likeArr:"",
+    likeArr: "",
     likeLength: "",
-    articles:"",
+    articles: "",
 
     updateUser: {
       firstName: "",
@@ -76,9 +88,9 @@ likeArr:"",
     },
     logUser: (state, user) => {
       // localStorage.setItem("user", JSON.stringify(user));
-      console.log("LOCALSTORAGE", user);
+      console.log("COOKIES", user);
       state.user = user;
-      $cookies.set("user",JSON.stringify(user));
+      $cookies.set("user", JSON.stringify(user));
     },
     UserData: (state, userData) => {
       state.userData = userData;
@@ -98,8 +110,11 @@ likeArr:"",
     AllData: (state, alldata) => {
       state.alldata = alldata;
     },
-    LikeLength: (state, likeLength) => {
-      state.likeLength = likeLength;
+    listLike: (state, listLike) => {
+      state.listLike = listLike;
+    },
+    errorLike: (state, errorLike) => {
+      state.errorLike = errorLike;
     },
     // dat_Post:(state,data)=>{
 
@@ -117,14 +132,6 @@ likeArr:"",
     UsersId: (state, usersId) => {
       state.usersId = usersId;
     },
-
-    logOut: (state) => {
-      state.user = {
-        userId: -1,
-        token: "",
-      };
-      //localStorage.removeItem('user')
-    },
   },
   getters: {
     allDatas: (state) => state.artData,
@@ -136,6 +143,10 @@ likeArr:"",
     // dat_Post:({commit}, data)=>{
     //   commit("dat_Post",data)
     // },
+
+    //----------DISCONNECT----------------//
+
+    //------------- SIGNUP LOGIN-------------------_//
 
     signupPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
@@ -176,11 +187,13 @@ likeArr:"",
           });
       });
     },
-    //----------DELETE USER---------------//
+
+    //-----------------DELETE USER--------------------//
 
     deleteUser: ({ commit }, data) => {
       const token = userToken;
-      const userId = data;
+       const id = userId;
+      const userDel = data;
       const headers = {
         headers: {
           Authorization: `Bearer + ${token}`,
@@ -188,12 +201,16 @@ likeArr:"",
       };
       console.log("INDEX-TOKEN-DELETE------->", token);
       console.log("INDEX-ID-DELETE------>", data);
+      console.log("INDEX-ID-DELETE------>", userId);
+      const body = {
+        id:userId
+      }
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
-          .put(`/user/delete?id=${userId}`, {
+          .put(`/user/delete?id=${userDel}`,body,{
             headers: {
-              Authorization: `Bearer + ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           })
           .then((response) => {
@@ -211,22 +228,8 @@ likeArr:"",
       });
     },
 
-    //----------DELETE USER FETCH---------------//
-    // async deleteUser(data){
-    //   try{
-    // this.Saxios.setHeader('Authorization', `Bearer ${JSON.parse(localStorage.getItem("user")).token}`);
-    // console.log("ENTRE THIS AXIOS ET AWAIT AXIOS");
-    // await axios.post(`http://localhost:3000/user/delete?id=${data}`)
-    //   } catch(e){
-    // const error = new Error(" ça va pas bien");
-    //   }
-    // },
+    
 
-    //----------DISCONNECT----------------//
-    disconnect: () => {
-      localStorage.removeItem("user");
-      this.$router.push("/");
-    },
     //----------UPDATE USER 1------------//
 
     updateUser: ({ commit }, Data) => {
@@ -237,7 +240,11 @@ likeArr:"",
 
       return new Promise((resolve, reject) => {
         instance
-          .put("/user/update", Data)
+          .put("/user/update", Data,{
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((response) => {
             console.log("RESPONSE INDEX -->", response);
 
@@ -254,17 +261,21 @@ likeArr:"",
       });
     },
 
-    //-----------------GET USER DATA----------------(())
+    //-----------------GET ONE USER DATA----------------(())
     getUserData: ({ commit }, data) => {
       const token = userToken;
       console.log("TOKEN", token);
       const userId = data;
       console.log(data);
       instance
-        .get(`/user?id=${userId}`)
+        .get(`/user?id=${userId}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           console.log("REPONSE USER-DATA INDEX STORE", res.data);
-         
+
           const countArticle = res.data.article.length;
           commit("Articles", countArticle);
           const countComment = res.data.comment.length;
@@ -291,7 +302,7 @@ likeArr:"",
       await instance
         .get(`/user/all`, {
           headers: {
-            Authorization: `Basic ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -312,10 +323,10 @@ likeArr:"",
         .catch((err) => {
           console.log("reponse err", err);
 
-          //console.log("ça m'énerve encore");
+          
         });
     },
-    //-----------UPLOAD POST-----------------//uploadComment
+    //-----------UPLOAD POST-----------------//
     uploadPost: ({ commit }, data) => {
       console.log("UPLOAD-POST INDEX", ...data.entries());
       commit("setStatus", "loading");
@@ -325,7 +336,7 @@ likeArr:"",
         instance
           .post("/article/post", data, {
             headers: {
-              Authorization: `Basic ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           })
           .then((response) => {
@@ -343,6 +354,36 @@ likeArr:"",
       });
     },
 
+    //-------------------UPDATEPOST-----------------//
+
+    updatePost: ({ commit }, Data) => {
+      const token = userToken;
+      console.log("TOKEN", token);
+      commit("setStatus", "loading");
+      console.log("UPDATE USER INDEX", Data.entries());
+
+      return new Promise((resolve, reject) => {
+        instance
+          .put("/article/update", Data,{
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("RESPONSE INDEX -->", response);
+
+            commit("setStatus", "loading");
+            resolve(response);
+            console.log("REPONSE UPDATE", response);
+          })
+          .catch((err) => {
+            commit("setStatus", "error_create");
+            reject(err);
+            console.log("ERREUR", err);
+            console.log("ça ne fonctionne pas");
+          });
+      });
+    },
     //-----------UPLOAD COMMENT-----------------//uploadComment
     uploadComment: ({ commit }, data) => {
       console.log("UPLOAD-POST INDEX", ...data.entries());
@@ -353,7 +394,7 @@ likeArr:"",
         instance
           .post("/comment/post", data, {
             headers: {
-              Authorization: `Basic ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           })
           .then((response) => {
@@ -373,7 +414,7 @@ likeArr:"",
     getAllArticle: ({ commit }) => {
       const token = userToken;
       const Us = userId;
-      
+
       console.log("TOKEN", token);
       commit("setStatus", "loading");
       const self = this;
@@ -392,29 +433,29 @@ likeArr:"",
             const Artrevers = res.data.reverse();
             commit("ArtData", Artrevers);
             const resData = res.data;
-             const art = resData.article;
+            const art = resData.article;
             // const like = art.like.length;
 
             // console.log(" LIKE-LENGTH  INDEX");
             const comments = resData.map((a) => a.comment);
-         const sommeLike = resData.map(item => item.dislike);
-         commit("LikeArr",sommeLike)
-          const liked = sommeLike.map(l => l.like).reduce((a, b) => a + b);
+            const sommeLike = resData.map((item) => item.dislike);
+            commit("LikeArr", sommeLike);
+            const liked = sommeLike.map((l) => l.like).reduce((a, b) => a + b);
             commit("Comments", comments);
             // commit("ALL COMMENTS", comments);
             console.log("RESDATA  COMMENTS", res.data);
-            
+
             // console.log("res GET INDEX LIKE", sommeLike);
             // for (let l of sommeLike)  {
             //   const liked = sommeLike.map(l => l[0]);
             //   // .reduce((a, b) => a + b);
             //   likeData.push(liked)
             // }
-            console.table("RES.DATA LIKE INDEX 1",sommeLike);
-            console.table("RES.DATA LIKE INDEX 2",sommeLike[2]);
+            console.table("RES.DATA LIKE INDEX 1", sommeLike);
+            commit
+            console.table("RES.DATA LIKE INDEX 2", sommeLike[2]);
             // console.log("BOUCLE INDEX USER-ID", usersId);
             commit("UsersId", usersId);
-            
 
             resolve(res);
           })
@@ -485,13 +526,12 @@ likeArr:"",
     },
 
     //----------------- LIKE POST----------------//
-    
+
     likePost: ({ commit }, data) => {
       const token = userToken;
-      // const userId = userId;
-
-      console.log("INDEX-TOKEN-DELETE COMMENT------->", token);
-      console.log("INDEX-ID-DELETE COMMENT------>", data);
+      // const userId = userId
+      console.log("INDEX-TOKEN-LIKE-POST------->", token);
+      console.log("INDEX-ID-LIKE-POST------>", data);
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
@@ -501,44 +541,63 @@ likeArr:"",
             },
           })
           .then((response) => {
-            commit("setStatus", "");
-
+            
+            console.log("RESPONSE LIKE INDEX",response);
+            instance.put(`/art/like`);
+            
             resolve(response);
           })
           .catch((err) => {
             commit("setStatus", "error_login");
-            console.log("ça deconne LIKE-POST index store");
+            commit("errorLike", err);
+            console.log("Erreur 401 LIKE-POST index store",err);
             reject(err);
           });
       });
     },
+
+    // ------------------MULTI LIKE------------------//
+    // likePost: ({ commit }, data) => {
+    //   const token = userToken;
+    //   // const userId = userId;
+
+    //   console.log("INDEX-TOKEN-DELETE COMMENT------->", token);
+    //   console.log("INDEX-ID-DELETE COMMENT------>", data);
+    //   commit("setStatus", "loading");
+
+    // // const url = "http://localhost:3000/like/post";
+
+    // // const reqDislikeTable = "http://localhost:3000/like/post";
+    // // const One = axios.put(reqDislikeTable);
+
+    // // const reqArtLike = `http://localhost:3000/art/like,`;
+    // //  const Two = axios.post(reqArtLike);
+
+    // //  const likeDislike = (axios.all([One, Two]).then(
+    // //    // reste a definir les conditions de réponses pour chaque requete
+    // //    axios.spread((...response) => {
+    // //      console.log("---------RESPONSE----------", response.data);
+
+    // //      console.log("---------REQUETE----------",  One, Two);
+
+    // //      console.log("---------Response Type----------", One.blob);
+
+    // //      const ResponseOne = response[0];
+
+    // //      const ResponseTwo = response[1];
+
+    // //      console.log(
+    // //        "ResponseOne",
+    // //        ResponseOne.data,
+    // //        "ResponseTWo",
+    // //        ResponseTwo.data
+    // //      );
+    // //    })
+    // //  ).catch = () => {
+    // //    res.json({message:"ça marche pas"})
+    // //  })
+    // },
   }, // fin actions
 });
 
 export default store;
-
-// const One = axios.get(reqAll);
-// const url = "http://localhost:3000/article?";
-// const reqAll = "http://localhost:3000/article/all";
-// const reqOne = `http://localhost:3000/article?${One}`;
-
-//  const Two = axios.get(reqOne);
-
-//  const getArticle = (axios.all([One, Two]).then(
-//    // reste a definir les conditions de éponses pour chaque requete
-//    axios.spread((...response) => {
-//      console.log("---------RESPONSE----------", response.data);
-//      console.log("---------REQUETE----------",  One, Two);
-//      console.log("---------Response Type----------", One.blob);
-//      const ResponseOne = response[0];
-//      const ResponseTwo = response[1];
-//      console.log(
-//        "ResponseOne",
-//        ResponseOne.data,
-//        "ResponseTWo",
-//        ResponseTwo.data
-//      );
-//    })
-//  ).catch = () => {
-//    res.json({message:"ça marche pas"})
-//  })

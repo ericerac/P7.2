@@ -112,12 +112,60 @@ exports.publish = async (req, res, next) => {
   });
   console.log("ART-POST", artPost);
   if (publish) {
-    res.json(publish);
+    res.status(200).json(publish);
   } else {
     res.json({ message: "erreur 404" });
   }
 };
 
+//---------------UPDATEPOST---------------------//
+
+exports.updatePost = async (req, res) => {
+  console.log("req.body 1 -->", req.body);
+  const form = "";
+  form.toString(req.body).valueOf(req.body);
+  console.log("req.body 2 -->", form);
+  const formData = req.body;
+  console.log("req.body-->", formData.entries());
+  const id = formData.articleId;
+
+  console.log("req.body.userId-->", id);
+
+  const response = await article.update(
+    {
+      formData,
+      content: formData.content,
+      userId: formData.userId,
+      likes: formData.likes,
+      // password:formData.password,
+
+      dislikes: formData.dislike,
+      media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+    },
+    {
+      where: { id: id },
+    }
+  )
+    .then((data) => {
+      console.log("REUSSI");
+      const res = {
+        success: true,
+        data: data,
+        message: "Mise à jour réussie",
+      };
+      return res;
+    })
+    .catch((error) => {
+      console.log("ERREUR");
+      const res = {
+        success: false,
+        error: error,
+        message: "Echec lors de la mise à jour",
+      };
+      return res;
+    });
+  res.json(response);
+};
 //---------------DELETE-------------------- OK--//
 exports.destroyArt = async (req, res) => {
   const params = req.query.id;

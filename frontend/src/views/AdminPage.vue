@@ -211,7 +211,7 @@ this.$store
     goToUsersData: function () {
          this.$store.dispatch("getAllUsersData")
          
-            this.$router.push("../components/UserList ");
+            this.$router.push("/UserList ");
        
         
       // this.$router.push("../components/UserList ");

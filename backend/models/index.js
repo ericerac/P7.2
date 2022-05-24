@@ -29,6 +29,7 @@ db.comment = CommentModel(sequelize, Sequelize);
 
 db.users.hasMany(db.article, { as: "article" });
 db.users.hasMany(db.comment, { as: "comment" });
+db.users.hasMany(db.disLike, { as: "dislike" });
 
 
 db.article.hasMany(db.comment, { as: "comment" });

@@ -10,6 +10,9 @@ module.exports = (sequelize, type) => {
       like: {
         type: type.INTEGER(),
       },
+      dislike: {
+        type: type.INTEGER(),
+      },
       
       userId: {
         type: type.UUID,

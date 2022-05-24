@@ -14,46 +14,19 @@ const sequelize = new Sequelize(
   }
 );
 
-// module.exports = async (req, res, next) => {
-//   const token = req.headers.authorization.split(" ")[1]; // récupère le token dans le header
-//   console.log("-----token-----", token);
-//   const decodedToken = jwt.verify(token, `${process.env.TOKEN}`); // décrypte le token
-//   const userId = decodedToken.id; // récupère l'id du token
-//   console.log("-----decodedToken.id-----", userId);
-//   console.log("----req.body.id-----", req.body.id);
 
-//   const oneUser = await user
-//     .findOne({
-//       where: { id: `${userId}` },
-//     })
-//     .then((res) => {
-//       console.log("RES", res.role);
-//       let adm = res.role;
-//       console.log("RES2", adm);
-
-//       if (adm != admin) {
-//         console.log(" autorisé");
-//         next();
-//       } else {
-//         console.log("NON AUTH");
-//       }
-//     })
-//     .catch(
-//       res.status(401).json({
-//         error: new Error(),
-//         message: "Requete non autorisée",
-//       })
-//     );
-// };
 
 module.exports = async (req, res, next) => {
   console.log("HEADERS------>>>", req.headers );
+  console.log("HEADERS-AUTHO----->>>", req.headers.authorization );
+
   if(!req.headers.authorization){
     console.log("HEADERS AUTH------>>>", req.headers.authorization );
+
    
     res.status(401).json({
       error: new Error(),
-      message: "Requete  sans token",
+      message: "Requete  sans token ou token invalide",
     });
     return
   }
@@ -76,7 +49,7 @@ module.exports = async (req, res, next) => {
       let admin = "admin";
       console.log("RES2", role);
 
-      if (role === admin) {
+      if (role === admin) {  // reponse si UserId  correspond a l'admin
         console.log(" ADMIN");
         return true;
       } else {
@@ -89,13 +62,17 @@ module.exports = async (req, res, next) => {
     console.log("on est là try auth");
     //console.log(userId);
 
-    console.log("oneUser", oneUser);
+    console.log("oneUser", oneUser); 
 
-    if (req.query.id == userId || oneUser == true) {
-      // compare l'id du token avec l'id utilisateur
-      next(); // si Id identhique ça continu " la route est protégée"
-    } else {
+    if (req.body.id && req.body.id === !userId  ) { // compare l'id du token avec l'id utilisateur
+      if (oneUser = true){
+        next();
+      }
+      
       throw "Id utilisateur invalide";
+    }  else {
+      
+      next(); // si Id identhique ça continu " la route est protégée"
     }
   } catch {
     res.status(401).json({

@@ -13,12 +13,14 @@ module.exports = (sequelize, type) => {
       media:{
         type:type.CHAR(255)
       },
-    //  like:{
-    //    type:type.INTEGER(36)
-    //  },
-    //  dislike:{
-    //    type:type.INTEGER(36)
-    //  },
+     likes:{
+       type:type.INTEGER(),
+       defaultValue: 0,
+     },
+     dislikes:{
+       type:type.INTEGER(),
+       defaultValue: 0,
+     },
       userId:{
         type:type.INTEGER(36)
       },
@@ -27,10 +29,6 @@ module.exports = (sequelize, type) => {
       
     });
 
-      // Article.associate = function(models) {
-      //   article.belongsTo(models.user, {foreignKey: 'userId', as: 'user'});
-      //   article.hasMany(models.comment, {foreignKey: 'commentId', as: 'comment'})
-      // };
     
     return Article;
   };

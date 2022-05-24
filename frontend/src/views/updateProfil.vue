@@ -16,7 +16,7 @@
                 </div>
                     
                     <div class="form-group" >
-                        <label>Choissez une photo de profil</label>
+                        <label>Choisissez une photo de profil</label>
                         <input
           type="file"
           name="image"
@@ -28,7 +28,7 @@
                     </div>    
                     <div class="form-group" >
                         <label>Nom</label>
-                        <input v-model="user.firstName" type="text" name="nom" class="form-control"   placeholder="firstNameDefault" required />
+                        <input v-model="user.firstName" type="text" name="nom" class="form-control"   placeholder="Nom" required />
                     </div>    
                     <div class="form-group" >
                         <label>Prénom</label>
@@ -44,8 +44,10 @@
                     </div> -->
                     
                     <div class="form-group">
-                        <input  name="submit" class="btn btn-primary btn-lg btn-block" keyUp="enter" value="Modifier" @click="updateUser(userId)">
-                        <input  name="retour" class="btn btn-primary btn-lg btn-block" keyUp="enter" value="Retour" @click="goToProfil">
+                      <label class="btn-action">Modifier</label>
+                        <input  name="submit" class="btn btn-primary mt-1 btn-lg btn-block" keyUp="enter" value="Modifier" @click="updateUser(userId)">
+                        <label class="btn-action">Retour</label>
+                        <input  name="retour" class="btn btn-primary mt-1 btn-lg btn-block" keyUp="enter" value="Retour" @click="goToProfil">
                     </div>
                     </div>
    
@@ -68,9 +70,10 @@ const FormData = require("form-data");
 import { axios } from "axios";
 import moment from "moment";
 
-let user = localStorage.getItem("user");
-let userId = "";
-let userToken = "";
+let userCookies = $cookies.get("user");
+console.log("USER COOKIES", userCookies);
+let userId = userCookies.userId;
+let userToken = userCookies.token;
 
 
 console.log(userId, userToken);
@@ -80,7 +83,7 @@ export default {
   beforeMount: function () {
 
     console.log("BEFORE MOUNT");
-    console.log("USER-DATA-->", user)
+    // console.log("USER-DATA-->", user)
   },
   onMounted: function () {
     console.log("ON MOUNTED");
@@ -88,30 +91,13 @@ export default {
   },
   beforeCreate: function () {
     console.log("BEFORE CREATED");
-    console.log("USER-DATA-->", user)
+    // console.log("USER-DATA-->", user)
   },
-  beforeUpdate: function () {
-    console.log("BEFORE UPDATE");
-    console.log("USER-DATA-->", user)
-  },
+  
   mounted: function () {
 
 
-    let user = localStorage.getItem("user");
-    let userId = "";
-    let userToken = "";
-    if (!user) {
-      user = {
-        userId: -1,
-        token: "",
-      };
-    } else if (user) {
-      const User = JSON.parse(user);
-      userId = User.userId;
-      userToken = User.token;
-    }
-
-    console.log("USER-ID i TOKEN 1-------->", userId, userToken);
+    
 
     this.getUserData(userId);
   },
@@ -132,16 +118,16 @@ export default {
     };
   },
   props: {
-      firstNameDefault:{
-          type:String,
-          default:user.firstName,}
+      // firstNameDefault:{
+      //     type:String,
+      //     default:user.firstName,}
       
 
   },
   computed: {
     ...mapState({
       user: "userData",
-      usersId: "userId",
+      
     }),
   },
   methods: {
@@ -177,12 +163,20 @@ export default {
       // upload file
       
       var bodyFormData = new FormData();
-      
-      bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
+      if(this.fileSelected){
+
+        
+        bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
       bodyFormData.append("firstName", this.user.firstName);
       bodyFormData.append("lastName", this.user.lastName);
       bodyFormData.append("email", this.user.email);
       bodyFormData.append("userId", this.user.id);
+        }else{
+          bodyFormData.append("firstName", this.user.firstName);
+      bodyFormData.append("lastName", this.user.lastName);
+      bodyFormData.append("email", this.user.email);
+      bodyFormData.append("userId", this.user.id);
+        };
      console.log(" USER-ID UPDATE-USER UPDATE-PROFIL ----> ",this.user.id);
       console.table("FORMDATA UPDATE-USER UPDATE-PROFIL ------>", ...bodyFormData.entries());
       this.$store
@@ -413,9 +407,7 @@ body :-ms-input-placeholder {
     background-color: #fff;
     margin: 0 auto;    
 }
-.logo{
-  
-}
+
 .line-logo{
   width: 88%;
   border:2px solid white;
@@ -490,18 +482,24 @@ button, input {
 }
 .btn-primary {
     color: #fff;
-    background-color: #000;
+    background-color: rgb(134, 2, 2);
     border-color: #FFF;
+   
 }
 .btn-group-lg > .btn, .btn-lg {
     padding: .5rem 1rem;
     font-size: 1.25rem;
     line-height: 1.5;
-    border-radius: .3rem;
+    border-radius: 1rem;
+    
 }
 .btn-block {
     display: block;
     width: 100%;
+}
+.btn-action{
+  /* visibility: hidden; */
+  display:none;
 }
 [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled), button:not(:disabled) {
     cursor: pointer;

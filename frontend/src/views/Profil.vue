@@ -1,57 +1,91 @@
 <template>
-  <div class="container d-flex justify-content-center align-items-center">
-    <div class="card">
-      <div class="mt-2 text-center">
-        <router-link class="text d-block mb-3" to="/user/admin" v-if="userData.role == 'admin'"><button
-            class="btn btn-primary btn-sm follow pt-20px">
-            Page administrateur
-          </button>
-          <button class="btn btn-danger btn-sm follow mt-0" @click="deleteUser(userData.id)">
-          Effacer mon compte
-        </button>
-        </router-link>
-<div class="user text-center">
-        
+  <div class="container  d-flex justify-content-center align-items-center">
+
+    <div class="row col-12 col-lg-10 col-xl-10">
+      <div class="navBar mb-3 pd-3 d-flex justify-content-between align-items-center">
+        <img class="logoTop" src="../assets/icon-left-font-monochrome-white.svg" alt="logo groupomania">
+        <div .class="powerOff">
+          <fa :icon="['fas', 'power-off']" @click="disconnect()" />
+        </div>
       </div>
-        <button class="btn btn-sm follow mt-0" @click="goToUpdateProfil">Modifier mon profil</button>
-        <button class="btn btn-sm follow mt-0" @click="goToFilActu">
-          Allez au fil d'actualité
-        </button>
-        
-      </div>
+      <div class="card  ">
+        <div class=" col-md-12 mt-2 text-center">
+          <div class="user text-center">
+
+          </div>
+          <div class="user text-center">
+            <span v-if="userData.role == 'admin'">
+              <button class="btn btn-sm follow mt-0" @click="goToUsersData">
+                Liste Des utilsateurs
+              </button>
+            </span>
+
+            <span>
+              <button class="btn btn-sm follow mt-0" @click="goToUpdateProfil">Modifier mon profil</button>
+            </span>
+            <span>
+              <button class="btn btn-sm follow mt-0" @click="goToFilActu">
+                Allez au fil d'actualité
+              </button>
+            </span>
+            <span>
+              <button class="btn btn-danger btn-sm follow mt-0" @click="deleteUser(userData.id)">
+                Effacer mon compte
+              </button>
+            </span>
+          </div>
+
+        </div>
+
+        <div class="upper">
+          <div class="profile">
+            <img v-if="!userData.media" id="userImg" src="../assets/icon.png " class="rounded-circle" width="80"
+              alt="logo groupomanias" />
       
-      <div class="upper">
-        <div class="profile">
-          <img v-if="!userData.media" id="userImg" src="../assets/icon.png " class="rounded-circle" width="80" alt="logo groupomanias" />
-          <div class=" mt-1 text-center "><span  v-if="!userData.media">Choisissez une photo de profil</span></div>
-          <img v-if="userData.media" id="userImg" v-bind:src="userData.media" class="rounded-circle" width="80" alt="Photo de profil" />
-          <!-- <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> -->
+            <img v-if="userData.media" id="userImg" v-bind:src="userData.media" class="rounded-circle" width="80"
+              alt="Photo de profil" />
+            
+          </div>
+        </div>
+
+ <div class="avis-media mt-1 mb-0 ">
+<p  v-if="!userData.media">Choisissez une photo de profil</p>
+</div>
+        <div class="mt-1 text-center">
+
+          <h4 class="mt-3">{{ userData.firstName }} {{ userData.lastName }}</h4>
+
+          <p id="adminUser" v-if="userData.role == 'admin'">Compte administrateur</p>
+
+          <div class="d-flex list-Foot justify-content-evently align-items-center px-1">
+            <div class="stats">
+              <h6 class="mt-3">Articles</h6>
+              <span class="stat">{{ CountArticle }}</span>
+            </div>
+
+            <div class="stats">
+              <h6 class="mt-3">Commentaires</h6>
+              <span class="stat">{{ CountComment }}</span>
+            </div>
+
+            <div class="stats">
+              <h6 class="mt-3">Inscrit le:</h6>
+              <span class="stat">{{ dateTime(userData.createdAt) }}</span>
+            </div>
+            
+          </div>
         </div>
       </div>
 
-      
+      <div class="navBar mt-3  d-flex justify-content-between ">
+        <img class="logoTop" src="../assets/icon-left-font-monochrome-white.svg" alt="logo groupomania">
 
-      <div class="mt-5 text-center">
-        <h4 class="mt-3">{{ userData.firstName }} {{ userData.lastName }}</h4>
+        <ul class="footerList">
+          <li>Contact</li>
+          <li>Avis légal</li>
 
-        <p id="adminUser" v-if="userData.role == 'admin'">Compte administrateur</p>
+        </ul>
 
-        <div class="d-flex justify-content-between align-items-center mt-4 px-3">
-          <div class="stats">
-            <h6 class="mt-3">Articles</h6>
-            <span class="stat">{{ CountArticle }}</span>
-          </div>
-
-          <div class="stats">
-            <h6 class="mt-3">Commentaires</h6>
-            <span class="stat">{{ CountComment }}</span>
-          </div>
-
-          <div class="stats">
-            <h6 class="mt-3">Inscrit le:</h6>
-            <span class="stat">{{ dateTime(userData.createdAt) }}</span>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -65,10 +99,14 @@ import { axios } from "axios";
 import moment from "moment";
 
 
-// let userCookies = $cookies.get("user");
-// console.log("USER COOKIES",userCookies);
-// let userId = userCookies.userId;
-// let userToken = userCookies.token;
+let userCookies = $cookies.get("user");
+if(!userCookies){
+  
+}else{
+console.log("USER COOKIES", userCookies);
+let userId = userCookies.userId;
+let userToken = userCookies.token;}
+
 
 // const User = JSON.parse(user);
 // if (User) {
@@ -84,36 +122,36 @@ export default {
 
   beforeMount: function () {
     console.log("BEFORE MOUNT");
-let userCookies = $cookies.get("user");
-console.log("USER COOKIES",userCookies);
-this.userId = userCookies.userId;
-this.userToken = userCookies.token;
-    
+    let userCookies = $cookies.get("user");
+    console.log("USER COOKIES", userCookies);
+    this.userId = userCookies.userId;
+    this.userToken = userCookies.token;
+
     console.log("USER-DATA-->", this.userData);
     this.getUserData(this.userId);
   },
   // onMounted: function () {
   //   console.log("ON MOUNTED");
-  
+
   // },
-   beforeCreate: function () {
-     console.log("BEFORE CREATED");
-   console.log("USER-DATA-->", this.userData);
-  // beforeUpdate: function () {
-  //   console.log("BEFORE UPDATE");
-  
-   },
-   created: function () {
-     console.log("CREATED");
-   console.log("USER-DATA-->", this.userData);
-  // beforeUpdate: function () {
-  //   console.log("BEFORE UPDATE");
-  
-   },
-   
+  beforeCreate: function () {
+    console.log("BEFORE CREATED");
+    console.log("USER-DATA-->", this.userData);
+    // beforeUpdate: function () {
+    //   console.log("BEFORE UPDATE");
+
+  },
+  created: function () {
+    console.log("CREATED");
+    console.log("USER-DATA-->", this.userData);
+    // beforeUpdate: function () {
+    //   console.log("BEFORE UPDATE");
+
+  },
+
   mounted: function () {
 
-console.log("USER-DATA MOOUNTED PROFIL",this.userData);
+    console.log("USER-DATA MOOUNTED PROFIL", this.userData);
     // let user = $cookies.get(JSON.parse("user"));
     // let userId =user.useiId;
     // let userToken = user.token;
@@ -148,7 +186,7 @@ console.log("USER-DATA MOOUNTED PROFIL",this.userData);
       email: "",
       password: "",
 
-      userToken:"",
+      userToken: "",
     };
   },
   props: {},
@@ -170,7 +208,18 @@ console.log("USER-DATA MOOUNTED PROFIL",this.userData);
     },
 
     goToUpdateProfil: function () {
-     this.$router.push("/updateProfil");
+      this.$router.push("/updateProfil");
+    },
+    goToUsersData: function () {
+      this.$store.dispatch("getAllUsersData")
+
+      this.$router.push("../components/UserList ");
+    },
+    //----------------DISCONNECT-----------------//
+    disconnect() {
+      console.log("DISCONNECT");
+      $cookies.remove("user");
+      this.$router.push("/");
     },
 
     FileUpload(event) {
@@ -187,7 +236,7 @@ console.log("USER-DATA MOOUNTED PROFIL",this.userData);
     getUserData(UserId) {
       this.$store
         .dispatch("getUserData", UserId)
-        .then((response)=> {
+        .then((response) => {
           console.log("REPONSE USER DATA Profil", response);
         })
         .catch((err) => {
@@ -221,24 +270,25 @@ console.log("USER-DATA MOOUNTED PROFIL",this.userData);
 
     //--------------------DELETE USER-------------------------//
 
-    deleteUser(data){
+    deleteUser(data) {
       const result = window.confirm("Voulez-vous vraiment supprimer votre compte ?")
-      if(!result){
-return
+      if (!result) {
+        return
       }
       console.log("USER-ID PROFIL DELETE", data);
       this.$store
         .dispatch("deleteUser", data)
-        .then((resolve) => {
-          if(resolve){
-            console.log("RESOLVE PROFIL PAGE DELETE ------>",resolve.data.message);
+        .then((res) => {
+          if (res) {
+            console.log("RESOLVE PROFIL PAGE DELETE ------>", res.data.message);
             alert("votre compte a été supprimé")
             // response.json({ message: "Compte supprimé" })
-          this.$router.push("/");
-            }
-        }).catch((err)=>{
-          console.log("ERREUR REQUETE PROFIL DELETE USER------>",err);
-         
+            // 
+            this.disconnect()
+          }
+        }).catch((err) => {
+          console.log("ERREUR REQUETE PROFIL DELETE USER------>", err);
+
         })
     }
     //--------------------UPDATE-USER 1.1---------------------//
@@ -313,18 +363,42 @@ body {
   font-weight: 300;
 }
 
+#app {
+  background-image: url("../assets/fondNavRed.png");
+  background-repeat: unset;
+  /* opacity:.7; */
+}
+
 .container {
   height: 100vh;
 }
 
+.navBar {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  width: 100%;
+  height: 50px;
+  background-image: url("../assets/Fondnav.png ");
+  border-radius: .7rem;
+  color: white;
+
+}
+
+.logoTop {
+  width: 20%;
+  height: auto;
+  box-shadow: 2px 2px 20px solid black;
+}
+
 .card {
-  width: 380px;
+  /* width: 380px; */
   border: none;
   border-radius: 15px;
   padding: 8px;
   background-color: #fff;
   position: relative;
-  height: 370px;
+  height: auto;
 }
 
 .upper {
@@ -344,20 +418,25 @@ body {
 .profile img {
   height: 80px;
   width: 80px;
-  margin-top: 2px;
+  margin: 2px auto;
 }
 
 .profile {
-  position: absolute;
-  top: 100px;
-  left: 38%;
+
   height: 90px;
   width: 90px;
   border: 3px solid #fff;
+  margin: 2px auto;
 
   border-radius: 50%;
 }
+.avis-media{
+ 
+  width: 100%;
+  
+  text-align: center;
 
+}
 .follow {
   border-radius: 15px;
   padding-left: 20px;
@@ -365,7 +444,30 @@ body {
   height: 35px;
 }
 
-.stats span {
+/* .stats span {
   font-size: 20px;
+} */
+
+.footerList {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-between;
+  align-items: center;
+
+}
+.ul{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.list-Foot{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+ul li {
+  margin-left: 2rem;
+  font-size: 1rem;
+  margin-top: 1rem;
 }
 </style>

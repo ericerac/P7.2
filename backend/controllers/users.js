@@ -15,6 +15,7 @@ const { use } = require("../app");
 const Comment = db.comment;
 const articles = db.article;
 const user = db.users;
+const dislikes = db.disLike;
 
 //-------------------------------------//
 const sequelize = new Sequelize(
@@ -32,8 +33,6 @@ const User = UserModel(sequelize, Sequelize);
 //---------------------------------------------//
 
 exports.deleteAll = (req, res) => {};
-
-
 
 // -----------------SIGNUP-----------------------//
 
@@ -61,7 +60,7 @@ exports.signup = async (req, res, next) => {
 // -----------------LOGIN----------------------//
 
 exports.login = async (req, res, next) => {
-  console.log("on est au login", req.query);
+  console.log("on est au login", req.body);
   const user = await User.findOne({ where: { email: req.body.email } });
   if (user) {
     const password_valid = await bcrypt.compare(
@@ -69,7 +68,7 @@ exports.login = async (req, res, next) => {
       user.password
     );
     if (password_valid) {
-      token = jwt.sign({ id: user.id }, `${process.env.TOKEN}`,{
+      token = jwt.sign({ id: user.id }, `${process.env.TOKEN}`, {
         expiresIn: "12h",
       });
       res
@@ -97,6 +96,10 @@ exports.GetOneUser = async (req, res, next) => {
       {
         model: articles,
         as: "article",
+      },
+      {
+        model: dislikes,
+        as: "dislike",
       },
       {
         model: Comment,
@@ -133,10 +136,9 @@ exports.GetAllUsers = async (req, res, next) => {
 
 exports.GetMultiUsers = async (req, res, next) => {
   const params = req.body.id;
-  let AllUsers=[];
+  let AllUsers = [];
   //const params = req.query.id;
-  for(let i of params){
-
+  for (let i of params) {
     const allUsers = await user.findAll({
       where: { id: params },
       include: [
@@ -152,15 +154,14 @@ exports.GetMultiUsers = async (req, res, next) => {
       distinct: true,
       col: "articleId",
     });
-    AllUsers=allUsers;
-  };
-  if(AllUsers){
-
-    res.json(AllUsers);
-  }else{
-    res.status("erreur 404")
+    AllUsers = allUsers;
   }
-}
+  if (AllUsers) {
+    res.json(AllUsers);
+  } else {
+    res.status("erreur 404");
+  }
+};
 
 //------------UPDATE PROFIL USER---------------//
 
@@ -174,22 +175,34 @@ exports.updateUser = async (req, res) => {
   const id = formData.userId;
 
   console.log("req.body.userId-->", id);
+if(!req.file){
+  Data={
+  firstName: formData.firstName,
+  lastName: formData.lastName,
+  email: formData.email,
+  // password:formData.password,
+  userId: formData.userId,}
+}else{
+  Data={
 
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    email: formData.email,
+    // password:formData.password,
+    userId: formData.userId,
+    media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+  }
+
+}
   const response = await User.update(
     {
-      formData,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      // password:formData.password,
-      userId: formData.userId,
-      media: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+      ...Data
     },
     {
       where: { id: id },
     }
   )
-    .then((data) => {
+  .then((data) => {
       console.log("REUSSI");
       const res = {
         success: true,
@@ -212,55 +225,67 @@ exports.updateUser = async (req, res) => {
 
 //-----------DELETE USER----------------//
 
-// exports.destroyUser = async (req, res) => {
-//   //const params = req.query.id;
-//   const params = req.body;
-//   console.log("id TO DESTROY", params);
-
-  
-//   const supprimer = await User.destroy({ where: { id: params.id } });
-//   console.log("SUPPRIMER",supprimer);
-//   console.log("PARAMS.ID",params.id);
-
-//   if (supprimer) {
-//     res.json({ message: "Compte Utilisateur supprimé" });
-//   } else {
-//     res.json({ message: "erreur 404" });
-//   }
-// };
+//  exports.destroyUser = async (req, res) => {
+//    const params = req.query.id;
+//    const params1 = req.body.id;
+//    console.log("id TO DESTROY", params)
+//    const supprimer = await User.destroy({ where: { id: params.id } });
+//    console.log("SUPPRIMER",supprimer);
+//    console.log("PARAMS.ID",params.id)
+//    if (supprimer) {
+//      res.json({ message: "Compte Utilisateur supprimé" });
+//    } else {
+//      res.json({ message: "erreur 404" });
+//    }
+//  };
 
 exports.destroyUser = async (req, res) => {
   const params = req.query.id;
-  console.log("id", params);
-  console.log("HEADERS------>>>", req.headers.authorization );
+  const params1 = req.body.id;
+  console.log("REQ.QUERY.ID", params);
+  console.log("REQ.BODY.ID", params1);
+  // console.log("HEADERS------>>>", req.headers.authorization);
   const UserTo = await user.findOne({
     where: { id: `${params}` },
-    
   });
-  if(!UserTo){
-    res.json({message:"l'utilisateur n'existe pas"})
-  }else{
-
-    console.log("id", params);
-    const suprimmer = await User.destroy({ where: { id: params } });
-    if (suprimmer) {
-      res.json({ message: "Compte utilisateur supprimé" });
-    } else {
-      res.json({ message: "erreur 404" });
-    }
+  console.log("USER-TO",UserTo);
+  if (!UserTo) {
+     res.json({ message: "l'utilisateur n'existe pas" });
+     return
+  } else {
+    console.log("REQ.BODY.ID", params1);
+    
+      // console.log("-------req--------", req);
+      // console.log("-------req.body One--------", req.body.Id);
+      // console.log("-------req.query One--------", req.query.role);
+      //const params = req.query.id;
+      // const params = req;
+      const UserOne = await user.findOne({
+        where: { id: `${params1}` },
+      });
+      console.log("USER-ONE",UserOne);
+      console.log("USER-TO",UserTo);
+      if (!UserOne.role === "admin" || UserOne.id != UserTo.id) {
+        res.status(401).json({message:" requete non autorisée"})
+        
+        } else {
+          const suprimmer = await User.destroy({ where: { id: params } });
+          if (suprimmer) {
+            res.json({ message: "Compte utilisateur supprimé" });
+        }
+      }
+    
   }
 };
 
-exports.GetAdminUser = async (req) => {
-
-  console.log("-------req--------", req );
-  console.log("-------req.body One--------", req.body.Id);
-  console.log("-------req.query One--------", req.query.role);
-  //const params = req.query.id;
-  const params = req;
-  const adminUser = await user.findOne({
-    where: { id: `${params}` },
-    
-  });
-  res.json(adminUser);
-};
+// exports.GetAdminUser = async (req) => {
+//   console.log("-------req--------", req);
+//   console.log("-------req.body One--------", req.body.Id);
+//   console.log("-------req.query One--------", req.query.role);
+//   //const params = req.query.id;
+//   const params = req;
+//   const adminUser = await user.findOne({
+//     where: { id: `${params}` },
+//   });
+//   res.json(adminUser);
+// };

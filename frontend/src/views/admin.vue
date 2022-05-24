@@ -135,7 +135,7 @@ this.$store
     goToUsersData: function () {
          this.$store.dispatch("getAllUsersData")
          
-            this.$router.push("../components/UserList ");
+            this.$router.push("@/views/UserList ");
        
         
       // this.$router.push("../components/UserList ");
