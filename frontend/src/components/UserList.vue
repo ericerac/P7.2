@@ -242,9 +242,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
 }
-.search-input{
 
-}
 
 span {
     width: 30%;
