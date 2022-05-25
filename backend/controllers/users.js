@@ -53,7 +53,8 @@ exports.signup = async (req, res, next) => {
 
     console.log(User);
   } else {
-    res.status(404).json({ message: "Email utilisateur existant" });
+     res.status(404).json({ message: "Email utilisateur existant" });
+    
   }
 };
 

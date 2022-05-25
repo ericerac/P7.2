@@ -12,7 +12,7 @@
                     <label for="nom">Nom</label>
                     <input v-model="firstName" type="text" name="nom" class="form-control" placeholder="Nom" required />
                 </div>
-                <div class="errorFirstName" v-if="errorFirstName.length">
+                <div class="error" v-if="errorFirstName.length">
                     {{ errorFirstName }}
                 </div>
                 <div class="form-group" v-if="mode == 'signup'">
@@ -20,15 +20,15 @@
                     <input v-model="lastName" type="text" name="prenom" class="form-control" placeholder="Prénom"
                         required />
                 </div>
-                <div class="errorLastName" v-if="errorLastName.length">
-                    {{ errorLastName }}
+                <div class="error" v-if="errorLastName.length">
+                    {{ errorlastName }}
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input v-model="Email" type="email" name="email" class="form-control" placeholder="Email"
                         required />
                 </div>
-                <div class="errorEmail" v-if="errorEmail.length">
+                <div class="error" v-if="errorEmail.length">
                     {{ errorEmail }}
                 </div>
                 <div class="form-group">
@@ -37,7 +37,9 @@
                     <input v-model="password" type="password" name="password" class="form-control"
                         placeholder=" Votre mot de passe" required>
                 </div>
-
+<div class="error" v-if="errorPassword.length">
+                    {{ errorPassword }}
+                </div>
                 <div class="form-group">
                     <label class="btn-label">Se connecter</label>
                     <input v-if="mode == 'login'" name="submit" class="btn btn-primary btn-lg btn-block" :keyUp="enter"
@@ -74,6 +76,9 @@ export default {
             errorFirstName: [],
             errorLastName: [],
             errorEmail: [],
+            errorPassword: [],
+
+            lastNameErrorMsg:"",
 
             firstName: "",
             lastName: "",
@@ -85,7 +90,17 @@ export default {
     computed: {
         ...mapState(["status"]),
     },
-    
+    // watch:{
+    //     lastName:(val)=>{
+    //         const that = this;
+    // console.log(val);
+    // if(val.match(/^[a-zA-Z-._àâéèêô´`¨ ñÑî'ùûïÏäëüöÖÄçÀÂÉÈÔÙÛÇ]*$/)){
+    // // that.lastNameErrorMsg="veuillez saisir uniquement des lettres et tirets (pas de chiffres ni caractères spéciaux).";
+    // that.lastNameErrorMsg=val;
+    //     }
+    // },
+
+    // },
     methods: {
         goToSignup: function () {
             this.mode = "signup";
@@ -127,6 +142,14 @@ export default {
                 this.errorEmail.push('* Adresse email non valide');
                 return false
             }
+            if (!this.password) {
+                this.errorPassword.push("* l'adresse Email doit être renseignée.");
+                return false
+            } else if (!this.validPassword(this.password)) {
+                console.log("THIS:PASSWORD", this.password);
+                this.errorPassword.push('* Mot de passe de 8 a 20 caractères dont 1 special et 1 chiffre * ');
+                return false
+            }
 
             
             this.signupPost();
@@ -146,6 +169,11 @@ export default {
             console.log("VALIDATION EMAIL", email);
             var re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
             return re.test(email);
+        },
+        validPassword: function (password) {
+            console.log("VALIDATION PASSWORD", password);
+            var re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?~_+-=|\]).{8,32}$/g;
+            return re.test(password);
         },
 
         //-------------SIGNUP----------------------//
@@ -458,6 +486,13 @@ label {
     display: inline-block;
     margin-bottom: .5rem;
     font-weight: 700;
+}
+.error{
+width: 100%;
+height: 50px;
+padding:3px;
+color:red;
+background-color: white;
 }
 
 .copyright {

@@ -28,8 +28,8 @@ const store = createStore({
     status: "",
     user: "",
     userId: "",
-//----------------_LIKE--------------//
-    
+
+logoutErr:"",
 
     PostData: {},
     
@@ -90,11 +90,9 @@ const store = createStore({
     AllData: (state, alldata) => {
       state.alldata = alldata;
     },
-    listLike: (state, listLike) => {
-      state.listLike = listLike;
-    },
-    errorLike: (state, errorLike) => {
-      state.errorLike = errorLike;
+    
+    logoutErr: (state, logoutErr) => {
+      state.logoutErr = logoutErr;
     },
     // dat_Post:(state,data)=>{
 
@@ -113,39 +111,39 @@ const store = createStore({
       state.usersId = usersId;
     },
   },
-  getters: {
-    allDatas: (state) => state.artData,
+  watch:{
+    logoutErr:(val)=>{
+console.log(val);
+    }
   },
-
   computed: {},
 
   actions: {
-    // dat_Post:({commit}, data)=>{
-    //   commit("dat_Post",data)
-    // },
+    
 
-    //----------DISCONNECT----------------//
-
+    
     //------------- SIGNUP LOGIN-------------------_//
 
-    signupPost: ({ commit }, userData) => {
-      commit("setStatus", "loading");
-      return new Promise((resolve, reject,response) => {
-        instance
-          .post("/signup", userData)
-          .then((res) => {
-            
-            console.log("REPONSE",res);
-            resolve(res) ;
-            
-          })
-          .catch((err) => {
-            commit("setStatus", "error_create");
-            reject(err)
-            console.log("ERREUR",err);
-          });
-      });
-    },
+    
+    
+     signupPost: ({ commit }, userData) => {
+       commit("setStatus", "loading");
+       return new Promise((resolve, reject,response) => {
+         instance
+           .post("/signup", userData)
+           .then((res) => {
+        
+             console.log("REPONSE",res);
+             resolve(res) ;
+        
+           })
+           .catch((err) => {
+             commit("logoutErr", err);
+             reject(err)
+             console.log("ERREUR",err);
+           });
+       })
+     },
 
     loginPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
@@ -163,7 +161,7 @@ const store = createStore({
           .catch((err) => {
             commit("setStatus", "error_login");
 
-            console.log("ça deconne login index store", err);
+            console.log("ERREUR", err);
             reject(err);
           });
       });
