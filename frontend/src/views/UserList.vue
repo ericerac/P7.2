@@ -10,12 +10,12 @@
                     <!-- the blue line on top -->
 
                     <div class="card-header  pb-2 brc-secondary-l3">
-                        <div>
+                        <div class="head-left ">
                             <span class="retour" @click="goToProfilPage()">
                                 <i class="fa fa-arrow-left  text-95"></i>
                                 Retour
                             </span>
-
+<img class="logoTop" src="../assets/icon-left-font-monochrome-black.svg" alt="logo groupomania">
 
                         </div>
                         <div>
@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <DetailUser v-show="DetailUser" />
+        
     </div>
 
 
@@ -89,48 +89,42 @@
 import { mapState } from "vuex";
  console.log(" BEFORE tout");
 import moment from "moment"
-
+import store from "@/store/index.js";
 
 export default {
-    name: "UserList",
+    name: "userList",
     data: function () {
         return {
             detailUser: true,
             searchUser: "",
         };
     },
-watch:{
 
- AllUsers: function (val) {
-            if(val){
-location.reload();
-            }
-        },
-},
 
 beforeCreate:()=>{
     console.log(" BEFORE CREATE");
+    
 },
-beforeRouteEnter:()=>{
-    console.log(" BEFORE ROUTE");
-},
-    beforeMount:()=>{
-        location.reload();
-         console.log(" BEFORE MOUNT");
-    },
-    mounted: function () {
+// beforeRouteEnter:()=>{
+//     console.log(" BEFORE ROUTE");
+// },
+//     beforeMount:()=>{
+//         // location.reload();
+//          console.log(" BEFORE MOUNT");
+//     },
+//     mounted: function () {
        
-        console.log(" MOUNTED USER-LIST ARTICLES");
-    },
-    created: function () {
+//         console.log(" MOUNTED USER-LIST ARTICLES");
+//     },
+     created: function () {
         this.$store
             .dispatch("getAllUsersData")
-            location.reload();
-    },
-    update: function () {
-        this.$store
-            .dispatch("getAllUsersData")
-    },
+             // location.reload();
+     },
+//     update: function () {
+//         // this.$store
+//         //     .dispatch("getAllUsersData")
+//     },
     computed: {
         ...mapState({
             AllUsers: "allsUsersData",
@@ -188,6 +182,7 @@ beforeRouteEnter:()=>{
                     }
                 }).catch((err) => {
                     console.log("ERREUR REQUETE PROFIL DELETE USER------>", err);
+                    alert("Requete refusée")
 
                 })
         }
@@ -214,6 +209,13 @@ body {
 
 .retour {
     cursor: pointer;
+    text-align: start;
+}
+.head-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: flex-start;
 }
 
 .card-header {
@@ -254,9 +256,9 @@ span {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    min-width: 375px;
     margin: 0 auto;
-    width: 90%;
+    width: 95%;
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;

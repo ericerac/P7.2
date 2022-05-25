@@ -15,7 +15,7 @@
           </div>
           <div class="user text-center">
             <span v-if="userData.role == 'admin'">
-              <button class="btn btn-sm follow mt-0" @click="goToUsersData()">
+              <button class="btn btn-sm follow mt-0" @click="goToUsersData">
                 Liste Des utilsateurs
               </button>
             </span>
@@ -81,7 +81,7 @@
         <img class="logoTop" src="../assets/icon-left-font-monochrome-white.svg" alt="logo groupomania">
 
         <ul class="footerList">
-          <li>Contact</li>
+          <li><a class="contact" href="mailto:contact@groupomania.com" >Contact</a></li>
           <li>Avis légal</li>
 
         </ul>
@@ -93,7 +93,7 @@
 
 <script>
 import { mapState } from "vuex";
-//import FormData from 'form-data';
+
 const FormData = require("form-data");
 import { axios } from "axios";
 import moment from "moment";
@@ -146,7 +146,7 @@ export default {
       fileSelected: null,
       name: "",
 
-      url: "http://localhost:8080",
+      
 
       userId: "",
       firstName: "",
@@ -166,6 +166,11 @@ export default {
       UpdateData: "formData",
       usersId: "userId",
     }),
+goToUsersData: function () {
+      //  this.$store.dispatch("getAllUsersData")
+
+       this.$router.push("/UserList");
+    },
   },
   methods: {
     goToProfil: function () {
@@ -178,11 +183,12 @@ export default {
     goToUpdateProfil: function () {
       this.$router.push("/updateProfil");
     },
-    goToUsersData: function () {
-       this.$store.dispatch("getAllUsersData")
 
-      this.$router.push("../components/UserList.vue ");
-    },
+    // goToUsersData: function () {
+    //   //  this.$store.dispatch("getAllUsersData")
+
+    //    this.$router.push("/UserList");
+    // },
     //----------------DISCONNECT-----------------//
     disconnect() {
       console.log("DISCONNECT");
@@ -221,7 +227,7 @@ export default {
       bodyFormData.append("lastName", this.lastName);
       bodyFormData.append("email", this.email);
       bodyFormData.append("userId", userId);
-      console.log("FORMDATA", bodyFormData);
+      
       console.table("this.firstName ", ...bodyFormData.entries());
       this.$store
         .dispatch("updateUser", bodyFormData)
@@ -248,10 +254,9 @@ export default {
         .dispatch("deleteUser", data)
         .then((res) => {
           if (res) {
-            console.log("RESOLVE PROFIL PAGE DELETE ------>", res.data.message);
+            console.log("RES PROFIL PAGE DELETE ------>", res.data.message);
             alert("votre compte a été supprimé")
-            // response.json({ message: "Compte supprimé" })
-            // 
+            
             this.disconnect()
           }
         }).catch((err) => {
@@ -275,14 +280,21 @@ body {
 
 #app {
   background-image: url("../assets/fondNavRed.png");
-  background-repeat: unset;
-  /* opacity:.7; */
-}
+  background-repeat:repeat;
+  background-position: center;
+  background-attachment: fixed;
+ 
+} 
+
 
 .container {
   height: 100vh;
 }
-
+.container {
+    background-color: rgb(252, 217, 164);
+    max-width: 1200px;
+    
+}
 .navBar {
   display: flex;
   justify-content: space-between;
@@ -309,6 +321,7 @@ body {
   background-color: #fff;
   position: relative;
   height: auto;
+  
 }
 
 .upper {
@@ -373,5 +386,11 @@ ul li {
   margin-left: 2rem;
   font-size: 1rem;
   margin-top: 1rem;
+}
+.contact {
+    
+    color: white;
+    font-weight: bold;
+    right: 2rem;
 }
 </style>

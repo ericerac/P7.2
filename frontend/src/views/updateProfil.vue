@@ -13,7 +13,7 @@
                 </div>
                     
                     <div class="form-group" >
-                        <label>Choisissez une photo de profil</label>
+                        <label for="image">Choisissez une photo de profil</label>
                         <input
           type="file"
           name="image"
@@ -38,9 +38,9 @@
                     
                     
                     <div class="form-group">
-                      <label class="btn-action">Modifier</label>
+                      <label class="btn-action" for="submit" >Modifier</label>
                         <input  name="submit" class="btn btn-primary mt-1 btn-lg btn-block" keyUp="enter" value="Modifier" @click="updateUser(userId)">
-                        <label class="btn-action">Retour</label>
+                        <label class="btn-action" for="retour">Retour</label>
                         <input  name="retour" class="btn btn-primary mt-1 btn-lg btn-block" keyUp="enter" value="Retour" @click="goToProfil">
                     </div>
                     </div>

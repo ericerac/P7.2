@@ -21,10 +21,10 @@ router.post(
   );
 
 router.get("/user/multi",  userControl.GetMultiUsers);
-router.get("/user",auth,  userControl.GetOneUser);
+router.get("/user",auth ,  userControl.GetOneUser);
 
-router.put("/user/delete",auth,  userControl.destroyUser);
-router.put("/user/update",auth, multer,  userControl.updateUser);
+router.put("/user/delete",auth ,  userControl.destroyUser);
+router.put("/user/update",auth , multer,  userControl.updateUser);
 
 router.get("/user/all",auth,  userControl.GetAllUsers);
 

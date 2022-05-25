@@ -31,9 +31,9 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background-color: rgb(252, 217, 164);
+  /* background-color: rgb(252, 217, 164);
   margin-top: 0px;
-  background-attachment: fixed;
+  background-attachment: fixed; */
 
 }
 </style>

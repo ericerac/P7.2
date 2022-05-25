@@ -1,5 +1,5 @@
 <template>
-    <div class="container posts-content">
+    <div class="container-fluid posts-content">
         <div class="row">
             <!-- ---------------------TOP-------------------- -->
             <div class="col-12 col-lg-12 col-xl-12">
@@ -57,7 +57,7 @@
             </div>
 
             <!-- ********++++----------------------POST-----------------************ -->
-            <div class="post col-md-6c col-lg-8 col-xl-8 offset-md-2" v-for="article in dataArt" :key="article.id">
+            <div class="post col-md-10 col-lg-10 col-xl-8  col-xxl-6 offset-md-1 offset-xl-2 offset-xxl-3" v-for="article in dataArt" :key="article.id">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="media post-head mb-3">
@@ -182,7 +182,7 @@
                         <img class="logo col-md-0" src="../assets/icon-left-font-monochrome-white.svg"
                             alt="logo groupomania" />
 
-                        <!-- <a class="contact" mailto:contact@groupomanis.com >Contact</a> -->
+                         <a class="contact" href="mailto:contact@groupomania.com" >Contact</a>
                     </div>
                     <div class="navbar">
                         <div class="link"></div>
@@ -284,6 +284,8 @@ export default {
         disconnect() {
             console.log("DISCONNECT");
             $cookies.remove("user");
+            this.user="";
+            userId="";
             this.$router.push("/");
         },
 
@@ -317,16 +319,16 @@ export default {
                 bodyFormData.append("media", this.fileSelected, this.fileSelected.name);
                 bodyFormData.append("content", this.content);
                 bodyFormData.append("userId", userId);
-                bodyFormData.append("likes", this.likes);
-                bodyFormData.append("dislikes", this.dislikes);
+                bodyFormData.append("likes", 0);
+                bodyFormData.append("dislikes", 0);
 
                 console.table("FORM DATA AVEC IMAGE 1", ...bodyFormData.entries());
             } else {
                 var bodyFormData = new FormData();
                 bodyFormData.append("content", this.content);
                 bodyFormData.append("userId", userId);
-                bodyFormData.append("likes", this.likes);
-                bodyFormData.append("dislikes", this.dislikes);
+                bodyFormData.append("likes", 0);
+                bodyFormData.append("dislikes", 0);
 
                 console.table("FORM DATA SANS IMAGE ", ...bodyFormData.entries());
             }
@@ -404,27 +406,29 @@ export default {
         //------------------DELETE ARTICLE-------------------------//
         deleteArticle(data) {
             console.log("USER-ID PROFIL DELETE", data);
+            const delart = {id:data}
             this.$store
-                .dispatch("deleteArticle", data)
+                .dispatch("deleteArticle", delart)
                 .then((response) => {
                     if (response) {
-                        response.json({ message: "Article supprimé" });
-                        this.$router.push("login");
+                        alert( "Article supprimé" );
+                        location.reload();
                     }
                 })
                 .catch((err) => {
-                    console.log("ERREUR REQUETE PROFIL DELETE ARTICLE----->", err);
+                    console.log("ERREUR REQUETE  DELETE ARTICLE----->", err);
                 });
         },
         //------------------DELETE COMMENT-------------------------//
         deleteComment(data) {
             console.log("USER-ID COMMENT DELETE", data);
+            const delcom = {id:data}
             this.$store
-                .dispatch("deleteComment", data)
+                .dispatch("deleteComment", delcom)
                 .then((response) => {
                     if (response) {
-                        response.json({ message: "Commentaire supprimé" });
-                        this.$router.push("login");
+                        alert( "Commentaire supprimé" );
+                       location.reload();
                     }
                 })
                 .catch((err) => {
@@ -462,21 +466,22 @@ export default {
 }
 
 html {
-    background-attachment: fixed;
-    /* background-color: blanchedalmond; */
+    /* background-attachment:scroll;
+    background-color: blanchedalmond; */
 }
 
 .root {
     background-color: blanchedalmond;
 }
 
-.container {
+.container-fluid {
     background-color: rgb(252, 217, 164);
+    max-width: 1200px;
 }
 
 #app {
     background-color: rgb(40, 30, 17);
-    background-attachment: fixed;
+    background-attachment:scroll;
 }
 
 body {
@@ -821,5 +826,18 @@ span {
     color: white;
     font-weight: bold;
     right: 2rem;
+}
+@media (max-width: 1980px) {
+    
+    .container-fluid {
+    background-color: rgb(252, 217, 164);
+    max-width: 1700px;
+}
+}
+@media (max-width: 1280px) {
+    .container-fluid {
+    background-color: rgb(252, 217, 164);
+    max-width: 1200px;
+}
 }
 </style>

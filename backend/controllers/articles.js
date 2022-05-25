@@ -166,12 +166,12 @@ exports.updatePost = async (req, res) => {
 };
 //---------------DELETE POST-------------------- OK--//
 exports.destroyArt = async (req, res) => {
-  const params = req.query.id;
-  console.log(params);
+  const params = req.body.id;
+  console.log("req.body.id",params);
   const oneArticle = await articles.findOne({
     where: { id: `${params}` },
   });
-
+console.log("ONE ARTICLE",oneArticle);
   let data = oneArticle.media;
 
   console.log("oneArticle", oneArticle);

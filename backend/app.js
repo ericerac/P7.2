@@ -19,7 +19,7 @@ const Sequelize = require("sequelize");
 //const articleRoute = require('./routes/articles')
 const userRoutes = require("./routes/api/user");
 const ArtRoutes = require("./routes/api/articles");
- const commentRoutes = require('./routes/api/comment');
+const commentRoutes = require('./routes/api/comment');
 const likeRoutes = require('./routes/api/like_dislike');
 
 
@@ -29,15 +29,11 @@ const likeRoutes = require('./routes/api/like_dislike');
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("Connectée");
-  // User.hasMany(Article);
-  // Article.belongsTo(User);
+  
 
 });
 
-// let corsOptions = {
-//   origin: "http://localhost:8082",
-// };
-// app.use(cors(corsOptions));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -56,10 +52,7 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// simple route
-//app.get("/", (req, res) => {
-//  res.json({ message: "Welcome application." });
-//});
+
 
 app.use("/images", express.static("images"));
 app.use(express.static(path.join(__dirname,"images")));

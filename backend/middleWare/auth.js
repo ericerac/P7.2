@@ -64,7 +64,7 @@ module.exports = async (req, res, next) => {
 
     console.log("oneUser", oneUser); 
 
-    if (req.body.id && req.body.id === !userId  ) { // compare l'id du token avec l'id utilisateur
+    if (req.body.id && req.body.id === userId  ) { // compare l'id du token avec l'id utilisateur
       if (oneUser = true){
         next();
       }

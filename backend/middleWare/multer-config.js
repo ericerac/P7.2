@@ -42,7 +42,6 @@ const storage = multer.diskStorage({
   },
 });
 
-//const upload = multer({storage:storage});
-//exports.upload = upload.single('image');
+
 module.exports = multer({ storage }).single("media");
-// .single = fichier unique. 'image' = type de fichier
+

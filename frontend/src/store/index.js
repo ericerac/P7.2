@@ -130,18 +130,19 @@ const store = createStore({
 
     signupPost: ({ commit }, userData) => {
       commit("setStatus", "loading");
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject,response) => {
         instance
           .post("/signup", userData)
-          .then(function (response) {
-            commit("setStatus", "loading");
-            resolve(response);
-            console.log("REPONSE SIGNUP ", response);
+          .then((res) => {
+            
+            console.log("REPONSE",res);
+            resolve(res) ;
+            
           })
           .catch((err) => {
             commit("setStatus", "error_create");
-            reject(err);
-            console.log("ça ne fonctionne pas");
+            reject(err)
+            console.log("ERREUR",err);
           });
       });
     },
@@ -153,7 +154,7 @@ const store = createStore({
         instance
           .post("/login", userData)
           .then((response) => {
-            // setHeaders(response.data.token)
+            //  setHeaders(response.data.token)
             commit("setStatus", "");
             commit("logUser", response.data);
             resolve(response);
@@ -174,21 +175,17 @@ const store = createStore({
       const token = userToken;
        const id = userId;
       const userDel = data;
-      const headers = {
-        headers: {
-          Authorization: `Bearer + ${token}`,
-        },
-      };
-      console.log("INDEX-TOKEN-DELETE------->", token);
+      
+      console.log("INDEX-TOKEN-USER CONNECT------->", token);
       console.log("INDEX-ID-DELETE------>", data);
-      console.log("INDEX-ID-DELETE------>", userId);
+      console.log("INDEX-ID-USUR CONNECT------>", userId);
       const body = {
-        id:userId
+        id:data
       }
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
-          .put(`/user/delete?id=${userDel}`,body,{
+          .put(`/user/delete`,body,{
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -455,9 +452,9 @@ const store = createStore({
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
-          .put(`/article/delete?id=${data}`, {
+          .put(`/article/delete`, data, {
             headers: {
-              Authorization: `Bearer + ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           })
           .then((response) => {
@@ -483,9 +480,9 @@ const store = createStore({
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
-          .put(`/comment/delete?id=${data}`, {
+          .put(`/comment/delete`, data,{
             headers: {
-              Authorization: `Bearer + ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           })
           .then((response) => {

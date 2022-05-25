@@ -67,7 +67,7 @@ exports.publish = async (req, res, next) => {
 //-----------DELETE COMMENT ---------------//
 
 exports.destroyComment = async (req, res) => {
-  const params = req.query.id;
+  const params = req.body.id;
   console.log(params);
   const oneComment = await comment.findOne({
     where: { id: `${params}` },
