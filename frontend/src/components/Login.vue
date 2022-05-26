@@ -41,12 +41,12 @@
                     {{ errorPassword }}
                 </div>
                 <div class="form-group">
-                    <label class="btn-label">Se connecter</label>
+                    <label for="submit" class="btn-label">Se connecter</label>
                     <input v-if="mode == 'login'" name="submit" class="btn btn-primary btn-lg btn-block" :keyUp="enter"
                         value="Se connecter" @click="loginPost()">
                 </div>
                 <div class="form-group" v-if="mode == 'signup'">
-                    <label class="btn-label">S'enregistrer</label>
+                    <label  for="submit" class="btn-label">S'enregistrer</label>
                     <input name="submit" class="btn btn-primary btn-lg btn-block" keyUp="enter" value="S'enregistrer"
                         @click="checkForm()">
                 </div>
@@ -172,7 +172,7 @@ export default {
         },
         validPassword: function (password) {
             console.log("VALIDATION PASSWORD", password);
-            var re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?~_+-=|\]).{8,32}$/g;
+            var re = /^(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/g;
             return re.test(password);
         },
 
