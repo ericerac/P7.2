@@ -8,23 +8,7 @@ const MIME_TYPES = {
   "image/gif": "gif",
 };
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, callback) => {
-//     console.log(req);
-//     // requête, fichier, callback
-//     callback(null, "images"); // nom du dossier
-//     console.log("MULTER STORAGE");
-//   },
-//   filename: (req, file, callback) => {      // requête, fichier, callback
 
-//     const name = file.originalname.split(" ").join("_"); // nom d'origine du fichier
-//     // "split et join" remplace d'éventuels espace dans le nom du fichier
-
-//     const extension = MIME_TYPES[file.mimetype]; // selection dans le dico l'extension correspondante au mimetype du fichier
-//     callback(null, name + Date.now() + "." + extension); // génere un nom unique du fichier //  + '.' + extension
-//                                                 // Date.now() = timestype du fichier pour le rendre unique
-//   },
-// });
 
 const storage = multer.diskStorage({
   

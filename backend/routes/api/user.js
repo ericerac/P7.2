@@ -10,7 +10,7 @@ const bruteforce = new ExpressBrute(store);
 
 
 router.post("/signup",passWord,  userControl.signup);
-//router.post("/login",  userControl.login);
+
 router.post(
     "/login",
     bruteforce.prevent,
@@ -20,7 +20,7 @@ router.post(
     }
   );
 
-router.get("/user/multi",  userControl.GetMultiUsers);
+
 router.get("/user",auth ,  userControl.GetOneUser);
 
 router.put("/user/delete",auth ,  userControl.destroyUser);

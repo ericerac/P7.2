@@ -13,7 +13,7 @@ const auth = require('../../middleWare/auth')
  router.post("/post",auth,  likeDislike.postLike); //table relationelle
 
 
-//  router.get("/all",  likeDislike.AllLike);
+
 
 
 module.exports = router;

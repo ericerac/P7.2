@@ -26,7 +26,7 @@ module.exports = async (req, res, next) => {
    
     res.status(401).json({
       error: new Error(),
-      message: "Requete  sans token ou token invalide",
+      message: "Requete Non authorisée",
     });
     return
   }

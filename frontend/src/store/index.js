@@ -111,11 +111,7 @@ logoutErr:"",
       state.usersId = usersId;
     },
   },
-  watch:{
-    logoutErr:(val)=>{
-console.log(val);
-    }
-  },
+  
   computed: {},
 
   actions: {

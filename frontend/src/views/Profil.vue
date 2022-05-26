@@ -97,15 +97,16 @@ import { mapState } from "vuex";
 const FormData = require("form-data");
 import { axios } from "axios";
 import moment from "moment";
-
+let userId="";
+let userToken="";
 
 let userCookies = $cookies.get("user");
 if(!userCookies){
   
 }else{
 console.log("USER COOKIES", userCookies);
-let userId = userCookies.userId;
-let userToken = userCookies.token;}
+ userId = userCookies.userId;
+ userToken = userCookies.token;}
 
 
 
@@ -193,6 +194,8 @@ goToUsersData: function () {
     disconnect() {
       console.log("DISCONNECT");
       $cookies.remove("user");
+      userId="";
+      userToken="";
       this.$router.push("/");
     },
 

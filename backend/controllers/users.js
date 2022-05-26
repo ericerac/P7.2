@@ -32,7 +32,7 @@ const sequelize = new Sequelize(
 const User = UserModel(sequelize, Sequelize);
 //---------------------------------------------//
 
-exports.deleteAll = (req, res) => {};
+
 
 // -----------------SIGNUP-----------------------//
 

@@ -3,9 +3,9 @@
 
 module.exports = {
     HOST: "localhost",
-    USER: "root",
-    PASSWORD: "1029!rieN",
-    DB: "BD_groupo",
+    USER: `${process.env.USER_NAME}`,
+    PASSWORD:`${process.env.PASSWORD_DB}`,
+    DB: `${process.env.DB_NAME}`,
     dialect: "mysql",
     pool: {
       max: 5,

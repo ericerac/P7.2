@@ -1,18 +1,9 @@
-// const { Sequelize } = require("sequelize");
-
-//  const config = new Sequelize("[bd_groupo]", "[root]", "[1029!rieN]", {
-//    host: "localhost",
-//    dialect: "mysql",
-//  });
-
-//const {DataTypes} = require('sequelize, DataTypes');
-// modele user
 
 const dbConfig = require ('../config/db.config')
 var Sequelize = require("sequelize");
 var sequelize = new Sequelize(dbConfig);
 
-/* Define Models */
+/*  Models */
 
 module.exports = (sequelize,type) => {
   const User = sequelize.define("user", {

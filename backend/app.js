@@ -13,10 +13,7 @@ const Sequelize = require("sequelize");
    host: "localhost",
    dialect: "mysql",
  });
-//const sequelize = require('sequelize');
-//const Sequelize = require('./config/db.config');
 
-//const articleRoute = require('./routes/articles')
 const userRoutes = require("./routes/api/user");
 const ArtRoutes = require("./routes/api/articles");
 const commentRoutes = require('./routes/api/comment');
@@ -24,8 +21,7 @@ const likeRoutes = require('./routes/api/like_dislike');
 
 
 
-//const router = express.Router;
-//app.use(router);
+
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("Connectée");
@@ -46,10 +42,10 @@ app.use((req, res, next) => {
   );
   next();
 });
-// parse requests of content-type - application/json
+//  - application/json
 app.use(express.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
+//  - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 
@@ -61,13 +57,13 @@ app.use("/", userRoutes);
 app.use("/login", userRoutes);
 
 app.use("/article", ArtRoutes);
-// app.use("/comment", commentRoutes);
+
 app.use("/comment", commentRoutes);
 
 app.use("/like", likeRoutes);
 app.use("/art", likeRoutes);
 app.use("/dislike", likeRoutes);
 
-//app.use("/article", ArtRoutes);
+
 
 module.exports = app;

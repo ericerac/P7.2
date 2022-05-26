@@ -465,10 +465,7 @@ export default {
     box-sizing: border-box;
 }
 
-html {
-    /* background-attachment:scroll;
-    background-color: blanchedalmond; */
-}
+
 
 .root {
     background-color: blanchedalmond;

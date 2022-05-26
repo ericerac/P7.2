@@ -91,6 +91,10 @@ import { mapState } from "vuex";
 import moment from "moment"
 import store from "@/store/index.js";
 
+//  if(user = undefined || user.role != "admin"){
+//      alert("Vous n'êtes pas autorisée")
+//  }
+
 export default {
     name: "userList",
     data: function () {
@@ -102,9 +106,16 @@ export default {
 
 
 beforeCreate:()=>{
-    console.log(" BEFORE CREATE");
+    // console.log(" BEFORE CREATE",userId);
     
 },
+created:()=>{
+    console.log("  CREATED");
+},
+mounted:()=>{
+    console.log("  MOUNTED", userId);
+},
+
 // beforeRouteEnter:()=>{
 //     console.log(" BEFORE ROUTE");
 // },
@@ -117,14 +128,12 @@ beforeCreate:()=>{
 //         console.log(" MOUNTED USER-LIST ARTICLES");
 //     },
      created: function () {
+         console.log("CREATED");
         this.$store
             .dispatch("getAllUsersData")
              // location.reload();
      },
-//     update: function () {
-//         // this.$store
-//         //     .dispatch("getAllUsersData")
-//     },
+
     computed: {
         ...mapState({
             AllUsers: "allsUsersData",
